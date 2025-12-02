@@ -35,4 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### MAC OS ###
 .DS_Store
+
+### Payment Key ###
+application-pay.yml
