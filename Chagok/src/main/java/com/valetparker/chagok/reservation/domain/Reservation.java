@@ -19,6 +19,9 @@ public class Reservation {
     private Long reservationId;
 
     @Column(nullable = false)
+    private String partnerOrderId;
+
+    @Column(nullable = false)
     private LocalDateTime startTime;
 
     @Column(nullable = false)
