@@ -51,7 +51,6 @@ public class Parkinglot {
     @Column(nullable = false)
     private Integer unitTime;
 
-
     @Column(nullable = false)       // -> 검색해보니 매번 쿼리 계산말고, 리뷰 등록 시 업데이트하는 방식을 추천 추천하더라구요.
     private Double averageRating;
 
