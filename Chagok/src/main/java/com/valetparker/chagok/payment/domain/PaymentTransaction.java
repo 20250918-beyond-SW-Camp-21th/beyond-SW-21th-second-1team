@@ -1,11 +1,11 @@
-package com.valetparker.chagok.payment;
+package com.valetparker.chagok.payment.domain;
 
 import com.valetparker.chagok.payment.enums.PaymentStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment_transaction") // DB 테이블명은 소문자 스네이크 케이스를 사용합니다.
+@Table(name = "tbl_payment") // DB 테이블명은 소문자 스네이크 케이스를 사용합니다.
 public class PaymentTransaction {
 
     /**
@@ -68,9 +68,6 @@ public class PaymentTransaction {
 
     // JPA 사용을 위한 기본 생성자
     public PaymentTransaction() {}
-
-    // 필드 값 설정을 위한 Getter/Setter는 Lombok을 사용하거나 직접 구현하면 됩니다.
-    // 여기서는 코드 간결화를 위해 생략합니다.
 
     // Getter
     public Long getPaymentId() {
