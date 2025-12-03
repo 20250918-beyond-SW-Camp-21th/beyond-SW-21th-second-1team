@@ -11,7 +11,8 @@ import lombok.Setter;
 public class KakaoPayReadyRequest {
 
     /**
-     * 필수 (Required = O) 파라미터
+     * 필수 파라미터 (Required = O)
+     * 파라미터명 변경 불가 - 카카오페이 API 고정 필수파라미터
      */
 
     // 가맹점 ID (CID)
@@ -28,7 +29,7 @@ public class KakaoPayReadyRequest {
 
     // 상품명 (item_name)
     @JsonProperty("item_name")
-    private String itemName; // 예: "Spring Boot 강의 패키지"
+    private String itemName; // 예: "ValetParker n시간"
 
     // 상품 수량 (quantity)
     @JsonProperty("quantity")
