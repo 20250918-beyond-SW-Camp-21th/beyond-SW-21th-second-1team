@@ -1,5 +1,7 @@
 package com.valetparker.chagok.reservation.domain;
 
+import com.valetparker.chagok.User.User;
+import com.valetparker.chagok.parkinglot.domain.Parkinglot;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
@@ -14,7 +16,7 @@ public class Reservation {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long reservationId;
+    private Long reservationId;
 
     @Column(nullable = false)
     private LocalDateTime startTime;
@@ -24,15 +26,17 @@ public class Reservation {
 
     @Column(nullable = false)
     @ColumnDefault("false")
-    private boolean isCanceled;
+    private Boolean isCanceled;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private long userNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userNo")
+    private User user;
 
-    @Column(nullable = false)
-    private long parkinglotId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parkinglotId")
+    private Parkinglot parkinglot;
 
 }
