@@ -36,7 +36,7 @@ public class Review {
     @JoinColumn(name = "parkinglot_id")
     @Column(nullable = false)
     private Parkinglot parkinglot;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_id")
     @Column(nullable = false)
     private Reservation reservation;
