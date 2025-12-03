@@ -1,0 +1,4 @@
+#spring.application.name=Chagok
+kakaopay:
+  secretKey: DEV24F19DC3255FC3F294F15107E1FB1E60D13D4
+  cid: TC0ONETIME
