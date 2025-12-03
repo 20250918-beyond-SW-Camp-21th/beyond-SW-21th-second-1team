@@ -1,5 +1,8 @@
 package com.valetparker.chagok.review.domain;
 
+import com.valetparker.chagok.User.User;
+import com.valetparker.chagok.parkinglot.domain.Parkinglot;
+import com.valetparker.chagok.reservation.domain.Reservation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,19 +18,26 @@ public class Review {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long reviewId;
+    private Long reviewId;
     @Column(nullable = false)
-    private double rating;
+    private Double rating;
     @Column(length = 1000)
     private String content;
     @Column(nullable = false)
     private LocalDateTime reviewCreatedAt;
     @Column
     private LocalDateTime reviewModifiedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_no")
     @Column(nullable = false)
-    private long writerId;
+    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parkinglot_id")
     @Column(nullable = false)
-    private long parkinglotId;
+    private Parkinglot parkinglot;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id")
     @Column(nullable = false)
-    private long reservationId;
+    private Reservation reservation;
 }
