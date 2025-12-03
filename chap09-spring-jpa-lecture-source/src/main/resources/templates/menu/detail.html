@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>detail</title>
 </head>
 <body>
-$END$
+
+<table border="1">
+    <tr>
+        <th>메뉴번호</th>
+        <th>메뉴이름</th>
+        <th>메뉴가격</th>
+        <th>카테고리코드</th>
+        <th>판매상태</th>
+    </tr>
+    <tr>
+        <td th:text="${ menu.menuCode }"></td>
+        <td th:text="${ menu.menuName }"></td>
+        <td th:text="${ menu.menuPrice }"></td>
+        <td th:text="${ menu.categoryCode }"></td>
+        <td th:text="${ menu.orderableStatus }"></td>
+    </tr>
+</table>
+
 </body>
 </html>
