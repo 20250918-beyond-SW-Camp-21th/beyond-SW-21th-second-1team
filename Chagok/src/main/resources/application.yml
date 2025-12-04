@@ -1,4 +1,4 @@
 #spring.application.name=Chagok
 kakaopay:
   secretKey:
-    cid: pay
+  cid: pay
