@@ -1,6 +1,6 @@
 package com.valetparker.chagok.review.domain;
 
-import com.valetparker.chagok.User.domain.User;
+import com.valetparker.chagok.user.User;
 import com.valetparker.chagok.parkinglot.domain.Parkinglot;
 import com.valetparker.chagok.reservation.domain.Reservation;
 import jakarta.persistence.*;
