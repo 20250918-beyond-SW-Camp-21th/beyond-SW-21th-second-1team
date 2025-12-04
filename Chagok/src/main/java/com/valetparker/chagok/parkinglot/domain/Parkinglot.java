@@ -85,8 +85,6 @@ public class Parkinglot {
 
     public void parkingLotAddress(String address){
         this.address = address;
-
-
     }
 
 
