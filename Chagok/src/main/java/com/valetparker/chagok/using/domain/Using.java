@@ -1,5 +1,6 @@
 package com.valetparker.chagok.using.domain;
 
+import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.using.enums.UsingStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -20,6 +21,7 @@ public class Using {
     @Column(nullable = false)
     private int exceededCount;
 
-    @Column(nullable = false)
-    private long reservationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservationId")
+    private Reservation reservation;
 }
