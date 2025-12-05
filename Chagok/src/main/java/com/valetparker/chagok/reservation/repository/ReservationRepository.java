@@ -1,8 +1,12 @@
 package com.valetparker.chagok.reservation.repository;
 
-
 import com.valetparker.chagok.reservation.domain.Reservation;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface ReservationRepository extends JpaRepository<Reservation,Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface ReservationRepository extends CrudRepository<Reservation, Long> {
+
+
 }
