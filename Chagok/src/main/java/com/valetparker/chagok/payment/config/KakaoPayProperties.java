@@ -9,6 +9,7 @@ public class KakaoPayProperties {
     private String secretKey;
     private String cid;
 
+    // application.yml을 통해서 application-pay.yml에 있는 SecretKey 가져옴
     public String getSecretKey() {
         return secretKey;
     }
