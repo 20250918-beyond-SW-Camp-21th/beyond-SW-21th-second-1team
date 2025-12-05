@@ -17,10 +17,10 @@ public class ReservationController {
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
-
+/*
     @PostMapping("/regist")
     public ResponseEntity<ApiResponse> registerReservation(@RequestBody ReservationDto request) {
         ReservationDto saved = reservationService.regist(request);
         return ResponseEntity.ok(ApiResponse.success(saved));
-    }
+    }*/
 }
