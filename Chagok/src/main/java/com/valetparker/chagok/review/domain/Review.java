@@ -50,4 +50,5 @@ public class Review {
     @JoinColumn(name = "reservation_id")
     @Column(nullable = false)
     private Reservation reservation;
+
 }
