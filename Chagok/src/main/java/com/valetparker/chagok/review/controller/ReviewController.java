@@ -30,11 +30,11 @@ public class ReviewController {
     * 2. 이 때 각 이용 정보들에 본인이 작성한 리뷰가 있을 경우 이를 조회할 수 있다.
     * 3. 이용정보 별로 본인이 작성한 리뷰를 볼 수 있는 것이다.
     * */
-    @GetMapping("/mypage/{userId}/reviews")
-    public ResponseEntity<ApiResponse<ReviewListResponse>> getMyAllReviews(@PathVariable Long userId) {
-        ReviewListResponse response = reviewService.getReviewsByUser(userId);
-        return ResponseEntity.ok(ApiResponse.success(response));
-    }
+//    @GetMapping("/mypage/{userId}/reviews")
+//    public ResponseEntity<ApiResponse<ReviewListResponse>> getMyAllReviews(@PathVariable Long userId) {
+//        ReviewListResponse response = reviewService.getReviewsByUser(userId);
+//        return ResponseEntity.ok(ApiResponse.success(response));
+//    }
 
     @GetMapping("/mypage/{usingId}/{review}")
     public ResponseEntity<ApiResponse<ReviewDetailResponse>> getMyOneReview(@PathVariable Long usingId, @PathVariable Long reviewId) {
