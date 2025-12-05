@@ -29,7 +29,7 @@ public enum Seouldistrict {
 
     private final String koreanName;
 
-    SeoulDistrict(String koreanName) {
+    Seouldistrict(String koreanName) {
         this.koreanName = koreanName;
     }
 }

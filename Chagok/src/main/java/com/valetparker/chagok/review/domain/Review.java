@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
 public class Review {
 
     /*
-    * 엔티티 내 Command를 위한 함수들(CUD)은 valid 체크 어노테이션을
-    * 함수 인자에 넣어둬야 함.
-    * */
+     * 엔티티 내 Command를 위한 함수들(CUD)은 valid 체크 어노테이션을
+     * 함수 인자에 넣어둬야 함.
+     * */
 
     @Id
     @Column(nullable = false)
