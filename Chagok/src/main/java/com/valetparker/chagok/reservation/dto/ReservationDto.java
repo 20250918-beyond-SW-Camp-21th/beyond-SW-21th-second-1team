@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class ReservationDto {
 
     private long reservationId;
+    private String partnerOrderId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private boolean isCanceled;
