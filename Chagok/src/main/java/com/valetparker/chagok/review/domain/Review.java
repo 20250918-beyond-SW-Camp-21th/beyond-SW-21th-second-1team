@@ -38,15 +38,12 @@ public class Review {
     private LocalDateTime reviewModifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no")
-    @Column(nullable = false)
+    @JoinColumn(name = "user_no", nullable = false)
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parkinglot_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "parkinglot_id", nullable = false)
     private Parkinglot parkinglot;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 }
