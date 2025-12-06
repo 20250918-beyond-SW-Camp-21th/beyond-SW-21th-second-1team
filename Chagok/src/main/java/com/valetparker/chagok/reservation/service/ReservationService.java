@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,4 +45,12 @@ public class ReservationService {
         return reservationId;
     }
 
+    public List<ReservationDto> getReservationHistory(Long userNo) {
+        List<ReservationResponse> reservations = reservationRepository
+                .findByUserNoOrderByCreatedAtDesc(userNo);
+
+        return reservations.stream()
+                .map(reservation -> modelMapper.map(reservation, ReservationDto.class))
+                .toList();
+    }
 }
