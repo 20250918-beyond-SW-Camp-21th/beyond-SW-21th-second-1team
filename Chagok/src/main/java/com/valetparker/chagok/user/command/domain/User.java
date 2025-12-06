@@ -1,4 +1,4 @@
-package com.valetparker.chagok.user.domain;
+package com.valetparker.chagok.user.command.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

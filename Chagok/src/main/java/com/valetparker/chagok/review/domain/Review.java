@@ -2,7 +2,7 @@ package com.valetparker.chagok.review.domain;
 
 import com.valetparker.chagok.parkinglot.domain.Parkinglot;
 import com.valetparker.chagok.reservation.domain.Reservation;
-import com.valetparker.chagok.user.domain.User;
+import com.valetparker.chagok.user.command.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
