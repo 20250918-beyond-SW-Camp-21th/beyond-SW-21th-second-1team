@@ -31,4 +31,8 @@ public class User {
 
     @Column(name = "car_number", unique = true, nullable = false)
     private String carNumber;
+
+    public void setEncodedPassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }
