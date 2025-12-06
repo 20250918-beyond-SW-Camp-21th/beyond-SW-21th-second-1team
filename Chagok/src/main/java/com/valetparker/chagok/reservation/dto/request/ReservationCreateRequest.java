@@ -3,17 +3,15 @@ package com.valetparker.chagok.reservation.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReservationCreateRequest {
-
     private Long userNo;
     private Long parkinglotId;
-    private String partnerOrderId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 }

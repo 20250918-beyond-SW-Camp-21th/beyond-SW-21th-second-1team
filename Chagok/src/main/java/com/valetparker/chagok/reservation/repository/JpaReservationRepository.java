@@ -1,9 +1,7 @@
-/*
 package com.valetparker.chagok.reservation.repository;
 
-import com.valetparker.chagok.reservation.dto.ReservationDto;
+import com.valetparker.chagok.reservation.domain.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public class JpaReservationRepository extends ReservationRepository, JpaRepository<ReservationDto, Long> {
+public interface JpaReservationRepository extends ReservationRepository, JpaRepository<Reservation, Long> {
 }
-*/

@@ -3,13 +3,18 @@ package com.valetparker.chagok.reservation.controller;
 import com.valetparker.chagok.common.dto.ApiResponse;
 import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.reservation.dto.ReservationDto;
+import com.valetparker.chagok.reservation.dto.request.ReservationCreateRequest;
+import com.valetparker.chagok.reservation.dto.response.ReservationResponse;
 import com.valetparker.chagok.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/reservation")
+@RequestMapping("/api/reservation")
+@Slf4j
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -18,9 +23,15 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-/*    @PostMapping("/regist")
-    public ResponseEntity<ApiResponse> registerReservation(@RequestBody ReservationDto request) {
-        ReservationDto saved = reservationService.regist(request);
-        return ResponseEntity.ok(ApiResponse.success(saved));
-    }*/
+    @PostMapping("/regist")
+    public ResponseEntity<ApiResponse<Long>> registerReservation(
+            @RequestBody ReservationCreateRequest request
+    ) {
+        Long response = reservationService.createReservation(request);
+        return ResponseEntity
+                .ok(ApiResponse.success(response));
+    }
+
+
+
 }
