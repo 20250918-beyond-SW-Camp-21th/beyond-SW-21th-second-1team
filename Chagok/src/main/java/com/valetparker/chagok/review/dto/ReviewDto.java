@@ -1,5 +1,7 @@
 package com.valetparker.chagok.review.dto;
 
+import com.valetparker.chagok.review.domain.Review;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
  * */
 @Getter
 @Setter
+@Builder
 public class ReviewDto {
 
     private Long reviewId;
@@ -18,8 +21,14 @@ public class ReviewDto {
     private String content;
     private LocalDateTime reviewCreatedAt;
     private LocalDateTime reviewModifiedAt;
-//    private UserDto user;
-//    private ParkinglotDto parkinglot;
-//    private ReservationDto reservation;
 
+    public static ReviewDto from(Review review) {
+        return ReviewDto.builder()
+                .reviewId(review.getReviewId())
+                .rating(review.getRating())
+                .content(review.getContent())
+                .reviewCreatedAt(review.getReviewCreatedAt())
+                .reviewModifiedAt(review.getReviewModifiedAt())
+                .build();
+    }
 }
