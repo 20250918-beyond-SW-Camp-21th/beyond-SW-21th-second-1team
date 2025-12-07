@@ -21,7 +21,8 @@ public class Using {
     @Column(nullable = false)
     private int exceededCount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+/*    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservationId")
-    private Reservation reservation;
+    private Reservation reservation;*/
+    private Long reservationId;
 }

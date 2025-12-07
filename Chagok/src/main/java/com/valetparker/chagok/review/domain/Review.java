@@ -3,6 +3,7 @@ package com.valetparker.chagok.review.domain;
 import com.valetparker.chagok.parkinglot.domain.Parkinglot;
 import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.user.command.domain.User;
+import com.valetparker.chagok.using.domain.Using;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,8 +43,8 @@ public class Review {
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parkinglot_id", nullable = false)
-    private Parkinglot parkinglot;
+    private ParkingLot parkinglot;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_id", nullable = false)
-    private Reservation reservation;
+    @JoinColumn(name = "using_id", nullable = false)
+    private Using using;
 }
