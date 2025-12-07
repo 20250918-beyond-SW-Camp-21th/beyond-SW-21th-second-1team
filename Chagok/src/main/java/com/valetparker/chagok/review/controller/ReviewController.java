@@ -59,19 +59,19 @@ public class ReviewController {
     /*
     * 리뷰 등록
     * */
-    @PostMapping("/mypage/usings/{usingId}")
-    public ResponseEntity<ApiResponse<ReviewCommandResponse>> registerReview(
-            @PathVariable Long usingId,
-            @RequestPart @Validated ReviewCreateRequest request
-    ) {
-        Long reviewId = reviewService.createReview(request, usingId);
-        ReviewCommandResponse response = ReviewCommandResponse.builder()
-                .reviewId(reviewId)
-                .build();
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
-    }
+//    @PostMapping("/mypage/usings/{usingId}")
+//    public ResponseEntity<ApiResponse<ReviewCommandResponse>> registerReview(
+//            @PathVariable Long usingId,
+//            @RequestPart @Validated ReviewCreateRequest request
+//    ) {
+//        Long reviewId = reviewService.createReview(request, usingId);
+//        ReviewCommandResponse response = ReviewCommandResponse.builder()
+//                .reviewId(reviewId)
+//                .build();
+//        return ResponseEntity
+//                .status(HttpStatus.CREATED)
+//                .body(ApiResponse.success(response));
+//    }
 
     /*
     * 리뷰 수정
