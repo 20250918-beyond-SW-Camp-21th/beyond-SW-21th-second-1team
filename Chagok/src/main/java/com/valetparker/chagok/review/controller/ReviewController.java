@@ -34,9 +34,9 @@ public class ReviewController {
 //        return ResponseEntity.ok(ApiResponse.success(response));
 //    }
 
-    @GetMapping("/mypage/{usingId}/{review}")
-    public ResponseEntity<ApiResponse<ReviewDetailResponse>> getUsingReview(@PathVariable Long usingId, @PathVariable Long reviewId) {
-        ReviewDetailResponse response = reviewService.getReviewByUsing(reviewId, usingId);
+    @GetMapping("/mypage/{usingId}/review")
+    public ResponseEntity<ApiResponse<ReviewDetailResponse>> getUsingReview(@PathVariable Long usingId) {
+        ReviewDetailResponse response = reviewService.getReviewByUsing(usingId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
@@ -48,12 +48,12 @@ public class ReviewController {
     * 3. 이는 오로지 조회목적이다. 개인별 리뷰 조회와 달리 등록/수정/삭제가 되지 않는다.
     * */
     // 리뷰 조회 - 최신순/별점높은순/별점낮은순 조회 가능
-    @GetMapping("/parkinglots/details/{parkingLotId}/reviews")
+    @GetMapping("/parkinglots/details/{parkinglotId}/reviews")
     public ResponseEntity<ApiResponse<ReviewListResponse>> getParkingReviews(
             @PathVariable Long parkinglotId,
             ParkinglotReviewSearchRequest request
     ) {
-        ReviewListResponse response = reviewService.getReviewsByParkinglot(parkinglotId);
+        ReviewListResponse response = reviewService.getReviewsByParkinglot(parkinglotId, request);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 

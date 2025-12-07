@@ -11,11 +11,15 @@ public interface ReviewRepository {
 
     Optional<Review> findById(Long reviewId);
 
-    List<Review> findAllOrderByReviewCreatedAtDesc();
+    // 이용 정보 별 리뷰 조회
+    Optional<Review> findByUsingId(Long usingId);
 
-    List<Review> findAllOrderByRating();
+    // 주차장 별 리뷰 조회
+    List<Review> findByParkinglotOrderByReviewCreatedAtDesc(Long parkinglotId);
 
-    List<Review> findAllOrderByRatingDesc();
+    List<Review> findByParkinglotOrderByRating(Long parkinglotId);
+
+    List<Review> findByParkinglotOrderByRatingDesc(Long parkinglotId);
 
     void deleteById(Long reviewId);
 
