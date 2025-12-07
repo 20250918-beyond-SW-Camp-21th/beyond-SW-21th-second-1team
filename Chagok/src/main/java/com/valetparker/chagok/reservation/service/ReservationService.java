@@ -1,15 +1,12 @@
 package com.valetparker.chagok.reservation.service;
 
-import com.valetparker.chagok.parkinglot.domain.Parkinglot;
+import com.valetparker.chagok.common.exception.BusinessException;
+import com.valetparker.chagok.common.exception.ErrorCode;
 import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.reservation.dto.ReservationDto;
 import com.valetparker.chagok.reservation.dto.request.ReservationCreateRequest;
 import com.valetparker.chagok.reservation.dto.response.ReservationHistoryResponse;
-import com.valetparker.chagok.reservation.dto.response.ReservationResponse;
 import com.valetparker.chagok.reservation.repository.ReservationRepository;
-import com.valetparker.chagok.user.domain.User;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +54,18 @@ public class ReservationService {
                     return new ReservationHistoryResponse(dto);
                 })
                 .toList();
+    }
+
+    @Transactional
+    public Long cancelReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findByReservationId(reservationId)
+                .orElseThrow(()->new BusinessException(ErrorCode.NOT_FOUND));
+
+        // 환불 처리 및 확인
+
+        reservation.cancel();
+
+        return reservationId;
     }
 }
 
