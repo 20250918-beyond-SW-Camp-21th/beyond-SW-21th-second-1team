@@ -1,8 +1,20 @@
 package com.valetparker.chagok.reservation.repository;
 
-
 import com.valetparker.chagok.reservation.domain.Reservation;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.valetparker.chagok.reservation.dto.ReservationDto;
+import com.valetparker.chagok.reservation.dto.response.ReservationResponse;
 
-public interface ReservationRepository extends JpaRepository<Reservation,Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface ReservationRepository {
+
+    Reservation save(Reservation reservation);
+
+    Optional<Reservation> findByReservationId(Long reservationId);
+
+    List<Reservation> findByUserNoOrderByCreatedAtDesc(Long userNo);
+
+    void deleteByReservationId(Long reservationId);
+
 }
