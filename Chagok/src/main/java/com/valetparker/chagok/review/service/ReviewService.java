@@ -31,16 +31,16 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-//    @Transactional(readOnly = true)
-//    public ReviewDetailResponse getReviewByUsing(Long usingId) {
-//        Review review = reviewRepository.findByUsing_UsingId(usingId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
-//        ReviewDto reviewDto = ReviewDto.from(review);
-//
-//        return ReviewDetailResponse.builder()
-//                .reviewDto(reviewDto)
-//                .build();
-//    }
+    @Transactional(readOnly = true)
+    public ReviewDetailResponse getReviewByUsing(Long usingId) {
+        Review review = reviewRepository.findByUsing_UsingId(usingId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+        ReviewDto reviewDto = ReviewDto.from(review);
+
+        return ReviewDetailResponse.builder()
+                .reviewDto(reviewDto)
+                .build();
+    }
 
     @Transactional(readOnly = true)
     public ReviewListResponse getReviewsByParkinglot(Long parkinglotId, ParkinglotReviewSearchRequest request) {
