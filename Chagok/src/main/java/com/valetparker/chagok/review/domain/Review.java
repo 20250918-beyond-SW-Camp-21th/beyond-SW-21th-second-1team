@@ -42,7 +42,7 @@ public class Review {
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parkinglot_id", nullable = false)
-    private Parkinglot parkinglot;
+    private ParkingLot parkinglot;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "using_id", nullable = false)
     private Using using;

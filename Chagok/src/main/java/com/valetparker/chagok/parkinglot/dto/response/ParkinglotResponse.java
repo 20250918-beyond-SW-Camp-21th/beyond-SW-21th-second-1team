@@ -1,41 +1,53 @@
-//package com.valetparker.chagok.parkinglot.dto.response;
-//
-//import com.valetparker.chagok.parkinglot.domain.Parkinglot;
-//import lombok.AllArgsConstructor;
-//import lombok.Builder;
-//import lombok.Getter;
-//
-//@Getter
-//@Builder
-//@AllArgsConstructor
-//public class ParkinglotResponse {
-//
-//    // 응답에 포함될 필드들
-//    private Long parkinglotId;           //     주차장 ID
-//    private String name;                 //     주차장 이름
-//    private String address;              //     주소
-//    private String seoulDistrictName;    //     구 이름
-//    private int totalSpots;              //     총 자리 수
-//    private int remainingSpots;          //     남은 자리 수
-//    private double averageRating;        //     평점
-//    private int baseFee;                 //     기본 요금
-//    private int baseTime;                //     기본 시간(분)
-//    private int unitFee;                 //     추가 요금
-//    private int unitTime;                //     추가 시간 단위 (분)
-//
-//    public static ParkinglotResponse from(Parkinglot parkinglot) {
-//        return ParkinglotResponse.builder()
-//                .parkinglotId(parkinglot.getParkinglotId())
-//                .name(parkinglot.getName())
-//                .address(parkinglot.getAddress())
-//                .seoulDistrictName(parkinglot.getSeoulDistrict().getKoreanName())  // 한글명
-//                .totalSpots(parkinglot.getTotalSpots())
-//                .remainingSpots(parkinglot.getRemainingSpots())  // 메서드 호출
-//                .averageRating(parkinglot.getAverageRating())
-//                .baseFee(parkinglot.getBaseFee())
-//                .baseTime(parkinglot.getBaseTime())
-//                .unitFee(parkinglot.getUnitFee())
-//                .unitTime(parkinglot.getUnitTime())
-//                .build();
-//    }
-//}
+package com.valetparker.chagok.parkinglot.dto.response;
+
+import com.valetparker.chagok.parkinglot.domain.ParkingLot;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+@Schema(description = "주차장 상세 응답 DTO")
+public class ParkinglotResponse {
+
+    @Schema(description = "주차장 ID")
+    private Long parkinglotId;
+
+    @Schema(description = "주차장 이름")
+    private String name;
+
+    @Schema(description = "주소")
+    private String address;
+
+    @Schema(description = "자치구 (한글명)")
+    private String districtName;
+
+    @Schema(description = "남은 주차 자리")
+    private int remainingSpots;
+
+    @Schema(description = "전체 주차 자리")
+    private int totalSpots;
+
+    @Schema(description = "기본 요금")
+    private Integer baseFee;
+
+    @Schema(description = "단위 요금")
+    private Integer unitFee;
+
+    @Schema(description = "평점")
+    private Double averageRating;
+
+    public static ParkinglotResponse from(ParkingLot entity) {
+        return ParkinglotResponse.builder()
+                .parkinglotId(entity.getParkinglotId())
+                .name(entity.getName())
+                .address(entity.getAddress())
+                .districtName(entity.getSeoulDistrict().getKoreanName()) // 한글 이름 사용
+                .remainingSpots(entity.getRemainingSpots())
+                .totalSpots(entity.getTotalSpots())
+                .baseFee(entity.getBaseFee())
+                .unitFee(entity.getUnitFee())
+                .averageRating(entity.getAverageRating())
+                .build();
+    }
+}

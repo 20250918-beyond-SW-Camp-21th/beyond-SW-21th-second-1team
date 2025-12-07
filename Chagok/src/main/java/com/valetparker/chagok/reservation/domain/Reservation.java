@@ -1,7 +1,5 @@
 package com.valetparker.chagok.reservation.domain;
 
-import com.valetparker.chagok.user.domain.User;
-import com.valetparker.chagok.parkinglot.domain.Parkinglot;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,6 +49,9 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parkinglotId")
+<<<<<<< HEAD
+    private ParkingLot parkinglot;
+=======
     private Parkinglot parkinglot;*/
 
 }

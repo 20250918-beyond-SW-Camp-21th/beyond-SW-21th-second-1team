@@ -1,6 +1,6 @@
 package com.valetparker.chagok.parkinglot.domain;
 
-import com.valetparker.chagok.parkinglot.enums.Seouldistrict;
+import com.valetparker.chagok.parkinglot.enums.SeoulDistrict;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Parkinglot {
+public class ParkingLot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class Parkinglot {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Seouldistrict seoulDistrict;
+    private SeoulDistrict seoulDistrict;
 
     @Column(nullable = false)
     private Integer totalSpots;
@@ -58,9 +58,9 @@ public class Parkinglot {
 
 
     @Builder
-    public Parkinglot(
+    public ParkingLot(
             String name,
-            Seouldistrict seoulDistrict,
+            SeoulDistrict seoulDistrict,
             String address,
             Integer baseFee,
             Integer unitFee,
