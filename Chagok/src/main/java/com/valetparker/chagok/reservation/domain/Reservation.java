@@ -1,7 +1,5 @@
 package com.valetparker.chagok.reservation.domain;
 
-import com.valetparker.chagok.user.domain.User;
-import com.valetparker.chagok.parkinglot.domain.ParkingLot;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

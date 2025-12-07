@@ -1,16 +1,17 @@
-package com.valetparker.chagok.parkinglot.dto;
+package com.valetparker.chagok.parkinglot.dto.response;
 
 import com.valetparker.chagok.parkinglot.domain.ParkingLot;
-import com.valetparker.chagok.parkinglot.enums.Seouldistrict;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Schema(description = "주차장 조회 응답 DTO")
+@Builder
+@Schema(description = "주차장 상세 응답 DTO")
 public class ParkinglotResponse {
 
     @Schema(description = "주차장 ID")
-    private Long id;
+    private Long parkinglotId;
 
     @Schema(description = "주차장 이름")
     private String name;
@@ -18,50 +19,35 @@ public class ParkinglotResponse {
     @Schema(description = "주소")
     private String address;
 
-    @Schema(description = "행정구")
-    private Seouldistrict seoulDistrict;
+    @Schema(description = "자치구 (한글명)")
+    private String districtName;
 
-    @Schema(description = "전체 주차 면수")
-    private Integer totalSpots;
+    @Schema(description = "남은 주차 자리")
+    private int remainingSpots;
 
-    @Schema(description = "현재 사용중인 면수")
-    private Integer usedSpots;
-
-    @Schema(description = "잔여 주차 면수")
-    private Integer remainingSpots;
+    @Schema(description = "전체 주차 자리")
+    private int totalSpots;
 
     @Schema(description = "기본 요금")
     private Integer baseFee;
 
-    @Schema(description = "기본 시간(분)")
-    private Integer baseTime;
-
     @Schema(description = "단위 요금")
     private Integer unitFee;
-
-    @Schema(description = "단위 시간(분)")
-    private Integer unitTime;
 
     @Schema(description = "평점")
     private Double averageRating;
 
-    public ParkinglotResponse(ParkingLot parkinglot) {
-        this.id = parkinglot.getParkinglotId();
-        this.name = parkinglot.getName();
-        this.address = parkinglot.getAddress();
-        this.seoulDistrict = parkinglot.getSeoulDistrict();
-        this.totalSpots = parkinglot.getTotalSpots();
-        this.usedSpots = parkinglot.getUsedSpots();
-        this.remainingSpots = parkinglot.getRemainingSpots();
-        this.baseFee = parkinglot.getBaseFee();
-        this.baseTime = parkinglot.getBaseTime();
-        this.unitFee = parkinglot.getUnitFee();
-        this.unitTime = parkinglot.getUnitTime();
-        this.averageRating = parkinglot.getAverageRating();
-    }
-
-
-    public static ParkinglotResponse from(ParkingLot parkinglot) {
-        return new ParkinglotResponse(parkinglot);
+    public static ParkinglotResponse from(ParkingLot entity) {
+        return ParkinglotResponse.builder()
+                .parkinglotId(entity.getParkinglotId())
+                .name(entity.getName())
+                .address(entity.getAddress())
+                .districtName(entity.getSeoulDistrict().getKoreanName()) // 한글 이름 사용
+                .remainingSpots(entity.getRemainingSpots())
+                .totalSpots(entity.getTotalSpots())
+                .baseFee(entity.getBaseFee())
+                .unitFee(entity.getUnitFee())
+                .averageRating(entity.getAverageRating())
+                .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.valetparker.chagok.parkinglot.enums;
 
-public enum Seouldistrict {
+public enum SeoulDistrict {
     GANGNAM("강남구"),
     GANGDONG("강동구"),
     GANGBUK("강북구"),
@@ -29,7 +29,7 @@ public enum Seouldistrict {
 
     private final String koreanName;
 
-    Seouldistrict(String koreanName) {
+    SeoulDistrict(String koreanName) {
         this.koreanName = koreanName;
     }
     public String getKoreanName() {
