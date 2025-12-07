@@ -32,4 +32,7 @@ public enum Seouldistrict {
     Seouldistrict(String koreanName) {
         this.koreanName = koreanName;
     }
+    public String getKoreanName() {
+        return this.koreanName;
+    }
 }
