@@ -55,5 +55,4 @@ public class KakaoPayReadyRequest {
     @JsonProperty("fail_url")
     private String failUrl; // 예: "http://localhost:8080/pay/fail"
 
-    // 이 외의 선택 파라미터는 필요에 따라 추가할 수 있습니다.
 }
