@@ -1,7 +1,7 @@
 package com.valetparker.chagok.reservation.domain;
 
 import com.valetparker.chagok.user.domain.User;
-import com.valetparker.chagok.parkinglot.domain.Parkinglot;
+import com.valetparker.chagok.parkinglot.domain.ParkingLot;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
@@ -40,6 +40,6 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parkinglotId")
-    private Parkinglot parkinglot;
+    private ParkingLot parkinglot;
 
 }

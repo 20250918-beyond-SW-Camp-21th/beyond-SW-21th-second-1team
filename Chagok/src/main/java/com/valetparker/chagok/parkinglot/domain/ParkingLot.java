@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Parkinglot {
+public class ParkingLot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,7 +58,7 @@ public class Parkinglot {
 
 
     @Builder
-    public Parkinglot(
+    public ParkingLot(
             String name,
             Seouldistrict seoulDistrict,
             String address,
