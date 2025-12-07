@@ -1,6 +1,6 @@
 package com.valetparker.chagok.reservation.service;
 
-import com.valetparker.chagok.parkinglot.domain.Parkinglot;
+import com.valetparker.chagok.parkinglot.domain.ParkingLot;
 import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.reservation.dto.ReservationDto;
 import com.valetparker.chagok.reservation.dto.request.ReservationCreateRequest;
