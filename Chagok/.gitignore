@@ -40,4 +40,4 @@ out/
 .DS_Store
 
 ### Payment Key ###
-application-pay.yml
+src/main/resources/application-pay.yml
