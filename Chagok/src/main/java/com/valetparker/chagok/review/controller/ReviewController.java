@@ -2,14 +2,17 @@ package com.valetparker.chagok.review.controller;
 
 import com.valetparker.chagok.common.dto.ApiResponse;
 import com.valetparker.chagok.review.dto.request.ParkinglotReviewSearchRequest;
+import com.valetparker.chagok.review.dto.request.ReviewCreateRequest;
+import com.valetparker.chagok.review.dto.request.ReviewUpdateRequest;
+import com.valetparker.chagok.review.dto.response.ReviewCommandResponse;
 import com.valetparker.chagok.review.dto.response.ReviewDetailResponse;
 import com.valetparker.chagok.review.dto.response.ReviewListResponse;
 import com.valetparker.chagok.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /*
 * ====== 논의 사항 ======
@@ -28,7 +31,8 @@ public class ReviewController {
     * 2. 이 때 각 이용 정보들에 본인이 작성한 리뷰가 있을 경우 이를 조회할 수 있다.
     * 3. 이용정보 별로 본인이 작성한 리뷰를 볼 수 있는 것이다.
     * */
-    @GetMapping("/mypage/{usingId}/review")
+//    @GetMapping("/mypage/{usingId}/review")
+    @GetMapping("/mypage/usings/{usingId}")
     public ResponseEntity<ApiResponse<ReviewDetailResponse>> getUsingReview(@PathVariable Long usingId) {
         ReviewDetailResponse response = reviewService.getReviewByUsing(usingId);
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -52,4 +56,43 @@ public class ReviewController {
     }
 
 
+    /*
+    * 리뷰 등록
+    * */
+    @PostMapping("/mypage/usings/{usingId}")
+    public ResponseEntity<ApiResponse<ReviewCommandResponse>> registerReview(
+            @PathVariable Long usingId,
+            @RequestPart @Validated ReviewCreateRequest request
+    ) {
+        Long reviewId = reviewService.createReview(request, usingId);
+        ReviewCommandResponse response = ReviewCommandResponse.builder()
+                .reviewId(reviewId)
+                .build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(response));
+    }
+
+    /*
+    * 리뷰 수정
+    * */
+    @PutMapping("/mypage/reviews/{reviewId}")
+    public ResponseEntity<ApiResponse<Void>> modifyReview(
+            @PathVariable Long reviewId,
+            @RequestPart @Validated ReviewUpdateRequest request
+    ) {
+        reviewService.updateReview(request, reviewId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /*
+    * 리뷰 삭제
+    * */
+    @DeleteMapping("/mypage/reviews/{reviewId}")
+    public ResponseEntity<ApiResponse<Void>> deleteReview(
+            @PathVariable Long reviewId
+    ) {
+        reviewService.deleteReview(reviewId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 }
