@@ -1,6 +1,7 @@
 package com.valetparker.chagok.reservation.repository;
 
 import com.valetparker.chagok.reservation.domain.Reservation;
+import com.valetparker.chagok.reservation.dto.ReservationDto;
 import com.valetparker.chagok.reservation.dto.response.ReservationResponse;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface ReservationRepository {
 
     Optional<Reservation> findByReservationId(Long reservationId);
 
-    List<ReservationResponse> findByUserNoOrderByCreatedAtDesc(Long userNo);
+    List<Reservation> findByUserNoOrderByCreatedAtDesc(Long userNo);
 
     void deleteByReservationId(Long reservationId);
 

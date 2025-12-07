@@ -4,6 +4,7 @@ import com.valetparker.chagok.parkinglot.domain.Parkinglot;
 import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.reservation.dto.ReservationDto;
 import com.valetparker.chagok.reservation.dto.request.ReservationCreateRequest;
+import com.valetparker.chagok.reservation.dto.response.ReservationHistoryResponse;
 import com.valetparker.chagok.reservation.dto.response.ReservationResponse;
 import com.valetparker.chagok.reservation.repository.ReservationRepository;
 import com.valetparker.chagok.user.domain.User;
@@ -45,12 +46,18 @@ public class ReservationService {
         return reservationId;
     }
 
-    public List<ReservationDto> getReservationHistory(Long userNo) {
-        List<ReservationResponse> reservations = reservationRepository
+    public List<ReservationHistoryResponse> getReservationHistory(Long userNo) {
+        List<Reservation> reservations = reservationRepository
                 .findByUserNoOrderByCreatedAtDesc(userNo);
 
+        /*예외처리*/
+
         return reservations.stream()
-                .map(reservation -> modelMapper.map(reservation, ReservationDto.class))
+                .map(reservation -> {
+                    ReservationDto dto = modelMapper.map(reservation, ReservationDto.class);
+                    return new ReservationHistoryResponse(dto);
+                })
                 .toList();
     }
 }
+
