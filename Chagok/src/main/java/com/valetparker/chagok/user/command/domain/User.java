@@ -1,4 +1,4 @@
-package com.valetparker.chagok.user.domain;
+package com.valetparker.chagok.user.command.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,4 +31,8 @@ public class User {
 
     @Column(name = "car_number", unique = true, nullable = false)
     private String carNumber;
+
+    public void setEncodedPassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }
