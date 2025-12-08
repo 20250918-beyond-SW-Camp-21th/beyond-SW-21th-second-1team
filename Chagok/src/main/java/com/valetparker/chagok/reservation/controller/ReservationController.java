@@ -1,15 +1,10 @@
 package com.valetparker.chagok.reservation.controller;
 
 import com.valetparker.chagok.common.dto.ApiResponse;
-import com.valetparker.chagok.reservation.domain.Reservation;
-import com.valetparker.chagok.reservation.dto.ReservationDto;
 import com.valetparker.chagok.reservation.dto.request.ReservationCreateRequest;
 import com.valetparker.chagok.reservation.dto.response.ReservationHistoryResponse;
-import com.valetparker.chagok.reservation.dto.response.ReservationResponse;
 import com.valetparker.chagok.reservation.service.ReservationService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +38,11 @@ public class ReservationController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Long>> cancelReservation(
+            @RequestParam Long reservationId
+    ) {
+      Long isCanceled = reservationService.cancelReservation(reservationId);
+      return ResponseEntity.ok(ApiResponse.success(isCanceled));
+    }
 }
