@@ -1,7 +1,5 @@
 package com.valetparker.chagok.reservation.domain;
 
-//import com.valetparker.chagok.user.command.domain.User;
-//import com.valetparker.chagok.parkinglot.domain.Parkinglot;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,6 +42,10 @@ public class Reservation {
 
     private Long userNo;
     private Long parkinglotId;
+
+    public void cancel() {
+        isCanceled = true;
+    }
 
 /*    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userNo")
