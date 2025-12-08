@@ -10,6 +10,7 @@ public interface UserRepository {
     Optional<User> findByNickname(String nickname);
     Optional<User> findByCarNumber(String carNumber);
     Optional<User> findByUserNo(Long userNo);
+    Optional<User> findByRole(String role);
 
     User save(User user);
 }

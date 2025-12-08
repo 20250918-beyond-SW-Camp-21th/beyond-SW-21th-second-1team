@@ -6,9 +6,6 @@ spring:
     url: jdbc:mariadb://dev.macacolabs.site:3306/parkinghub
     username: valetparker
     password: valetparker
-kakaopay:
-  secretKey:
-  cid:
 profile:
   active: pay
 
