@@ -1,16 +1,21 @@
 package com.valetparker.chagok.reservation.domain;
 
-import com.valetparker.chagok.user.command.domain.User;
-import com.valetparker.chagok.parkinglot.domain.Parkinglot;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "tbl_reservation")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reservation {
 
     @Id
@@ -31,15 +36,23 @@ public class Reservation {
     @ColumnDefault("false")
     private Boolean isCanceled;
 
+    @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    private Long userNo;
+    private Long parkinglotId;
+
+    public void cancel() {
+        isCanceled = true;
+    }
+
+/*    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userNo")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parkinglotId")
-    private Parkinglot parkinglot;
+    private Parkinglot parkinglot;*/
 
 }
