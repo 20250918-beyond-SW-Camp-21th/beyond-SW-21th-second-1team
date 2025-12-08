@@ -1,20 +1,26 @@
 package com.valetparker.chagok.review.domain;
 
 import com.valetparker.chagok.parkinglot.domain.Parkinglot;
-import com.valetparker.chagok.reservation.domain.Reservation;
+import com.valetparker.chagok.review.dto.request.ReviewUpdateRequest;
 import com.valetparker.chagok.user.domain.User;
+import com.valetparker.chagok.using.domain.Using;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
+//@Entity
+//@Table(name = "tbl_review")
+//@Getter
+//@NoArgsConstructor
 @Entity
 @Table(name = "tbl_review")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+//@Builder
 public class Review {
 
     /*
@@ -42,8 +48,13 @@ public class Review {
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parkinglot_id", nullable = false)
-    private Parkinglot parkinglot;
+    private ParkingLot parkinglot;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_id", nullable = false)
-    private Reservation reservation;
+    @JoinColumn(name = "using_id", nullable = false)
+    private Using using;
+
+    public void updateReview(ReviewUpdateRequest request) {
+        this.content = request.getContent();
+        this.rating = request.getRating();
+    }
 }
