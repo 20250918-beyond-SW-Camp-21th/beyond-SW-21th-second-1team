@@ -31,7 +31,7 @@ public class JwtTokenProvider {
         secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // 로그인 access token 생성 (닉네임, 차번호, 유저번호)
+    // 로그인 access token 생성 (email)
     public String createAccessToken(String email) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
