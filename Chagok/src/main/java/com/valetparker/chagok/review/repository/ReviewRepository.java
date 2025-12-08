@@ -13,8 +13,8 @@ public interface ReviewRepository {
 
     Optional<Review> findById(Long reviewId);
 
-    // 이용 정보 별 리뷰 조회
-    Optional<Review> findByUsing_UsingId(Long usingId);
+    // 예약 정보 별 리뷰 조회
+    Optional<Review> findByReservation_ReservationId(Long reservationId);
 
     // 주차장 별 리뷰 조회
     Page<Review> findByParkinglot_ParkinglotId(Long parkinglotId, Pageable pageable);
