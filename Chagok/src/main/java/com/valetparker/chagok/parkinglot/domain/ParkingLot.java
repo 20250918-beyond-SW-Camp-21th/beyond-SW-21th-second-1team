@@ -101,6 +101,8 @@ public class ParkingLot {
         this.usedSpots--;
     }
 
+
+
     //  주소 수정
     public void updateAddress(String newAddress) {
         if (newAddress == null || newAddress.isBlank()) {
