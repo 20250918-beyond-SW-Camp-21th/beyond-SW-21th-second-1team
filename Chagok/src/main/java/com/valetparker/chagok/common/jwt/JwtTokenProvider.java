@@ -32,13 +32,11 @@ public class JwtTokenProvider {
     }
 
     // 로그인 access token 생성 (닉네임, 차번호, 유저번호)
-    public String createAccessToken(String nickname, String carNumber, Long userNo) {
+    public String createAccessToken(String email) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
         return Jwts.builder()
-                .subject(nickname)
-                .claim("carNumber",carNumber)
-                .claim("userNo", userNo)
+                .subject(email)
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(secretKey)
@@ -46,13 +44,11 @@ public class JwtTokenProvider {
     }
 
     // refresh token
-    public String createRefreshToken(String nickname, String carNumber, Long userNo) {
+    public String createRefreshToken(String email) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtRefreshExpiration);
         return Jwts.builder()
-                .subject(nickname)
-                .claim("carNumber",carNumber)
-                .claim("userNo", userNo)
+                .subject(email)
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(secretKey)

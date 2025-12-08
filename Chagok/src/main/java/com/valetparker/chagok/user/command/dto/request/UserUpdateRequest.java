@@ -1,4 +1,4 @@
-package com.valetparker.chagok.user.modify.dto;
+package com.valetparker.chagok.user.command.dto.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

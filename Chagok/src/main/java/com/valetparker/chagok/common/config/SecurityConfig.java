@@ -1,6 +1,7 @@
 package com.valetparker.chagok.common.config;
 
 import com.valetparker.chagok.common.jwt.HeaderAuthenticationFilter;
+import com.valetparker.chagok.common.jwt.JwtTokenProvider;
 import com.valetparker.chagok.common.jwt.RestAccessDeniedHandler;
 import com.valetparker.chagok.common.jwt.RestAuthenticationEntryPoint;
 import jakarta.servlet.Filter;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,7 +29,8 @@ public class SecurityConfig {
 
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     private final RestAccessDeniedHandler restAccessDeniedHandler;
-
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,7 +48,9 @@ public class SecurityConfig {
                                 .accessDeniedHandler(restAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(HttpMethod.POST, "/regist", "/auth/login","/auth/refresh", "/auth/*/logout", "/user/*/modify").permitAll()
+                        auth.requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/regist", "/auth/login","/auth/refresh", "/auth/logout").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/user/modify").authenticated()
                                 .anyRequest().authenticated()
                 ).addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -54,7 +59,7 @@ public class SecurityConfig {
 
     @Bean
     public HeaderAuthenticationFilter headerAuthenticationFilter() {
-        return new HeaderAuthenticationFilter();
+        return new HeaderAuthenticationFilter(jwtTokenProvider, userDetailsService);
     }
 
 }
