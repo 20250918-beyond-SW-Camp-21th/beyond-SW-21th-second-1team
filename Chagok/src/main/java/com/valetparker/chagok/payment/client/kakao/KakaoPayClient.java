@@ -1,17 +1,19 @@
 package com.valetparker.chagok.payment.client.kakao;
 
 import com.valetparker.chagok.payment.client.kakao.dto.request.KakaoReadyRequest;
-import com.valetparker.chagok.payment.client.kakao.dto.response.KakaoReadyResponse;
 import com.valetparker.chagok.payment.client.kakao.dto.response.KakaoApproveResponse;
 import com.valetparker.chagok.payment.client.kakao.dto.response.KakaoCancelResponse;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import com.valetparker.chagok.payment.client.kakao.dto.response.KakaoReadyResponse;
+import com.valetparker.chagok.payment.config.KakaoPayProperties;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects; // Objects.requireNonNull() 사용을 위해 추가
+import java.util.Objects;
 
 @Component
 public class KakaoPayClient {
@@ -21,10 +23,9 @@ public class KakaoPayClient {
     private final String secretKey;
     private final String baseUrl = "https://kapi.kakao.com/v1/payment";
 
-    public KakaoPayClient(@Value("${kakao.cid}") String cid,
-                          @Value("${kakao.secret-key}") String secretKey) {
-        this.cid = cid;
-        this.secretKey = secretKey;
+    public KakaoPayClient(KakaoPayProperties properties) {
+        this.cid = properties.getCid();
+        this.secretKey = properties.getSecretKey();
     }
 
     private HttpHeaders createHeaders() {
