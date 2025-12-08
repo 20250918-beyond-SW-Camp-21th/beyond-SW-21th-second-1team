@@ -63,4 +63,20 @@ public class Review {
         this.content = request.getContent();
         this.rating = request.getRating();
     }
+
+    public static Review create(
+            Double rating,
+            String content,
+            User user,
+            ParkingLot parkingLot,
+            Reservation reservation
+    ) {
+        Review review = new Review();   // 기본 생성자 (PROTECTED) 사용
+        review.rating = rating;
+        review.content = content;
+        review.user = user;
+        review.parkinglot = parkingLot;
+        review.reservation = reservation;
+        return review;
+    }
 }

@@ -3,6 +3,10 @@ package com.valetparker.chagok.review.service;
 import com.valetparker.chagok.common.dto.Pagination;
 import com.valetparker.chagok.common.exception.BusinessException;
 import com.valetparker.chagok.common.exception.ErrorCode;
+import com.valetparker.chagok.parkinglot.domain.ParkingLot;
+import com.valetparker.chagok.parkinglot.repository.ParkinglotRepository;
+import com.valetparker.chagok.reservation.domain.Reservation;
+import com.valetparker.chagok.reservation.repository.ReservationRepository;
 import com.valetparker.chagok.review.domain.Review;
 import com.valetparker.chagok.review.dto.ReviewDto;
 import com.valetparker.chagok.review.dto.request.ParkinglotReviewSearchRequest;
@@ -12,6 +16,8 @@ import com.valetparker.chagok.review.dto.response.ReviewDetailResponse;
 import com.valetparker.chagok.review.dto.response.ReviewListResponse;
 import com.valetparker.chagok.review.enums.ReviewSortType;
 import com.valetparker.chagok.review.repository.ReviewRepository;
+import com.valetparker.chagok.user.command.domain.User;
+import com.valetparker.chagok.user.command.repository.UserRepository;
 import com.valetparker.chagok.using.domain.Using;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +42,9 @@ import java.util.List;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final ModelMapper modelMapper;
+    private final ReservationRepository reservationRepository;
+    private final UserRepository userRepository;
+    private final ParkinglotRepository parkinglotRepository;
 
     @Transactional(readOnly = true)
     public ReviewDetailResponse getReviewByReservation(Long reservationId) {
@@ -82,14 +90,31 @@ public class ReviewService {
                 .build();
     }
 
-//    @Transactional
-//    public Long createReview(ReviewCreateRequest request, Long usingId) {
-//
-//        Review newReview = modelMapper.map(request, Review.class);
-//        Review review = reviewRepository.save(newReview);
-//
-//        return review.getReviewId();
-//    }
+    @Transactional
+    public Long createReview(ReviewCreateRequest request, Long reservationId) {
+        Reservation reservation = reservationRepository.findByReservationId(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("예약 정보를 찾을 수 없습니다. reservationId=" + reservationId));
+
+        Long userNo = reservation.getUserNo();
+        Long parkinglotId = reservation.getParkinglotId();
+
+        User user = userRepository.findByUserNo(userNo)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. userNo=" + userNo));
+
+        ParkingLot parkingLot = parkinglotRepository.findById(parkinglotId)
+                .orElseThrow(() -> new IllegalArgumentException("주차장 정보를 찾을 수 없습니다. parkinglotId=" + parkinglotId));
+
+        Review newReview = Review.create(
+                request.getRating(),
+                request.getContent(),
+                user,
+                parkingLot,
+                reservation
+        );
+
+        Review saved = reviewRepository.save(newReview);
+        return saved.getReviewId();
+    }
 
     @Transactional
     public void updateReview(ReviewUpdateRequest request, Long reviewId) {

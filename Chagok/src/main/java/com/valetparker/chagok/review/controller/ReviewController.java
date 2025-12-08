@@ -38,7 +38,7 @@ public class ReviewController {
 //        return ResponseEntity.ok(ApiResponse.success(response));
 //    }
 
-    @GetMapping("/mypage/reservations/{reservationId}")
+    @GetMapping("/mypage/reservations/{reservationId}/review")
     public ResponseEntity<ApiResponse<ReviewDetailResponse>> getReservationReview(@PathVariable Long reservationId) {
         ReviewDetailResponse response = reviewService.getReviewByReservation(reservationId);
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -64,19 +64,19 @@ public class ReviewController {
     /*
     * 리뷰 등록
     * */
-//    @PostMapping("/mypage/usings/{usingId}")
-//    public ResponseEntity<ApiResponse<ReviewCommandResponse>> registerReview(
-//            @PathVariable Long usingId,
-//            @RequestPart @Validated ReviewCreateRequest request
-//    ) {
-//        Long reviewId = reviewService.createReview(request, usingId);
-//        ReviewCommandResponse response = ReviewCommandResponse.builder()
-//                .reviewId(reviewId)
-//                .build();
-//        return ResponseEntity
-//                .status(HttpStatus.CREATED)
-//                .body(ApiResponse.success(response));
-//    }
+    @PostMapping("/mypage/reservations/{reservationId}/review")
+    public ResponseEntity<ApiResponse<ReviewCommandResponse>> registerReview(
+            @PathVariable Long reservationId,
+            @RequestBody ReviewCreateRequest request
+    ) {
+        Long reviewId = reviewService.createReview(request, reservationId);
+        ReviewCommandResponse response = ReviewCommandResponse.builder()
+                .reviewId(reviewId)
+                .build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(response));
+    }
 
     /*
     * 리뷰 수정
