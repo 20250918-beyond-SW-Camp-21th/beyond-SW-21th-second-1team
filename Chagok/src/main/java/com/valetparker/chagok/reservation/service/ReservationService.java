@@ -1,5 +1,7 @@
 package com.valetparker.chagok.reservation.service;
 
+import com.valetparker.chagok.common.exception.BusinessException;
+import com.valetparker.chagok.common.exception.ErrorCode;
 import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.reservation.dto.ReservationDto;
 import com.valetparker.chagok.reservation.dto.request.ReservationCreateRequest;
@@ -52,6 +54,18 @@ public class ReservationService {
                     return new ReservationHistoryResponse(dto);
                 })
                 .toList();
+    }
+
+    @Transactional
+    public Long cancelReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findByReservationId(reservationId)
+                .orElseThrow(()->new BusinessException(ErrorCode.NOT_FOUND));
+
+        // 환불 처리 및 확인
+
+        reservation.cancel();
+
+        return reservationId;
     }
 }
 
