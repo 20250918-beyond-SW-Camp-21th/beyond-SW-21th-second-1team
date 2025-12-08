@@ -39,8 +39,8 @@ public class ReviewService {
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
-    public ReviewDetailResponse getReviewByUsing(Long usingId) {
-        Review review = reviewRepository.findByUsing_UsingId(usingId)
+    public ReviewDetailResponse getReviewByReservation(Long reservationId) {
+        Review review = reviewRepository.findByReservation_ReservationId(reservationId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
         ReviewDto reviewDto = ReviewDto.from(review);
 
@@ -82,14 +82,14 @@ public class ReviewService {
                 .build();
     }
 
-    @Transactional
-    public Long createReview(ReviewCreateRequest request, Long usingId) {
-
-        Review newReview = modelMapper.map(request, Review.class);
-        Review review = reviewRepository.save(newReview);
-
-        return review.getReviewId();
-    }
+//    @Transactional
+//    public Long createReview(ReviewCreateRequest request, Long usingId) {
+//
+//        Review newReview = modelMapper.map(request, Review.class);
+//        Review review = reviewRepository.save(newReview);
+//
+//        return review.getReviewId();
+//    }
 
     @Transactional
     public void updateReview(ReviewUpdateRequest request, Long reviewId) {

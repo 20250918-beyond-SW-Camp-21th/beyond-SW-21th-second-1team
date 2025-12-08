@@ -2,6 +2,7 @@ package com.valetparker.chagok.review.domain;
 
 //import com.valetparker.chagok.parkinglot.domain.Parkinglot;
 import com.valetparker.chagok.parkinglot.domain.ParkingLot;
+import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.review.dto.request.ReviewUpdateRequest;
 //import com.valetparker.chagok.user.domain.User;
 import com.valetparker.chagok.user.command.domain.User;
@@ -46,14 +47,17 @@ public class Review {
     private LocalDateTime reviewModifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no", nullable = false)
+    @JoinColumn(name = "writer_id", nullable = false)
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parkinglot_id", nullable = false)
     private ParkingLot parkinglot;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "using_id", nullable = false)
+//    private Using using;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "using_id", nullable = false)
-    private Using using;
+    @JoinColumn(name = "reservation_id", nullable = false)
+    private Reservation reservation;
 
     public void updateReview(ReviewUpdateRequest request) {
         this.content = request.getContent();

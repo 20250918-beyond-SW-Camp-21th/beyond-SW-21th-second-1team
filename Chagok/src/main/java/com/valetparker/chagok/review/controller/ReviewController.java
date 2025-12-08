@@ -32,12 +32,17 @@ public class ReviewController {
     * 3. 이용정보 별로 본인이 작성한 리뷰를 볼 수 있는 것이다.
     * */
 //    @GetMapping("/mypage/{usingId}/review")
-    @GetMapping("/mypage/usings/{usingId}")
-    public ResponseEntity<ApiResponse<ReviewDetailResponse>> getUsingReview(@PathVariable Long usingId) {
-        ReviewDetailResponse response = reviewService.getReviewByUsing(usingId);
+//    @GetMapping("/mypage/usings/{usingId}")
+//    public ResponseEntity<ApiResponse<ReviewDetailResponse>> getUsingReview(@PathVariable Long usingId) {
+//        ReviewDetailResponse response = reviewService.getReviewByUsing(usingId);
+//        return ResponseEntity.ok(ApiResponse.success(response));
+//    }
+
+    @GetMapping("/mypage/reservations/{reservationId}")
+    public ResponseEntity<ApiResponse<ReviewDetailResponse>> getReservationReview(@PathVariable Long reservationId) {
+        ReviewDetailResponse response = reviewService.getReviewByReservation(reservationId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
-
 
     /*
     * 주차장별 리뷰 조회
