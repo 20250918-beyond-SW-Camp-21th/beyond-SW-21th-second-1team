@@ -1,7 +1,8 @@
-package com.valetparker.chagok.user.repository;
+package com.valetparker.chagok.user.command.repository;
 
-import com.valetparker.chagok.user.domain.User;
+import com.valetparker.chagok.user.command.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaUserRepository extends UserRepository, JpaRepository<User, Long> {
+
 }
