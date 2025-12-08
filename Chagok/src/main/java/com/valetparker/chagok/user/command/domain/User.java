@@ -32,7 +32,15 @@ public class User {
     @Column(name = "car_number", unique = true, nullable = false)
     private String carNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private UserRole role = UserRole.USER;
+
     public void setEncodedPassword(String encodedPassword) {
         this.password = encodedPassword;
+    }
+
+    public void setCarNumber(String carNumber) {
+        this.carNumber = carNumber;
     }
 }

@@ -45,7 +45,7 @@ public class SecurityConfig {
                                 .accessDeniedHandler(restAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(HttpMethod.POST, "/regist", "/auth/login","/auth/refresh", "/auth/*/logout").permitAll()
+                        auth.requestMatchers(HttpMethod.POST, "/regist", "/auth/login","/auth/refresh", "/auth/*/logout", "/user/*/modify").permitAll()
                                 .anyRequest().authenticated()
                 ).addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
