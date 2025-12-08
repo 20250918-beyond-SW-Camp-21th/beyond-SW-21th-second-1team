@@ -47,7 +47,7 @@ public class ParkingLot {
     private Integer unitTime;
 
     @Column(nullable = false)
-    private Double averageRating;
+    private Double avgRating;
 
     @Column(nullable = false)
     private Long adminId;
@@ -72,7 +72,7 @@ public class ParkingLot {
         this.usedSpots = 0;           // 초기화값.
         this.baseTime = 30;           // 30분.
         this.unitTime = 10;           // 10분 단위.
-        this.averageRating = 0.0;
+        this.avgRating = 0.0;
         this.adminId = adminId != null ? adminId : 1L;
     }
 
@@ -112,7 +112,7 @@ public class ParkingLot {
         if (newRating < 0.0 || newRating > 5.0) {
             throw new IllegalArgumentException("평점은 0~5.0 사이여야 합니다");
         }
-        this.averageRating = newRating;
+        this.avgRating = newRating;
     }
 
 }
