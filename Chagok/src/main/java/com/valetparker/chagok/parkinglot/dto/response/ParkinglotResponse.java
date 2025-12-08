@@ -35,7 +35,7 @@ public class ParkinglotResponse {
     private Integer unitFee;
 
     @Schema(description = "평점")
-    private Double averageRating;
+    private Double avgRating;
 
     public static ParkinglotResponse from(ParkingLot entity) {
         return ParkinglotResponse.builder()
@@ -47,7 +47,7 @@ public class ParkinglotResponse {
                 .totalSpots(entity.getTotalSpots())
                 .baseFee(entity.getBaseFee())
                 .unitFee(entity.getUnitFee())
-                .averageRating(entity.getAverageRating())
+                .avgRating(entity.getAvgRating())
                 .build();
     }
 }

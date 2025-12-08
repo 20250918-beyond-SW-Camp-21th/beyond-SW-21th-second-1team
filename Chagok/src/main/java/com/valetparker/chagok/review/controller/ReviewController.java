@@ -32,12 +32,17 @@ public class ReviewController {
     * 3. 이용정보 별로 본인이 작성한 리뷰를 볼 수 있는 것이다.
     * */
 //    @GetMapping("/mypage/{usingId}/review")
-    @GetMapping("/mypage/usings/{usingId}")
-    public ResponseEntity<ApiResponse<ReviewDetailResponse>> getUsingReview(@PathVariable Long usingId) {
-        ReviewDetailResponse response = reviewService.getReviewByUsing(usingId);
+//    @GetMapping("/mypage/usings/{usingId}")
+//    public ResponseEntity<ApiResponse<ReviewDetailResponse>> getUsingReview(@PathVariable Long usingId) {
+//        ReviewDetailResponse response = reviewService.getReviewByUsing(usingId);
+//        return ResponseEntity.ok(ApiResponse.success(response));
+//    }
+
+    @GetMapping("/mypage/reservations/{reservationId}/review")
+    public ResponseEntity<ApiResponse<ReviewDetailResponse>> getReservationReview(@PathVariable Long reservationId) {
+        ReviewDetailResponse response = reviewService.getReviewByReservation(reservationId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
-
 
     /*
     * 주차장별 리뷰 조회
@@ -59,19 +64,19 @@ public class ReviewController {
     /*
     * 리뷰 등록
     * */
-//    @PostMapping("/mypage/usings/{usingId}")
-//    public ResponseEntity<ApiResponse<ReviewCommandResponse>> registerReview(
-//            @PathVariable Long usingId,
-//            @RequestPart @Validated ReviewCreateRequest request
-//    ) {
-//        Long reviewId = reviewService.createReview(request, usingId);
-//        ReviewCommandResponse response = ReviewCommandResponse.builder()
-//                .reviewId(reviewId)
-//                .build();
-//        return ResponseEntity
-//                .status(HttpStatus.CREATED)
-//                .body(ApiResponse.success(response));
-//    }
+    @PostMapping("/mypage/reservations/{reservationId}/review")
+    public ResponseEntity<ApiResponse<ReviewCommandResponse>> registerReview(
+            @PathVariable Long reservationId,
+            @RequestBody ReviewCreateRequest request
+    ) {
+        Long reviewId = reviewService.createReview(request, reservationId);
+        ReviewCommandResponse response = ReviewCommandResponse.builder()
+                .reviewId(reviewId)
+                .build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(response));
+    }
 
     /*
     * 리뷰 수정
@@ -79,7 +84,7 @@ public class ReviewController {
     @PutMapping("/mypage/reviews/{reviewId}")
     public ResponseEntity<ApiResponse<Void>> modifyReview(
             @PathVariable Long reviewId,
-            @RequestPart @Validated ReviewUpdateRequest request
+            @RequestBody ReviewUpdateRequest request
     ) {
         reviewService.updateReview(request, reviewId);
         return ResponseEntity.ok(ApiResponse.success(null));

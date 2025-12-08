@@ -1,21 +1,17 @@
 package com.valetparker.chagok.parkinglot.domain;
 
 import com.valetparker.chagok.parkinglot.enums.SeoulDistrict;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+/*주석입니다.*/
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "tbl_parkinglot")
 public class ParkingLot {
 
     @Id
@@ -51,10 +47,7 @@ public class ParkingLot {
     private Integer unitTime;
 
     @Column(nullable = false)
-    private Double averageRating;
-
-    @Column(nullable = false)
-    private Long adminId;
+    private Double avgRating;
 
 
     @Builder
@@ -64,8 +57,7 @@ public class ParkingLot {
             String address,
             Integer baseFee,
             Integer unitFee,
-            Integer totalSpots,
-            Long adminId) {
+            Integer totalSpots) {
 
         this.name = name;
         this.seoulDistrict = seoulDistrict;
@@ -76,8 +68,7 @@ public class ParkingLot {
         this.usedSpots = 0;           // 초기화값.
         this.baseTime = 30;           // 30분.
         this.unitTime = 10;           // 10분 단위.
-        this.averageRating = 0.0;
-        this.adminId = adminId != null ? adminId : 1L;
+        this.avgRating = 0.0;
     }
 
     //  남은 자리 수
@@ -101,6 +92,8 @@ public class ParkingLot {
         this.usedSpots--;
     }
 
+
+
     //  주소 수정
     public void updateAddress(String newAddress) {
         if (newAddress == null || newAddress.isBlank()) {
@@ -114,7 +107,7 @@ public class ParkingLot {
         if (newRating < 0.0 || newRating > 5.0) {
             throw new IllegalArgumentException("평점은 0~5.0 사이여야 합니다");
         }
-        this.averageRating = newRating;
+        this.avgRating = newRating;
     }
 
 }
