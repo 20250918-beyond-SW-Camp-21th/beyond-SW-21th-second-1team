@@ -5,6 +5,7 @@ import com.valetparker.chagok.payment.client.kakao.dto.request.KakaoReadyRequest
 import com.valetparker.chagok.payment.client.kakao.dto.response.KakaoCancelResponse;
 import com.valetparker.chagok.payment.client.kakao.dto.response.KakaoReadyResponse;
 import com.valetparker.chagok.payment.client.kakao.dto.response.KakaoApproveResponse;
+import com.valetparker.chagok.payment.config.KakaoPayProperties;
 import com.valetparker.chagok.payment.domain.Payment;
 import com.valetparker.chagok.payment.enums.PaymentStatus;
 import com.valetparker.chagok.payment.repository.PaymentRepository;
@@ -20,14 +21,10 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final KakaoPayClient kakaoPayClient;
+    private final KakaoPayProperties kakaoPayProperties;
 //    private final ReservationService reservationService; // reservation 연결시 활성화
 
-    @Value("${kakao.redirect-url.success}")
-    private String successRedirectUrl;
-    @Value("${kakao.redirect-url.cancel}")
-    private String cancelRedirectUrl;
-    @Value("${kakao.redirect-url.fail}")
-    private String failRedirectUrl;
+
 
     /** 1. 결제 준비 요청 (Ready) - 결제창 URL 획득 */
     @Transactional
@@ -53,9 +50,9 @@ public class PaymentService {
                 .quantity(1)
                 .totalAmount(amount.intValue())
                 .taxFreeAmount(0)
-                .approval_url(successRedirectUrl)
-                .cancel_url(cancelRedirectUrl)
-                .fail_url(failRedirectUrl)
+                .approval_url(kakaoPayProperties.getRedirectUrlSuccess())
+                .cancel_url(kakaoPayProperties.getRedirectUrlCancel())
+                .fail_url(kakaoPayProperties.getRedirectUrlFail())
                 .build();
 
         // 3. KakaoPayClient 호출 및 tid 획득
@@ -108,7 +105,7 @@ public class PaymentService {
         // 3. 결제 트랜잭션 DB 상태 업데이트
         payment.setStatus(PaymentStatus.CANCELED);
 
-        // 4. ⭐ 예약 상태 취소 및 주차 공간 회수 ⭐
+        // 4. 예약 상태 취소 및 주차 공간 회수
 //        reservationService.cancelReservation(payment.getReservationId());
     }
 }

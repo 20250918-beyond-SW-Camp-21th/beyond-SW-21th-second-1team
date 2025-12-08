@@ -9,7 +9,11 @@ public class KakaoPayProperties {
     private String secretKey;
     private String cid;
 
-    // application.yml을 통해서 application-pay.yml에 있는 SecretKey 가져옴
+    // 리다이렉트 URL 필드 추가
+    private String redirectUrlSuccess;
+    private String redirectUrlCancel;
+    private String redirectUrlFail;
+
     public String getSecretKey() {
         return secretKey;
     }
@@ -24,5 +28,31 @@ public class KakaoPayProperties {
 
     public void setCid(String cid) {
         this.cid = cid;
+    }
+
+    // Getter/Setter 추가
+
+    public String getRedirectUrlSuccess() {
+        return redirectUrlSuccess;
+    }
+
+    public void setRedirectUrlSuccess(String redirectUrlSuccess) {
+        this.redirectUrlSuccess = redirectUrlSuccess;
+    }
+
+    public String getRedirectUrlCancel() {
+        return redirectUrlCancel;
+    }
+
+    public void setRedirectUrlCancel(String redirectUrlCancel) {
+        this.redirectUrlCancel = redirectUrlCancel;
+    }
+
+    public String getRedirectUrlFail() {
+        return redirectUrlFail;
+    }
+
+    public void setRedirectUrlFail(String redirectUrlFail) {
+        this.redirectUrlFail = redirectUrlFail;
     }
 }
