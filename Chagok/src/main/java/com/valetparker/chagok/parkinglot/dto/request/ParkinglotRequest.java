@@ -29,9 +29,6 @@ public class ParkinglotRequest {
     @Schema(description = "단위 요금 (원)", example = "1000")
     private Integer unitFee;
 
-    @Schema(description = "관리자 ID (임시)", example = "1")
-    private Long adminId;
-
     public ParkingLot toEntity() {
         return ParkingLot.builder()
                 .name(this.name)
@@ -40,7 +37,6 @@ public class ParkinglotRequest {
                 .totalSpots(this.totalSpots)
                 .baseFee(this.baseFee)
                 .unitFee(this.unitFee)
-                .adminId(this.adminId)
                 // baseTime(30), unitTime(10) 등은 Entity 빌더 기본값 사용
                 .build();
     }
