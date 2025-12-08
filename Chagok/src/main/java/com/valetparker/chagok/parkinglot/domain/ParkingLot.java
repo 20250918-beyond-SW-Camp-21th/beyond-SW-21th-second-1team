@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+/*주석입니다.*/
 
 @Entity
 @Getter
@@ -100,6 +101,8 @@ public class ParkingLot {
         }
         this.usedSpots--;
     }
+
+
 
     //  주소 수정
     public void updateAddress(String newAddress) {
