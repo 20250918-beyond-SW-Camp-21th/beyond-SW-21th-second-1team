@@ -35,4 +35,8 @@ public class User {
     public void setEncodedPassword(String encodedPassword) {
         this.password = encodedPassword;
     }
+
+    public void setCarNumber(String carNumber) {
+        this.carNumber = carNumber;
+    }
 }

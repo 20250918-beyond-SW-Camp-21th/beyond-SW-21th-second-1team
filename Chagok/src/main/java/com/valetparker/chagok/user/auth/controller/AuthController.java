@@ -4,7 +4,6 @@ import com.valetparker.chagok.common.dto.ApiResponse;
 import com.valetparker.chagok.user.auth.dto.request.LoginRequest;
 import com.valetparker.chagok.user.auth.dto.request.RefreshTokenRequest;
 import com.valetparker.chagok.user.auth.dto.response.TokenResponse;
-import com.valetparker.chagok.user.auth.entity.RefreshToken;
 import com.valetparker.chagok.user.auth.service.AuthService;
 import com.valetparker.chagok.user.command.domain.User;
 import com.valetparker.chagok.user.command.repository.UserRepository;
