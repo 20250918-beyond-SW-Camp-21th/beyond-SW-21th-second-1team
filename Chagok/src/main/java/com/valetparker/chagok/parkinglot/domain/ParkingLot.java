@@ -49,9 +49,6 @@ public class ParkingLot {
     @Column(nullable = false)
     private Double avgRating;
 
-    @Column(nullable = false)
-    private Long adminId;
-
 
     @Builder
     public ParkingLot(
@@ -60,8 +57,7 @@ public class ParkingLot {
             String address,
             Integer baseFee,
             Integer unitFee,
-            Integer totalSpots,
-            Long adminId) {
+            Integer totalSpots) {
 
         this.name = name;
         this.seoulDistrict = seoulDistrict;
@@ -73,7 +69,6 @@ public class ParkingLot {
         this.baseTime = 30;           // 30분.
         this.unitTime = 10;           // 10분 단위.
         this.avgRating = 0.0;
-        this.adminId = adminId != null ? adminId : 1L;
     }
 
     //  남은 자리 수
