@@ -84,7 +84,7 @@ public class ReviewController {
     @PutMapping("/mypage/reviews/{reviewId}")
     public ResponseEntity<ApiResponse<Void>> modifyReview(
             @PathVariable Long reviewId,
-            @RequestPart @Validated ReviewUpdateRequest request
+            @RequestBody ReviewUpdateRequest request
     ) {
         reviewService.updateReview(request, reviewId);
         return ResponseEntity.ok(ApiResponse.success(null));
