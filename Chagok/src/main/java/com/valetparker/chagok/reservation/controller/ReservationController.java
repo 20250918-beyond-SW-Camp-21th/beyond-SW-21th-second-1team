@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reservation")
+@RequestMapping("/reservation")
 @Slf4j
 public class ReservationController {
 
@@ -20,7 +20,7 @@ public class ReservationController {
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
-
+//uid pid
     @PostMapping("/regist")
     public ResponseEntity<ApiResponse<Long>> registerReservation(
             @RequestBody ReservationCreateRequest request

@@ -68,7 +68,6 @@ public class ReservationService {
 
         // 모든 검증 통과 → 예약 엔티티 생성
         Reservation reservation = Reservation.builder()
-                .partnerOrderId("partner-" + System.currentTimeMillis())  // 임시 값, 결제 연동 시 변경 가능
                 .startTime(startTime)
                 .endTime(endTime)
                 .isCanceled(false)
@@ -78,6 +77,8 @@ public class ReservationService {
                 .build();
 
         Reservation saved = reservationRepository.save(reservation);
+
+        saved.assignPartnerOrderId();
 
         return saved.getReservationId();
     }
