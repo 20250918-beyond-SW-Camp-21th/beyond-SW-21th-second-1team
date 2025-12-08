@@ -34,13 +34,16 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @PostMapping("/{userNo}/logout")
-    public ResponseEntity<ApiResponse<Void>> logout(@PathVariable("userNo") Long userNo,
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(@PathVariable("email") String email,
                                                     @RequestBody RefreshTokenRequest request){
-        User user = userRepository.findByUserNo(userNo)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         authService.logout(request.getRefreshToken());
         return ResponseEntity.ok(ApiResponse.success(null));
     }
+
+//    @PostMapping("/logout")
+//    public ResponseEntity<ApiResponse<Vo>> logout()
 }
