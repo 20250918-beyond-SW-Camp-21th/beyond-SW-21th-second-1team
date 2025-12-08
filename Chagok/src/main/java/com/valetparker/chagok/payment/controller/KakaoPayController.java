@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.*;
 public class KakaoPayController {
 
 
-    private final KakaoPayProvider kakaoPayProvider;
+//    private final KakaoPayProvider kakaoPayProvider;
 
 
-    // 카카오페이 결제를 준비하는 기능을 제공하는 api
-    @PostMapping("/ready")
-    public ReadyResponse ready(@RequestBody OrderRequest request) {
-        return kakaoPayProvider.ready(request);
-    }
+//    // 카카오페이 결제를 준비하는 기능을 제공하는 api
+//    @PostMapping("/ready")
+//    public ReadyResponse ready(@RequestBody OrderRequest request) {
+//        return kakaoPayProvider.ready(request);
+//    }
 
-    // 카카오페이 결제 성공시 자동으로 호출되는 결제 승인 api
-    @GetMapping("/approve")
-    public ApproveResponse approve(@RequestParam("pg_token") String pgToken) {
-        return kakaoPayProvider.approve(pgToken);
-    }
+//    // 카카오페이 결제 성공시 자동으로 호출되는 결제 승인 api
+//    @GetMapping("/approve")
+//    public ApproveResponse approve(@RequestParam("pg_token") String pgToken) {
+//        return kakaoPayProvider.approve(pgToken);
+//    }
 
 
 }
