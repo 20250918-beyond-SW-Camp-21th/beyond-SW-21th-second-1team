@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -23,7 +24,7 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String partnerOrderId;
 
     @Column(nullable = false)
@@ -43,16 +44,14 @@ public class Reservation {
     private Long userNo;
     private Long parkinglotId;
 
+    // 취소
     public void cancel() {
         isCanceled = true;
     }
 
-/*    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userNo")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parkinglotId")
-    private Parkinglot parkinglot;*/
+    // 주문번호 생성
+    public void assignPartnerOrderId() {
+        this.partnerOrderId = String.format("ORDER_%03d", this.reservationId);
+    }
 
 }
