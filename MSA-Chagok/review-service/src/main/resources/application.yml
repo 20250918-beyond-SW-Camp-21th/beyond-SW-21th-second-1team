@@ -13,15 +13,15 @@ eureka:
 
 spring:
   application:
-    name: swcamp-order-service
+    name: review-service
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/parkinghub
+    url: jdbc:mariadb://dev.macacolabs.site:3306/parkinghub
     username: valetparker
     password: valetparker
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:

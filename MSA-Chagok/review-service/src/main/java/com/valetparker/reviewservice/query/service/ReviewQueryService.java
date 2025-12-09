@@ -28,7 +28,7 @@ public class ReviewQueryService {
 
     @Transactional(readOnly = true)
     public ReviewDetailResponse getReviewByReservation(Long reservationId) {
-        Review review = reviewQueryRepository.findByReservation_ReservationId(reservationId)
+        Review review = reviewQueryRepository.findByReservationId(reservationId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
         ReviewDto reviewDto = ReviewDto.from(review);
 
@@ -52,7 +52,7 @@ public class ReviewQueryService {
 
         Pageable pageable = PageRequest.of(page - 1, size, sort);
 
-        Page<Review> reviewPage = reviewQueryRepository.findByParkinglot_ParkinglotId(parkinglotId, pageable);
+        Page<Review> reviewPage = reviewQueryRepository.findByParkinglotId(parkinglotId, pageable);
         List<ReviewDto> reviewDtoList = reviewPage.getContent().stream()
                 .map(ReviewDto::from)
                 .toList();
