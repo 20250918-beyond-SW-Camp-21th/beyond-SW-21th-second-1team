@@ -1,4 +1,4 @@
-rootProject.name = 'MSA-Chagok'
+rootProject.name = 'MSAChagok'
 include 'eureka-server'
 include 'gateway-server'
 include 'review-service'
