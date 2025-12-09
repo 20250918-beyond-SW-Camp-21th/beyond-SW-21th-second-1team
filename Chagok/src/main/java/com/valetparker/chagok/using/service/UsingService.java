@@ -8,6 +8,7 @@ import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.reservation.repository.ReservationRepository;
 import com.valetparker.chagok.using.domain.Using;
 import com.valetparker.chagok.using.dto.request.UsingInfoRequest;
+import com.valetparker.chagok.using.dto.response.EndUsingResponse;
 import com.valetparker.chagok.using.dto.response.UsingInfoResponse;
 import com.valetparker.chagok.using.enums.UsingStatus;
 import com.valetparker.chagok.using.repository.UsingRepository;
@@ -93,43 +94,54 @@ public class UsingService {
         long exceededFee = 0;
 
         // 4. 상태 계산
-        UsingStatus status;
-        if (using.getUsingStatus() == UsingStatus.USED) {
-            // 이미 이용 종료된 건
-            status = UsingStatus.USED;
+        UsingStatus status = using.getUsingStatus();
 
-        } else if (now.isBefore(startTime)) {
-            // 예약 시작 전
-            status = UsingStatus.BEFORE;
-
-        } else if (now.isBefore(endTime)) {
-            // 예약 시간 사이
-            status = UsingStatus.USING;
-
-        } else {
-            // 예약 종료 시각 이후 (아직 USED로 안 바뀐 경우) → 연체
-            status = UsingStatus.EXCEEDED_USING;
-
-            // 연체 시간(분)
-            exceededMinutes = Duration.between(endTime, now).toMinutes();
-
-            // unitTime / unitFee 기준으로 연체 단위, 금액 계산
-            int unitTime = parkinglot.getUnitTime();    // 예: 10분, 60분 등
-            int unitFee = parkinglot.getUnitFee();      // 예: 500원
-
-            // 올림 나눗셈으로 몇 단위 초과인지 계산
-            exceededUnits = (exceededMinutes + unitTime - 1) / unitTime;
-
-            exceededFee = exceededUnits * unitFee;
-
-            // 필요하면 Using 엔티티에도 연체 횟수 누적
-            using.setUsingStatus(UsingStatus.EXCEEDED_USING);
-            using.setExceededCount((int) exceededUnits);
+        // 이미 USED면 그대로 출력
+        if (status == UsingStatus.USED) {
+            if (using.getExceededCount() > 0) {
+                int unitFee = parkinglot.getUnitFee();
+                exceededUnits = using.getExceededCount();
+                exceededFee = exceededUnits * unitFee;
+            }
         }
 
-        // 상태가 변경되었으면 반영
-        if (using.getUsingStatus() != status) {
-            using.setUsingStatus(status);
+        // 연체된 경우
+        else if (status == UsingStatus.EXCEEDED_USING || using.getExceededCount() > 0) {
+            int unitTime = parkinglot.getUnitTime();
+            int unitFee = parkinglot.getUnitFee();
+
+            // DB에 저장된 exceededCount 기반
+            exceededUnits = using.getExceededCount();
+            exceededMinutes = exceededUnits * (long) unitTime;
+            exceededFee = exceededUnits * (long) unitFee;
+        }
+
+        // BEFORE / USING 상태만 "시간 기반"으로 상태 업데이트
+        else {
+            if (now.isBefore(startTime)) {
+                status = UsingStatus.BEFORE;
+            } else if (!now.isAfter(endTime)) {
+                status = UsingStatus.USING;
+            } else {
+                // 이제 막 연체 상태로 넘어간 경우
+                status = UsingStatus.EXCEEDED_USING;
+
+                exceededMinutes = Duration.between(endTime, now).toMinutes();
+                int unitTime = parkinglot.getUnitTime();
+                int unitFee = parkinglot.getUnitFee();
+
+                exceededUnits = (exceededMinutes + unitTime - 1) / unitTime;
+                exceededFee = exceededUnits * unitFee;
+
+                using.setUsingStatus(UsingStatus.EXCEEDED_USING);
+                using.exceededCounter((int) exceededUnits);
+            }
+
+            // 상태가 변경되었으면 반영
+
+            using.settingUsingStatus(status);
+
+
         }
 
         return new UsingInfoResponse(
@@ -144,6 +156,92 @@ public class UsingService {
                 startTime,
                 endTime,
                 remainingMinutes,
+                exceededMinutes,
+                exceededUnits,
+                exceededFee
+        );
+    }
+
+    /**
+     * 이용 종료
+     * - 예약 시간 내 종료: 연체 없음
+     * - 예약 시간 이후 종료: 연체 있음 (unit_time, unit_fee 기준 계산)
+     * - 공통: Using 상태 USED, is_quit = true, parkinglot.usedSpots - 1
+     */
+    @Transactional
+    public EndUsingResponse endUsing(Long reservationId) {
+
+        log.info("[UsingService] 이용 종료 요청. reservationId={}", reservationId);
+
+        // Using 조회
+        Using using = usingRepository.findByReservationId(reservationId)
+                .orElseThrow(() -> {
+                    log.warn("Using 정보 없음. reservationId={}", reservationId);
+                    return new BusinessException(ErrorCode.NOT_FOUND);
+                });
+
+        // 이미 종료된 건이면 종료 불가
+        if (using.getUsingStatus() == UsingStatus.USED) {
+            log.warn("이미 종료된 이용 건입니다. usingId={}", using.getUsingId());
+            throw new BusinessException(ErrorCode.VALIDATION_ERROR);
+        }
+
+        // Reservation 조회
+        Reservation reservation = reservationRepository.findByReservationId(reservationId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+
+        // Parkinglot 조회
+        ParkingLot parkinglot = parkinglotRepository.findById(reservation.getParkinglotId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime endTime = reservation.getEndTime();
+
+        boolean overdue = false;
+        long exceededMinutes = 0L;
+        long exceededUnits = 0L;
+        long exceededFee = 0L;
+
+        // 예약 시간 이후 종료인지 판단
+        if (now.isAfter(endTime)) {
+            overdue = true;
+
+            exceededMinutes = Duration.between(endTime, now).toMinutes();
+            if (exceededMinutes < 0) exceededMinutes = 0;
+
+            int unitTime = parkinglot.getUnitTime();   // 예: 60분
+            int unitFee = parkinglot.getUnitFee();     // 예: 1000원
+
+            if (unitTime > 0 && exceededMinutes > 0) {
+                // 올림 나눗셈: 1분이라도 초과하면 1단위로 계산
+                exceededUnits = (exceededMinutes + unitTime - 1) / unitTime;
+                exceededFee = exceededUnits * unitFee;
+            }
+
+            // 연체 횟수는 unit 기준 초과 횟수로 저장
+            using.exceededCounter((int) exceededUnits);
+            log.info("연체 종료. exceededMinutes={}, exceededUnits={}, exceededFee={}",
+                    exceededMinutes, exceededUnits, exceededFee);
+        } else {
+            log.info("예약 시간 내 정상 종료. now={}, endTime={}", now, endTime);
+        }
+
+        // 공통 종료 처리: 상태 USED, 출차 처리
+        using.setUsingStatus(UsingStatus.USED);
+        using.setIsQuit(true);   // is_quit = 1
+
+        // 주차장 자리 하나 늘리기 (usedSpots 감소)
+
+        log.info("[UsingService] 이용 종료 완료. usingId={}, reservationId={}, overdue={}",
+                using.getUsingId(), reservationId, overdue);
+
+        // JPA 더티체킹으로 using, parkinglot 모두 UPDATE 반영됨
+
+        return new EndUsingResponse(
+                using.getUsingId(),
+                reservation.getReservationId(),
+                using.getUsingStatus(),
+                overdue,
                 exceededMinutes,
                 exceededUnits,
                 exceededFee

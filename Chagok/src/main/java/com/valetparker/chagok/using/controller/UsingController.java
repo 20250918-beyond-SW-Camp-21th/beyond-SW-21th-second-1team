@@ -2,6 +2,7 @@ package com.valetparker.chagok.using.controller;
 
 import com.valetparker.chagok.common.dto.ApiResponse;
 import com.valetparker.chagok.using.dto.request.UsingInfoRequest;
+import com.valetparker.chagok.using.dto.response.EndUsingResponse;
 import com.valetparker.chagok.using.dto.response.UsingInfoResponse;
 import com.valetparker.chagok.using.service.UsingService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,15 @@ public class UsingController {
             @RequestBody UsingInfoRequest request
     ) {
         UsingInfoResponse response = usingService.getUsingInfo(request);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    // 이용 종료
+    @PostMapping("/end")
+    public ResponseEntity<ApiResponse<EndUsingResponse>> endUsing(
+            @RequestParam Long reservationId
+    ) {
+        EndUsingResponse response = usingService.endUsing(reservationId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

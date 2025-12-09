@@ -4,10 +4,12 @@ import com.valetparker.chagok.using.enums.UsingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
+@Getter
 @Table(name = "tbl_using")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +19,8 @@ public class Using {
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long usingId;
+
+    private boolean isQuit;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -28,24 +32,23 @@ public class Using {
 
     private Long reservationId;
 
-    public UsingStatus getUsingStatus() {
-        return this.usingStatus;
-    }
-
-    public long getUsingId() {
-        return this.usingId;
-    }
-
-    public int getExceededCount() {
-        return this.exceededCount;
+    public void settingUsingStatus(UsingStatus usingStatus) {
+        if (this.usingStatus != usingStatus) {
+            this.usingStatus = usingStatus;
+        }
     }
 
     public void setUsingStatus(UsingStatus usingStatus) {
         this.usingStatus = usingStatus;
     }
 
-    public void setExceededCount(int exceededCount) {
+    public void exceededCounter(int exceededCount) {
         this.exceededCount = exceededCount;
     }
+
+    public void setIsQuit(boolean quit) {     // is_quit 컬럼에 매핑
+        this.isQuit = quit;
+    }
+
 
 }
