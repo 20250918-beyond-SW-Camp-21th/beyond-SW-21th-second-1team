@@ -1,1 +1,42 @@
 #spring.application.name=gateway-server
+server:
+  port: 8000
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: lb://VALETPARKER-USER-SERVICE
+              predicates:
+                - Path=/api/v1/user-service/**
+              filters:
+                - RewritePath=/api/v1/user-service/(?<segment>.*), /$\{segment}
+                - name : CircuitBreaker
+                  args:
+                    name: userServiceCB
+                    fallbackUri: forward:/fallback/user
+            - id: parkinglot-service
+              uri: lb://VALETPARKER-ORDER-SERVICE
+              predicates:
+                - Path=/api/v1/parkinglot-service/**
+              filters:
+                - RewritePath=/api/v1/parkinglot-service/(?<segment>.*), /$\{segment}
+            - id: review-service
+              uri: lb://VALETPARKER-REVIEW-SERVICE
+              predicates:
+                - Path=/api/v1/review-service/**
+              filters:
+                - RewritePath=/api/v1/review-service/(?<segment>.*), /$\{segment}
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+jwt:
+  secret: LH9QZL8upsPBfuDY+Dkb1kT9DZIIUSuA2u4O6Lfi3mkEfeWtETpVTcR/8SMZdJWn/xNTuCQBE6rBvDXgnVmscQ==
