@@ -1,5 +1,6 @@
 package com.valetparker.reviewservice.command.service;
 
+import com.valetparker.reviewservice.command.client.UserClient;
 import com.valetparker.reviewservice.command.dto.request.ReviewCreateRequest;
 import com.valetparker.reviewservice.command.dto.request.ReviewUpdateRequest;
 import com.valetparker.reviewservice.command.repository.JpaReviewCommandRepository;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewCommandService {
 
     private final JpaReviewCommandRepository jpaReviewCommandRepository;
+    private final UserClient userClient;
+
 
     @Transactional
     public Long createReview(ReviewCreateRequest request, Long reservationId) {
