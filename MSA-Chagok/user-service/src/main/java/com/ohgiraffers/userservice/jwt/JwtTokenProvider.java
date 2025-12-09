@@ -1,5 +1,6 @@
 package com.ohgiraffers.userservice.jwt;
 
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
