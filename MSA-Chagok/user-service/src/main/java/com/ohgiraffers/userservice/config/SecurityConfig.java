@@ -1,9 +1,9 @@
 package com.ohgiraffers.userservice.config;
 
-import com.valetparker.chagok.common.jwt.HeaderAuthenticationFilter;
-import com.valetparker.chagok.common.jwt.JwtTokenProvider;
-import com.valetparker.chagok.common.jwt.RestAccessDeniedHandler;
-import com.valetparker.chagok.common.jwt.RestAuthenticationEntryPoint;
+import com.ohgiraffers.userservice.jwt.HeaderAuthenticationFilter;
+import com.ohgiraffers.userservice.jwt.JwtTokenProvider;
+import com.ohgiraffers.userservice.jwt.RestAccessDeniedHandler;
+import com.ohgiraffers.userservice.jwt.RestAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +46,8 @@ public class SecurityConfig {
                                 .accessDeniedHandler(restAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
+                        auth
+                        .requestMatchers( "/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/regist", "/auth/login","/auth/refresh").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/user/modify",  "/auth/logout").authenticated()
                                 .anyRequest().authenticated()
