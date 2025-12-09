@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ReservationDetailResponse {
+public class ReservationQueryResponse {
 
     private final ReservationDto reservationDto;
 }

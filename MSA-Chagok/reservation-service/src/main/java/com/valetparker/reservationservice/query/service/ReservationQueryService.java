@@ -4,11 +4,14 @@ import com.valetparker.reservationservice.common.entity.Reservation;
 import com.valetparker.reservationservice.common.exception.BusinessException;
 import com.valetparker.reservationservice.common.exception.ErrorCode;
 import com.valetparker.reservationservice.common.dto.ReservationDto;
-import com.valetparker.reservationservice.query.dto.response.ReservationDetailResponse;
+import com.valetparker.reservationservice.query.dto.response.ReservationListResponse;
+import com.valetparker.reservationservice.query.dto.response.ReservationQueryResponse;
 import com.valetparker.reservationservice.query.repository.ReservationQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,13 +21,27 @@ public class ReservationQueryService {
 
     // 단일객체 조회(reservationId)
     @Transactional(readOnly = true)
-    public ReservationDetailResponse getReservationDetailBy(Long reservationId) {
+    public ReservationQueryResponse getReservationDetailBy(Long reservationId) {
         Reservation reservation = reservationQueryRepository
                 .findByReservationId(reservationId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
         ReservationDto response = ReservationDto.from(reservation);
-        return ReservationDetailResponse.builder()
+        return ReservationQueryResponse.builder()
                 .reservationDto(response)
                 .build();
+    }
+
+    // 리스트 객체 조회(userNo)
+    @Transactional(readOnly = true)
+    public ReservationListResponse getReservationsByUserNo(Long userNo) {
+        List<Reservation> reservations = reservationQueryRepository
+                .findByUserNoOrderByCreatedAtDesc(userNo);
+        List<ReservationDto> reservationDtos = reservations.stream()
+                .map(ReservationDto::from)
+                .toList();
+        return ReservationListResponse.builder()
+                .reservationDtoList(reservationDtos)
+                .build();
+
     }
 }
