@@ -7,10 +7,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "valetparker-user-service", configuration = FeignClientConfig.class)
-public interface UserClient {
+@FeignClient(name = "valetparker-reservation-service", configuration = FeignClientConfig.class)
+public interface ReservationClient {
 
-    @GetMapping("/users/{userId}/grade")
-    ApiResponse<String> getUserGrade(@PathVariable("userId") Long userId);
-
+    @GetMapping("/reservation/{reservationId}")
+    ApiResponse<ReviewReservationInfoResponse> getReservation(
+            @PathVariable("reservationId") Long reservationId);
 }

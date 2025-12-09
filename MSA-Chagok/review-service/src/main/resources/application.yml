@@ -13,7 +13,7 @@ eureka:
 
 spring:
   application:
-    name: parkinglot-user-service
+    name: review-service
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://dev.macacolabs.site:3306/parkinghub
