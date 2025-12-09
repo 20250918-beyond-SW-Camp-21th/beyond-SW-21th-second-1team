@@ -26,8 +26,9 @@ public class ParkinglotRequest {
     @Schema(description = "기본 요금 (원)", example = "3000")
     private Integer baseFee;
 
-    @Schema(description = "단위 요금 (원)", example = "1000")
+    @Schema(description = "연체 요금 (원)", example = "1000")
     private Integer unitFee;
+
 
     public ParkingLot toEntity() {
         return ParkingLot.builder()
