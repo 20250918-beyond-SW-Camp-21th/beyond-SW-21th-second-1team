@@ -8,6 +8,8 @@ import com.example.parkinglotservice.service.ParkinglotService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,4 +39,18 @@ public class ParkinglotController {
     public List<ParkinglotResponse> searchParkingLots(@RequestParam SeoulDistrict district) {
         return parkinglotService.getParkingLotsByDistrict(district);
     }
+
+    @PostMapping
+    public ResponseEntity<ParkinglotResponse> create(@RequestBody ParkinglotRequest request) {
+        ParkinglotResponse response = parkinglotService.createParkingLot(request);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
+
+
+
+
+
 }

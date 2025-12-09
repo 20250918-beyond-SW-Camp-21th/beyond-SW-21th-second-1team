@@ -12,12 +12,12 @@ spring:
             - id: user-service
               uri: lb://VALETPARKER-USER-SERVICE
               predicates:
-                - Path=/api/v1/user-service/**
+                - Path=/api/v1/valetparker-user-service/**
               filters:
-                - RewritePath=/api/v1/user-service/(?<segment>.*), /$\{segment}
+                - RewritePath=/api/v1/valetparker-user-service/(?<segment>.*), /$\{segment}
                 - name : CircuitBreaker
                   args:
-                    name: userServiceCB
+                    name: userServiceCB9
                     fallbackUri: forward:/fallback/user
             - id: parkinglot-service
               uri: lb://VALETPARKER-ORDER-SERVICE

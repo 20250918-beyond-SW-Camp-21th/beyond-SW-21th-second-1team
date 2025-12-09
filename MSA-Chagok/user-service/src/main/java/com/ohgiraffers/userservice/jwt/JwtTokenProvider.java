@@ -1,5 +1,6 @@
 package com.ohgiraffers.userservice.jwt;
 
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -16,7 +17,7 @@ public class JwtTokenProvider {
     @Value("$LH9QZL8upsPBfuDY+Dkb1kT9DZIIUSuA2u4O6Lfi3mkEfeWtETpVTcR/8SMZdJWn/xNTuCQBE6rBvDXgnVmscQ==")
     private String jwtSecret;
 
-    @Value("180000")
+    @Value("1800000")
     private long jwtExpiration;
 
     @Value("604800000")

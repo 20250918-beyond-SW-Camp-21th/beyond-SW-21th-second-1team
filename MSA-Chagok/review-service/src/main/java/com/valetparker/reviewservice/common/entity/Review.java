@@ -37,15 +37,14 @@ public class Review {
     @LastModifiedDate
     private LocalDateTime reviewModifiedAt;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "writer_id", nullable = false)
-//    private User user;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "parkinglot_id", nullable = false)
-//    private ParkingLot parkinglot;
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "reservation_id", nullable = false)
-//    private Reservation reservation;
+    @Column(nullable = false)
+    private Long writerId;
+
+    @Column(nullable = false)
+    private Long parkinglotId;
+
+    @Column(nullable = false)
+    private Long reservationId;
 
     public void updateReview(ReviewUpdateRequest request) {
         this.content = request.getContent();
@@ -54,17 +53,17 @@ public class Review {
 
     public static Review create(
             Double rating,
-            String content
-//            User user,
-//            ParkingLot parkingLot,
-//            Reservation reservation
+            String content,
+            Long writerId,
+            Long parkinglotId,
+            Long reservationId
     ) {
         Review review = new Review();   // 기본 생성자 (PROTECTED) 사용
         review.rating = rating;
         review.content = content;
-//        review.user = user;
-//        review.parkinglot = parkingLot;
-//        review.reservation = reservation;
+        review.writerId = writerId;
+        review.parkinglotId = parkinglotId;
+        review.reservationId = reservationId;
         return review;
     }
 }
