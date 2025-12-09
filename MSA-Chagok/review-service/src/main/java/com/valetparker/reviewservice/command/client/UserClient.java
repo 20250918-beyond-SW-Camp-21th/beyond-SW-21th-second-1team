@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "valetparker-user-service", configuration = FeignClientConfig.class)
 public interface UserClient {
 
-    @GetMapping("/users/{userId}/grade")
-    ApiResponse<String> getUserGrade(@PathVariable("userId") Long userId);
+    @GetMapping("/users/{userId}/")
+    ApiResponse<String> getUser(@PathVariable("userId") Long userId);
 
 }

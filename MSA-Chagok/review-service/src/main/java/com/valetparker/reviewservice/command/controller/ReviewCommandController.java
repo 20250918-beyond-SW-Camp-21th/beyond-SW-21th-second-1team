@@ -31,7 +31,7 @@ public class ReviewCommandController {
                 .body(ApiResponse.success(response));
     }
 
-    @PutMapping("/mypage/reviews/{reviewId}")
+    @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<ApiResponse<Void>> modifyReview(
             @PathVariable Long reviewId,
             @RequestBody ReviewUpdateRequest request
@@ -40,7 +40,7 @@ public class ReviewCommandController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    @DeleteMapping("/mypage/reviews/{reviewId}")
+    @DeleteMapping("/reviews/{reviewId}")
     public ResponseEntity<ApiResponse<Void>> deleteReview(
             @PathVariable Long reviewId
     ) {
