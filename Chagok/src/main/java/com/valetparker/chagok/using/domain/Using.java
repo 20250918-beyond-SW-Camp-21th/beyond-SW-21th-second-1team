@@ -1,12 +1,17 @@
 package com.valetparker.chagok.using.domain;
 
-import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.using.enums.UsingStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "tbl_using")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Using {
     @Id
     @Column(nullable = false)
@@ -21,8 +26,26 @@ public class Using {
     @Column(nullable = false)
     private int exceededCount;
 
-/*    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservationId")
-    private Reservation reservation;*/
     private Long reservationId;
+
+    public UsingStatus getUsingStatus() {
+        return this.usingStatus;
+    }
+
+    public long getUsingId() {
+        return this.usingId;
+    }
+
+    public int getExceededCount() {
+        return this.exceededCount;
+    }
+
+    public void setUsingStatus(UsingStatus usingStatus) {
+        this.usingStatus = usingStatus;
+    }
+
+    public void setExceededCount(int exceededCount) {
+        this.exceededCount = exceededCount;
+    }
+
 }
