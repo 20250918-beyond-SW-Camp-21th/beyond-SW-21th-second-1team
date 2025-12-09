@@ -7,7 +7,8 @@ import com.valetparker.chagok.parkinglot.repository.ParkinglotRepository;
 import com.valetparker.chagok.reservation.domain.Reservation;
 import com.valetparker.chagok.reservation.dto.ReservationDto;
 import com.valetparker.chagok.reservation.dto.request.ReservationCreateRequest;
-import com.valetparker.chagok.reservation.dto.response.ReservationHistoryResponse;
+import com.valetparker.chagok.reservation.dto.response.ReservationDetailResponse;
+import com.valetparker.chagok.reservation.dto.response.ReservationListResponse;
 import com.valetparker.chagok.reservation.repository.ReservationRepository;
 import com.valetparker.chagok.user.command.domain.User;
 import com.valetparker.chagok.user.command.repository.UserRepository;
@@ -17,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,26 @@ public class ReservationService {
     private final ParkinglotRepository parkinglotRepository;
     private final ReservationRepository reservationRepository;
     private final ModelMapper modelMapper;
+
+    // partnerOrderId 포맷
+    private static final DateTimeFormatter ORDER_ID_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+    // unique partnerOrderId 생성
+    private String generateUniquePartnerOrderId() {
+        String orderId;
+
+        do {
+            String timePart = LocalDateTime.now().format(ORDER_ID_TIME_FORMATTER);
+            int random = ThreadLocalRandom.current().nextInt(0, 1000); // 0~999
+            String randomPart = String.format("%03d", random);
+
+            // 최종 형식: ORDER_20251209123015999_123
+            orderId = "ORDER_" + timePart + "_" + randomPart;
+
+        } while (reservationRepository.existsByPartnerOrderId(orderId));
+
+        return orderId;
+    }
 
     @Transactional
     public Long createReservation(ReservationCreateRequest request) {
@@ -55,7 +78,7 @@ public class ReservationService {
         }
 
         /* 예약 가능 여부 체크 해당 시간대에 겹치는 예약이 있는가? */
-/*        boolean hasOverlap = reservationRepository
+        boolean hasOverlap = reservationRepository
                 .existsByParkinglotIdAndIsCanceledFalseAndEndTimeGreaterThanAndStartTimeLessThan(
                         parkinglot.getParkinglotId(),
                         startTime,
@@ -64,26 +87,37 @@ public class ReservationService {
 
         if (hasOverlap) {
             throw new BusinessException(ErrorCode.REGIST_ERROR);
-        }*/
+        }
 
-        // 모든 검증 통과 → 예약 엔티티 생성
+        // 유니크한 주문번호 생성
+        String partnerOrderId = generateUniquePartnerOrderId();
+
+        // 예약 엔티티 생성 (partnerOrderId 포함)
         Reservation reservation = Reservation.builder()
+                .partnerOrderId(partnerOrderId)
                 .startTime(startTime)
                 .endTime(endTime)
                 .isCanceled(false)
                 .createdAt(LocalDateTime.now())
-                .userNo(user.getUserNo())
-                .parkinglotId(parkinglot.getParkinglotId())
+                .userNo(request.getUserNo())
+                .parkinglotId(request.getParkinglotId())
                 .build();
 
         Reservation saved = reservationRepository.save(reservation);
 
-        saved.assignPartnerOrderId();
-
         return saved.getReservationId();
     }
 
-    public List<ReservationHistoryResponse> getReservationHistory(Long userNo) {
+    @Transactional
+    public ReservationDetailResponse getReservationDetail(Long reservationId) {
+        Reservation reservation = reservationRepository
+                .findByReservationId(reservationId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+        ReservationDto response = modelMapper.map(reservation, ReservationDto.class);
+        return new ReservationDetailResponse(response);
+    }
+
+    public List<ReservationListResponse> getReservationList(Long userNo) {
         List<Reservation> reservations = reservationRepository
                 .findByUserNoOrderByCreatedAtDesc(userNo);
 
@@ -92,7 +126,7 @@ public class ReservationService {
         return reservations.stream()
                 .map(reservation -> {
                     ReservationDto dto = modelMapper.map(reservation, ReservationDto.class);
-                    return new ReservationHistoryResponse(dto);
+                    return new ReservationListResponse(dto);
                 })
                 .toList();
     }
