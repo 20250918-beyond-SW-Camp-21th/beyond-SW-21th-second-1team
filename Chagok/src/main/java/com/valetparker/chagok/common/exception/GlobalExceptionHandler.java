@@ -2,6 +2,7 @@ package com.valetparker.chagok.common.exception;
 
 import com.valetparker.chagok.common.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,6 +30,19 @@ public class GlobalExceptionHandler {
                 = ApiResponse.failure(errorCode.getCode(), errorMessage.toString());
         return new ResponseEntity<>(response, errorCode.getHttpStatus());
     }
+
+    // 새로추가
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleValidationException(BadCredentialsException e) {
+        ErrorCode errorCode = ErrorCode.LOGIN_ERROR;
+        StringBuilder errorMessage = new StringBuilder(errorCode.getMessage());
+        errorMessage.append(String.format("[%s : %s]", "LOGIN", e.getMessage()));
+
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorMessage.toString());
+        return new ResponseEntity<>(response, errorCode.getHttpStatus());
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleException() {
