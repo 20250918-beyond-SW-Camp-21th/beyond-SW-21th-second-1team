@@ -23,7 +23,6 @@ public class SecurityConfig {
 
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     private final RestAccessDeniedHandler restAccessDeniedHandler;
-    private final UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,11 +37,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers( "/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/mypage/reservations/**/review").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/mypage/reviews/**").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/mypage/reviews/**").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/mypage/reservations/**/review").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/parkinglot/detail/**/reviews").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/mypage/reservations/{reservationId}/review").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/mypage/reviews/{reviewId}").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/mypage/reviews/{reviewId}").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/mypage/reservations/{reservationId}/review").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/parkinglot/detail/{parkinglotId}/reviews").authenticated()
                                 .anyRequest().authenticated()
                 ).addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
