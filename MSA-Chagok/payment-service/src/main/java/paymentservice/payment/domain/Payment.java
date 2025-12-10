@@ -1,4 +1,4 @@
-package com.valetparker.chagok.payment.domain;
+package paymentservice.payment.domain;
 
 import com.valetparker.chagok.payment.enums.PaymentStatus;
 import jakarta.persistence.*;

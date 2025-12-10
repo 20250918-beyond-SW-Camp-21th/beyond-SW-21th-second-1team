@@ -1,4 +1,4 @@
-package com.valetparker.chagok.payment.config;
+package paymentservice.payment.config;
 
 import lombok.Getter;
 import lombok.Setter;

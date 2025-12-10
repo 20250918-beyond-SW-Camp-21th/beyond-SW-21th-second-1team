@@ -1,10 +1,9 @@
-package com.valetparker.chagok.common.config;
+package paymentservice.common.config;
 
 import com.valetparker.chagok.common.jwt.HeaderAuthenticationFilter;
 import com.valetparker.chagok.common.jwt.JwtTokenProvider;
 import com.valetparker.chagok.common.jwt.RestAccessDeniedHandler;
 import com.valetparker.chagok.common.jwt.RestAuthenticationEntryPoint;
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -47,11 +45,24 @@ public class SecurityConfig {
                         .accessDeniedHandler(restAccessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/regist", "/auth/login", "/auth/refresh").permitAll()
+                        .requestMatchers("/payment/**", "/kakaopay/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/modify", "/auth/logout").authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(
+                "/swagger-ui/",
+                "/swagger-ui.html",
+                "/v3/api-docs/",
+                "/swagger-resources/",
+                "/webjars/",
+                "/reservation/**",
+                "/online/v1/payments/**");
     }
 
     @Bean
