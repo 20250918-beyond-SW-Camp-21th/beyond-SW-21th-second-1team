@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         }
 
         String email = jwtTokenProvider.getEmailFromJWT(token);
-        log.info("accessToken email: {}", email);
+
         ServerHttpRequest mutateRequest = exchange.getRequest().mutate()
                 .header("X-User-Email", email)
                 .build();

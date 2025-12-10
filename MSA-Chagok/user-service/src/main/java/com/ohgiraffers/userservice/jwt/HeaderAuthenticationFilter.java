@@ -23,6 +23,14 @@ import java.util.List;
 @Slf4j
 public class HeaderAuthenticationFilter extends OncePerRequestFilter {
 
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailsService userDetailsService;
+
+    public HeaderAuthenticationFilter(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -33,16 +41,10 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
         log.info("email : {}", email);
 
         if (email != null) {
-            List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("USER"));
             // 이미 Gateway에서 검증된 정보로 인증 객체 구성
             PreAuthenticatedAuthenticationToken authentication =
-                    new PreAuthenticatedAuthenticationToken(email, null, authorities);
-
-            authentication.setAuthenticated(true);
-
+                    new PreAuthenticatedAuthenticationToken(email, null);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            log.info("Authentication Success : {}", authentication);
         }
         filterChain.doFilter(request, response);
 
