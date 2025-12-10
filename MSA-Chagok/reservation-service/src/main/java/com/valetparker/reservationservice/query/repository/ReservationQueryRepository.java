@@ -13,5 +13,5 @@ public interface ReservationQueryRepository extends JpaRepository<Reservation,Lo
     // 예약 조회
     Optional<Reservation> findByReservationId(Long ReservationId);
     // 예약 전체 최신순 조회
-    List<Reservation> findByUserNoOrderByCreatedAtDesc(Long userNo);
+    List<Reservation> findAllByUserNoOrderByCreatedAtDesc(Long userNo);
 }
