@@ -28,11 +28,11 @@ public class ParkinglotCommandService {
         return saved.getParkinglotId();
     }
 
-    @Transactional
-    public void updateParkinglot(ParkinglotUpdateRequest request, Long parkinglotId) {
-        
-
-    }
+//    @Transactional
+//    public void updateParkinglot(ParkinglotUpdateRequest request, Long parkinglotId) {
+//
+//
+//    }
 
 
 }
