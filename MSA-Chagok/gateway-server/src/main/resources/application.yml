@@ -9,6 +9,15 @@ spring:
       server:
         webflux:
           routes:
+            # Swagger API Docs Routes Start
+            - id: user-service-api-docs
+              uri: lb://VALETPARKER-USER-SERVICE # 플젝 명
+              predicates:
+                - Path=/valetparker-user-service/v3/api-docs/**
+              filters:
+                - RewritePath=/valetparker-user-service/v3/api-docs(?<segment>.*), /v3/api-docs$\{segment}
+
+            # Swagger API Docs Routes End
             - id: user-service
               uri: lb://VALETPARKER-USER-SERVICE
               predicates:
@@ -31,6 +40,13 @@ spring:
                 - Path=/api/v1/review-service/**
               filters:
                 - RewritePath=/api/v1/review-service/(?<segment>.*), /$\{segment}
+            - id: hub-service-swagger
+              uri: lb://hub-service
+              predicates:
+                - Path=/hub-service/v3/api-docs
+              filters:
+                - StripPrefix=1 # /hub-service/v3/api-docs
+
 eureka:
   client:
     fetch-registry: true
@@ -40,3 +56,18 @@ eureka:
 
 jwt:
   secret: LH9QZL8upsPBfuDY+Dkb1kT9DZIIUSuA2u4O6Lfi3mkEfeWtETpVTcR/8SMZdJWn/xNTuCQBE6rBvDXgnVmscQ==
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - name: user-service
+        url: /valetparker-user-service/v3/api-docs
+#      - name: parkinglot-service
+#        url: /api/v1/parkinglot-service/v3/api-docs
+#      - name: review-service
+#        url: /api/v1/review-service/v3/api-docs
+        # 예약 , 이용, 결제 설정 해주기
+
