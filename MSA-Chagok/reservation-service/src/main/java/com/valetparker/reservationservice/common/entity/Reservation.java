@@ -1,6 +1,5 @@
 package com.valetparker.reservationservice.common.entity;
 
-import com.valetparker.reservationservice.common.converter.LocalDateTimeConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
