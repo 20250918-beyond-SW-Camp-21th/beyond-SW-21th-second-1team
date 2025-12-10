@@ -49,8 +49,8 @@ public class SecurityConfig {
                         auth
                         .requestMatchers( "/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/regist", "/auth/login","/auth/refresh").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/auth/logout").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/user/modify").hasAuthority("USER")
+                                .requestMatchers(HttpMethod.POST, "/auth/logout").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/user/modify").authenticated()
                                 .anyRequest().authenticated()
                 ).addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
