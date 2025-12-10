@@ -33,10 +33,11 @@ public class AuthService {
             throw new BadCredentialsException("이메일 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
         }
 
-        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
+        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail(), user.getRole().name());
         System.out.println("accessToken = " + accessToken);
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
         System.out.println("refreshToken = " + refreshToken);
+
         RefreshToken refreshTokenEntity = RefreshToken.builder()
                 .email(user.getEmail())
                 .token(refreshToken)
@@ -70,7 +71,7 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadCredentialsException("해당 리프레시 토큰을 위한 유저 없음"));
 
-        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
+        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail(), user.getRole().name());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
 
         RefreshToken tokenEntity = RefreshToken.builder()
