@@ -49,7 +49,8 @@ public class SecurityConfig {
                         auth
                         .requestMatchers( "/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/regist", "/auth/login","/auth/refresh").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/user/modify",  "/auth/logout").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/auth/logout").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/user/modify").hasAuthority("USER")
                                 .anyRequest().authenticated()
                 ).addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -58,7 +59,7 @@ public class SecurityConfig {
 
     @Bean
     public HeaderAuthenticationFilter headerAuthenticationFilter() {
-        return new HeaderAuthenticationFilter(jwtTokenProvider, userDetailsService);
+        return new HeaderAuthenticationFilter();
     }
 
 }
