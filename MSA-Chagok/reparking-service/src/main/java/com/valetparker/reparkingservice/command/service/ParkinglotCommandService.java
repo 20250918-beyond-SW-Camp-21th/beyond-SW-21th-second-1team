@@ -2,8 +2,11 @@ package com.valetparker.reparkingservice.command.service;
 
 import com.valetparker.reparkingservice.command.dto.ParkinglotCreateRequest;
 import com.valetparker.reparkingservice.command.dto.ParkinglotUpdateRequest;
+import com.valetparker.reparkingservice.command.dto.UsedSpotsUpdateRequest;
 import com.valetparker.reparkingservice.command.repository.ParkinglotCommandRepository;
 import com.valetparker.reparkingservice.common.entity.Parkinglot;
+import com.valetparker.reparkingservice.common.exception.BusinessException;
+import com.valetparker.reparkingservice.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +33,13 @@ public class ParkinglotCommandService {
 
 //    @Transactional
 //    public void updateParkinglot(ParkinglotUpdateRequest request, Long parkinglotId) {
-//
-//
 //    }
+    @Transactional
+    public void updateUsedSpots(UsedSpotsUpdateRequest request) {
+        Parkinglot parkinglot = repository.findById(request.getParkinglotId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+        parkinglot.updateUsedSpots(request.isUsing());
+    }
 
 
 }
