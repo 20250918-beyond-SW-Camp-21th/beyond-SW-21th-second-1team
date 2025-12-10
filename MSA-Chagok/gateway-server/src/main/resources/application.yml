@@ -29,13 +29,6 @@ spring:
                   args:
                     name: userServiceCB9
                     fallbackUri: forward:/fallback/user
-            # 주차장
-            - id: parkinglot-service
-              uri: lb://VALETPARKER-PARKINGLOT-SERVICE
-              predicates:
-                - Path=/api/v1/valetparker-parkinglot-service/**
-              filters:
-                - RewritePath=/api/v1/valetparker-parkinglot-service/(?<segment>.*), /$\{segment}
             # 리뷰
             - id: valetparker-review-service
               uri: lb://VALETPARKER-REVIEW-SERVICE
@@ -83,8 +76,6 @@ springdoc:
     urls:
       - name: user-service
         url: /valetparker-user-service/v3/api-docs
-      - name: parkinglot-service
-        url: /api/v1/valetparker-parkinglot-service/v3/api-docs
       - name: review-service
         url: /api/v1/valetparker-review-service/v3/api-docs
       - name: reservation-service
