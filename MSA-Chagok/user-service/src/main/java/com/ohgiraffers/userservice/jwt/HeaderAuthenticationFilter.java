@@ -16,19 +16,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @Slf4j
 public class HeaderAuthenticationFilter extends OncePerRequestFilter {
-
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserDetailsService userDetailsService;
-
-    public HeaderAuthenticationFilter(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userDetailsService = userDetailsService;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -40,10 +33,16 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
         log.info("email : {}", email);
 
         if (email != null) {
+            List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("USER"));
             // 이미 Gateway에서 검증된 정보로 인증 객체 구성
             PreAuthenticatedAuthenticationToken authentication =
-                    new PreAuthenticatedAuthenticationToken(email, null);
+                    new PreAuthenticatedAuthenticationToken(email, null, authorities);
+
+            authentication.setAuthenticated(true);
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            log.info("Authentication Success : {}", authentication);
         }
         filterChain.doFilter(request, response);
 
