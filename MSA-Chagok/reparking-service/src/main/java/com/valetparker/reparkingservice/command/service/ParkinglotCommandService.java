@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ParkinglotCommandService {
 
-    ParkinglotCommandRepository repository;
+    private final ParkinglotCommandRepository repository;
 
     @Transactional
     public Long createParkinglot(ParkinglotCreateRequest request) {

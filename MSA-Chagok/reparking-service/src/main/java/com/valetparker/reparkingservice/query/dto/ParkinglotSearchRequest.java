@@ -12,7 +12,7 @@ public class ParkinglotSearchRequest {
     private Integer page = 1;
     private Integer size = 10;
     private ParkinglotSortType sort = ParkinglotSortType.NAME_ASC;
-    private SeoulDistrict seoulDistrict;
+    private SeoulDistrict seoulDistrict = null;
 
     public int getOffset() {
         return (page - 1) * size;

@@ -1,6 +1,6 @@
 #spring.application.name=reparking-service
 server:
-  port: 0
+  port: 8088
 
 eureka:
   instance:
