@@ -1,11 +1,13 @@
-package com.example.parkinglotservice.dto.request;
+package com.valetparker.parkinglotservice.dto.request;
 
-import com.example.parkinglotservice.domain.ParkingLot;
-import com.example.parkinglotservice.enums.SeoulDistrict;
+import com.valetparker.parkinglotservice.domain.ParkingLot;
+import com.valetparker.parkinglotservice.enums.SeoulDistrict;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @Getter
 @NoArgsConstructor
 @Schema(description = "주차장 등록 요청 DTO")
@@ -26,8 +28,14 @@ public class ParkinglotRequest {
     @Schema(description = "기본 요금 (원)", example = "3000")
     private Integer baseFee;
 
+    @Schema(description = "기본 요금 (원)", example = "3000")
+    private Integer baseTime;
+
     @Schema(description = "연체 요금 (원)", example = "1000")
     private Integer unitFee;
+
+    @Schema(description = "연체 시간 (원)", example = "1000")
+    private Integer unitTime;
 
 
     public ParkingLot toEntity() {
@@ -38,7 +46,8 @@ public class ParkinglotRequest {
                 .totalSpots(this.totalSpots)
                 .baseFee(this.baseFee)
                 .unitFee(this.unitFee)
-                // baseTime(30), unitTime(10) 등은 Entity 빌더 기본값 사용
+                .baseTime(this.baseTime)
+                .unitTime(this.unitTime)
                 .build();
     }
 }

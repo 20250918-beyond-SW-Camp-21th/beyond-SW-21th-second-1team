@@ -1,4 +1,4 @@
-package com.example.parkinglotservice.dto.response;
+package com.valetparker.parkinglotservice.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

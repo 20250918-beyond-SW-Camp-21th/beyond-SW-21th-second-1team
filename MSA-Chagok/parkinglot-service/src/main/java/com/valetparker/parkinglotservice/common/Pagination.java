@@ -1,4 +1,4 @@
-package com.example.parkinglotservice.common;
+package com.valetparker.parkinglotservice.common;
 
 import lombok.Builder;
 import lombok.Getter;

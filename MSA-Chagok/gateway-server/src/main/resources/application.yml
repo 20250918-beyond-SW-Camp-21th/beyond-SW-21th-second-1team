@@ -20,7 +20,7 @@ spring:
                     name: userServiceCB9
                     fallbackUri: forward:/fallback/user
             - id: parkinglot-service
-              uri: lb://VALETPARKER-ORDER-SERVICE
+              uri: lb://PARKINGLOT-SERVICE
               predicates:
                 - Path=/api/v1/parkinglot-service/**
               filters:

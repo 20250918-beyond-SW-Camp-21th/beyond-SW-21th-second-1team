@@ -1,6 +1,6 @@
-package com.example.parkinglotservice.domain;
+package com.valetparker.parkinglotservice.domain;
 
-import com.example.parkinglotservice.enums.SeoulDistrict;
+import com.valetparker.parkinglotservice.enums.SeoulDistrict;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,7 +46,6 @@ public class ParkingLot {
     @Column(nullable = false)
     private Integer unitTime;
 
-    @Column(nullable = false)
     private Double avgRating;
 
 
@@ -56,7 +55,9 @@ public class ParkingLot {
             SeoulDistrict seoulDistrict,
             String address,
             Integer baseFee,
+            Integer baseTime,
             Integer unitFee,
+            Integer unitTime,
             Integer totalSpots) {
 
         this.name = name;
@@ -82,6 +83,7 @@ public class ParkingLot {
             throw new IllegalStateException("만차입니다");
         }
         this.usedSpots++;
+        this.totalSpots--;
     }
 
     //  출차
@@ -90,6 +92,7 @@ public class ParkingLot {
             throw new IllegalStateException("출차할 차량이 없습니다");
         }
         this.usedSpots--;
+        this.totalSpots++;
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.parkinglotservice.enums;
+package com.valetparker.parkinglotservice.enums;
 
 public enum SeoulDistrict {
     GANGNAM("강남구"),

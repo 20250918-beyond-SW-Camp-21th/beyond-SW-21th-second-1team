@@ -1,4 +1,4 @@
-package com.example.parkinglotservice;
+package com.valetparker.parkinglotservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

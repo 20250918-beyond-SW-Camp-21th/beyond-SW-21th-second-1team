@@ -1,4 +1,4 @@
-package com.example.parkinglotservice;
+package com.valetparker.parkinglotservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

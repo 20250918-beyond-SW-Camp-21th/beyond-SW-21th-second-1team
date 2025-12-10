@@ -1,8 +1,8 @@
-package com.example.parkinglotservice.repository;
+package com.valetparker.parkinglotservice.repository;
 
 
-import com.example.parkinglotservice.domain.ParkingLot;
-import com.example.parkinglotservice.enums.SeoulDistrict;
+import com.valetparker.parkinglotservice.domain.ParkingLot;
+import com.valetparker.parkinglotservice.enums.SeoulDistrict;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +12,5 @@ import java.util.List;
 public interface ParkinglotRepository extends JpaRepository<ParkingLot, Long> {
 
     List<ParkingLot> findBySeoulDistrict(SeoulDistrict seoulDistrict);
+
 }

@@ -1,6 +1,6 @@
-package com.example.parkinglotservice.dto.response;
+package com.valetparker.parkinglotservice.dto.response;
 
-import com.example.parkinglotservice.domain.ParkingLot;
+import com.valetparker.parkinglotservice.domain.ParkingLot;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
