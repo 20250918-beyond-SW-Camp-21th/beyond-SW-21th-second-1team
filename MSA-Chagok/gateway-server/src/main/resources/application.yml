@@ -34,12 +34,12 @@ spring:
                 - Path=/api/v1/parkinglot-service/**
               filters:
                 - RewritePath=/api/v1/parkinglot-service/(?<segment>.*), /$\{segment}
-            - id: review-service
+            - id: valetparker-review-service
               uri: lb://VALETPARKER-REVIEW-SERVICE
               predicates:
-                - Path=/api/v1/review-service/**
+                - Path=/api/v1/valetparker-review-service/**
               filters:
-                - RewritePath=/api/v1/review-service/(?<segment>.*), /$\{segment}
+                - RewritePath=/api/v1/valetparker-review-service/(?<segment>.*), /$\{segment}
             - id: hub-service-swagger
               uri: lb://hub-service
               predicates:
