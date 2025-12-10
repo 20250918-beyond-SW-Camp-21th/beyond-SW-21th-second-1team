@@ -1,14 +1,17 @@
 package com.valetparker.reparkingservice.query.controller;
 
 import com.valetparker.reparkingservice.common.dto.ApiResponse;
+import com.valetparker.reparkingservice.common.enums.SeoulDistrict;
 import com.valetparker.reparkingservice.query.dto.ParkinglotDetailResponse;
 import com.valetparker.reparkingservice.query.dto.ParkinglotListResponse;
 import com.valetparker.reparkingservice.query.dto.ParkinglotSearchRequest;
+import com.valetparker.reparkingservice.query.enums.ParkinglotSortType;
 import com.valetparker.reparkingservice.query.service.ParkinglotQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,8 +31,19 @@ public class ParkinglotQueryController {
     //                  + (서울시구 필터)
     @GetMapping("/parkinglots/")
     public ResponseEntity<ApiResponse<ParkinglotListResponse>> getSortedParkinglots(
-            ParkinglotSearchRequest request
+//            ParkinglotSearchRequest request
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "NAME_ASC") ParkinglotSortType sort,
+            @RequestParam(required = false) SeoulDistrict seoulDistrict
     ) {
+
+        ParkinglotSearchRequest request = new ParkinglotSearchRequest();
+        request.setPage(page);
+        request.setSize(size);
+        request.setSort(sort);
+        request.setSeoulDistrict(seoulDistrict);
+
         ParkinglotListResponse response = parkinglotQueryService.getParkinglots(request);
         return ResponseEntity.ok(ApiResponse.success(response));
     }

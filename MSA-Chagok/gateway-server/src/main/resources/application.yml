@@ -45,7 +45,7 @@ spring:
               predicates:
                 - Path=/api/v1/valetparker-reparking-service/**
               filters:
-                - RewritePath=/api/v1/reparking-service/(?<segment>.*), /$\{segment}
+                - RewritePath=/api/v1/valetparker-reparking-service/(?<segment>.*), /$\{segment}
             - id: hub-service-swagger
               uri: lb://hub-service
               predicates:

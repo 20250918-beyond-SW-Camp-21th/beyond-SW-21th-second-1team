@@ -12,6 +12,7 @@ import com.valetparker.reparkingservice.query.dto.ParkinglotSearchRequest;
 import com.valetparker.reparkingservice.query.enums.ParkinglotSortType;
 import com.valetparker.reparkingservice.query.repository.ParkinglotQueryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ParkinglotQueryService {
 
     private final ParkinglotQueryRepository parkinglotQueryRepository;
@@ -43,6 +45,8 @@ public class ParkinglotQueryService {
     // 주차장 전체 조회 (이름순/평균별점높은순/평균별점낮은순/남은자리많은순) + (서울시구필터링)
     @Transactional(readOnly = true)
     public ParkinglotListResponse getParkinglots(ParkinglotSearchRequest request) {
+        log.info("ParkinglotSearchRequest: page={}, size={}, sort={}, district={}",
+                request.getPage(), request.getSize(), request.getSort(), request.getSeoulDistrict());
 
         int page = request.getPage();  // 1-based
         int size = request.getSize();
