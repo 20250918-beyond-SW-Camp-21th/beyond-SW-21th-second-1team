@@ -4,6 +4,8 @@ import com.valetparker.chagok.payment.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -22,6 +24,9 @@ public class Payment {
     @Column(nullable = false, unique = true)
     private String partnerOrderId;
 
+    @Column(nullable = false)
+    private String partnerUserId;
+
     private String pgToken;
 
     @Column(nullable = false)
@@ -29,21 +34,22 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus status;
+    private PaymentStatus paymentStatus;
 
     @Column(nullable = false)
     private Long reservationId;
 
-    public void setStatus(PaymentStatus status) {
-        this.status = status;
+    private LocalDateTime approvedAt;
+
+    public void approve(String pgToken, PaymentStatus status) {
+        this.pgToken = pgToken;
+        this.paymentStatus = status;
+        this.approvedAt = LocalDateTime.now();
     }
 
     public void setReadyInfo(String tid) {
         this.tid = tid;
-        this.status = PaymentStatus.PENDING_PAYMENT;
+        this.paymentStatus = PaymentStatus.PENDING_PAYMENT;
     }
 
-    public void setPgToken(String pgToken) {
-        this.pgToken = pgToken;
-    }
 }

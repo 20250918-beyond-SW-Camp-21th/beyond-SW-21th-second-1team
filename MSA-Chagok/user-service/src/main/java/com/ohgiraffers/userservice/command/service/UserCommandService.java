@@ -35,7 +35,6 @@ public class UserCommandService {
         if(request.getPassword() != null && !request.getPassword().isEmpty()) {
             user.setEncodedPassword(passwordEncoder.encode(request.getPassword()));
         }
-
         if(request.getCarNumber() != null && !request.getCarNumber().isEmpty()) {
             user.setCarNumber(request.getCarNumber());
         }

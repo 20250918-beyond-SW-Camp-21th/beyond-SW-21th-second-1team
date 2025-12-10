@@ -1,7 +1,12 @@
 package com.valetparker.reviewservice.config;
 
-import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,13 +15,38 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI().info(swaggerInfo());
-    }
 
-    private Info swaggerInfo() {
-        return new Info()
-                .title("ParkingHub REVIEW API")
-                .description("Review 기능 swagger api입니다.")
+        Info info = new Info()
+                .title("Review Service API")
+                .description("Review Service API")
                 .version("1.0.0");
+
+        String jwtSchemeName = "jwtAuth";
+
+        SecurityRequirement securityRequirement = new SecurityRequirement()
+                .addList(jwtSchemeName);
+
+        Components components = new Components()
+                .addSecuritySchemes(jwtSchemeName,
+                        new SecurityScheme()
+                                .name(jwtSchemeName)
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                );
+
+        Server gatewayServer = new Server()
+                .url("http://localhost:8000/api/v1/valetparker-review-service")
+                .description("Gateway Server");
+
+        Server localServer = new Server()
+                .url("/")
+                .description("Direct Access");
+
+        return new OpenAPI()
+                .info(info)
+                .servers(List.of(gatewayServer, localServer))
+                .addSecurityItem(securityRequirement)
+                .components(components);
     }
 }
