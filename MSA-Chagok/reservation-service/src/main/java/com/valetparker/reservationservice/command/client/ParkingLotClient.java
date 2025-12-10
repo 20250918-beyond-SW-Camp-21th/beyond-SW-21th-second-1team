@@ -1,8 +1,7 @@
 package com.valetparker.reservationservice.command.client;
 
-import com.valetparker.reservationservice.command.dto.request.UsedSpotsUpdateRequest;
+import com.valetparker.reservationservice.command.dto.response.UsedSpotsUpdateResponse;
 import com.valetparker.reservationservice.command.dto.response.BaseInfoResponse;
-import com.valetparker.reservationservice.command.dto.response.ReservationParkingLotResponse;
 import com.valetparker.reservationservice.common.dto.ApiResponse;
 import com.valetparker.reservationservice.config.FeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -20,6 +19,6 @@ public interface ParkingLotClient {
 
     // Parkinglot used ++
     @PutMapping("/parkinglot/using")
-    public ResponseEntity<ApiResponse<BaseInfoResponse>> updateUsedSpots(@RequestBody UsedSpotsUpdateRequest request);
+    public ResponseEntity<ApiResponse<BaseInfoResponse>> updateUsedSpots(@RequestBody UsedSpotsUpdateResponse request);
     // Parkinglot used --
 }

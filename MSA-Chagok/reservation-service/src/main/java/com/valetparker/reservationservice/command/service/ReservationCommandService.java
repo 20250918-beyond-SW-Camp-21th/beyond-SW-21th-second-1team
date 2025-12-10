@@ -1,20 +1,20 @@
 package com.valetparker.reservationservice.command.service;
 
 import com.valetparker.reservationservice.command.client.ParkingLotClient;
-import com.valetparker.reservationservice.command.client.UserClient;
-import com.valetparker.reservationservice.command.dto.request.ReservationCreateRequest;
 import com.valetparker.reservationservice.command.dto.request.ReservationUpdateRequest;
-import com.valetparker.reservationservice.command.dto.response.BaseInfoResponse;
+import com.valetparker.reservationservice.command.dto.response.UsedSpotsUpdateResponse;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.valetparker.reservationservice.command.repository.ReservationCommandRepository;
+import lombok.RequiredArgsConstructor;
+import com.valetparker.reservationservice.command.dto.request.ReservationCreateRequest;
+import com.valetparker.reservationservice.command.dto.response.BaseInfoResponse;
 import com.valetparker.reservationservice.common.converter.LocalDateTimeConverter;
 import com.valetparker.reservationservice.common.dto.ApiResponse;
 import com.valetparker.reservationservice.common.entity.Reservation;
 import com.valetparker.reservationservice.common.exception.BusinessException;
 import com.valetparker.reservationservice.common.exception.ErrorCode;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -23,14 +23,12 @@ import java.time.LocalDateTime;
 public class ReservationCommandService {
 
     private final ReservationCommandRepository reservationCommandRepository;
-    private final UserClient userClient;
     private final ParkingLotClient parkingLotClient;
     private final LocalDateTimeConverter localDateTimeConverter;
 
     @Transactional
     public Long createReservation(ReservationCreateRequest request, Long userNo) {
         LocalDateTime startTime = localDateTimeConverter.convert(request.getStartTime());
-
         ResponseEntity<ApiResponse<BaseInfoResponse>> response = parkingLotClient.getParkinglotBaseInfo(request.getParkingLotId());
 
         int baseTimeMinutes = response.getBody().getData().getBaseTime();
@@ -59,20 +57,27 @@ public class ReservationCommandService {
         return saved.getReservationId();
     }
 
-/*    public Long updateReservation(ReservationUpdateRequest request, String userId) {
-        LocalDateTime currentTime = localDateTimeConverter.convert(request.getTimeUpdate());
-        Long userNo = userClient.getUserNo(userId);
+    public UsedSpotsUpdateResponse startReservation(ReservationUpdateRequest request) {
+        LocalDateTime currTime = localDateTimeConverter.convert(request.getUpdateTime());
+        Reservation reservation = reservationCommandRepository.findByParkingLotIdAndIsCanceledFalse(request.getReservationId());
 
-        ReservationC
-        //isUsing
-        boolean isUsing = .isAfter(currentTime);
-        //parkingLotId
+        boolean hasReservationStarted = reservation.isStarted(currTime, reservation.getStartTime(), reservation.getEndTime());
 
-        ResponseEntity<ApiResponse<BaseInfoResponse>> response = parkingLotClient.updateUsedSpots()
+        if (!hasReservationStarted) {
+            throw new BusinessException(ErrorCode.VALIDATION_ERROR_EARLY_START);
+        }
+        return UsedSpotsUpdateResponse.builder()
+                .parkinglotId(request.getParkingLotId())
+                .isUsing(true)
+                .build();
+    }
 
-
-    }*/
-    // parkinglot API 메소드 사용 (Count ++)
+    public UsedSpotsUpdateResponse finishReservation(ReservationUpdateRequest request) {
+        return UsedSpotsUpdateResponse.builder()
+                .parkinglotId(request.getParkingLotId())
+                .isUsing(false)
+                .build();
+    }
 
 
 }

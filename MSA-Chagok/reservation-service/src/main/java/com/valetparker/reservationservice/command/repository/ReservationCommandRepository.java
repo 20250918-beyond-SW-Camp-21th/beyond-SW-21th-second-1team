@@ -14,4 +14,6 @@ public interface ReservationCommandRepository extends JpaRepository<Reservation,
             LocalDateTime startTime,
             LocalDateTime endTime
     );
+
+    Reservation findByParkingLotIdAndIsCanceledFalse(Long parkingLotId);
 }
