@@ -39,7 +39,7 @@ spring:
               predicates:
                 - Path=/api/v1/valetparker-review-service/**
               filters:
-                - RewritePath=/api/v1/review-service/(?<segment>.*), /$\{segment}
+                - RewritePath=/api/v1/valetparker-review-service/(?<segment>.*), /$\{segment}
             - id: valetparker-reparking-service
               uri: lb://VALETPARKER-REPARKING-SERVICE
               predicates:

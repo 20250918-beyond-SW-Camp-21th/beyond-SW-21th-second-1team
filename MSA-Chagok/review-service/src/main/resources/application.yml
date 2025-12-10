@@ -27,10 +27,15 @@ spring:
       hibernate:
         format_sql: true
 
+# 스웨거
 springdoc:
-  default-produces-media-type: application/json
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  cache:
+    disabled: true
   api-docs:
-    path: /v3/api-docs
+    groups:
+      enabled: true
   swagger-ui:
-    path: /swagger-ui.html
-    display-request-duration: true
+    tags-sorter: alpha
+    operations-sorter: alpha
