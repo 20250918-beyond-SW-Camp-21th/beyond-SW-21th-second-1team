@@ -18,7 +18,7 @@ public class SwaggerConfig {
 
         Info info = new Info()
                 .title("Reservation Service API")
-                .description("User Service API")
+                .description("Reservation Service API")
                 .version("1.0.0");
 
         String jwtSchemeName = "jwtAuth";
@@ -36,7 +36,7 @@ public class SwaggerConfig {
                 );
 
         Server gatewayServer = new Server()
-                .url("http://localhost:8000/api/v1/valetparker-user-service")
+                .url("http://localhost:8000/api/v1/valetparker-reservation-service")
                 .description("Gateway Server");
 
         Server localServer = new Server()

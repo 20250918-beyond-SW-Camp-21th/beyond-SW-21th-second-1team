@@ -40,8 +40,9 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
     implementation 'org.modelmapper:modelmapper:3.2.0'
+
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
 }
 
 dependencyManagement {
