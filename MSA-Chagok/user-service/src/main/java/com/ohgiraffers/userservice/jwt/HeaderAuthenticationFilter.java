@@ -23,27 +23,22 @@ import java.util.List;
 @Slf4j
 public class HeaderAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserDetailsService userDetailsService;
-
-    public HeaderAuthenticationFilter(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userDetailsService = userDetailsService;
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         // API Gateway가 전달한 헤더 읽기
         String email = request.getHeader("X-User-Email");
+        String role = request.getHeader("X-User-Role");
 
         log.info("email : {}", email);
+        log.info("role : {}", role);
 
         if (email != null) {
             // 이미 Gateway에서 검증된 정보로 인증 객체 구성
             PreAuthenticatedAuthenticationToken authentication =
-                    new PreAuthenticatedAuthenticationToken(email, null);
+                    new PreAuthenticatedAuthenticationToken(email, null,
+                            List.of(new SimpleGrantedAuthority(role)));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
