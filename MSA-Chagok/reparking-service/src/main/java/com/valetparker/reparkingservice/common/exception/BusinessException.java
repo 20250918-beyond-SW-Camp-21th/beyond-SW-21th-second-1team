@@ -1,6 +1,5 @@
 package com.valetparker.reparkingservice.common.exception;
 
-import com.valetparker.reviewservice.common.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
