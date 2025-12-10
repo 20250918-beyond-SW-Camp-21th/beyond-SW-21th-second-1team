@@ -1,4 +1,4 @@
-package com.ohgiraffers.reservationservice;
+package com.valetparker.reservationservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

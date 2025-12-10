@@ -13,7 +13,7 @@ eureka:
 
 spring:
   application:
-    name: valetparker-user-service
+    name: VALETPARKER-USER-SERVICE
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://dev.macacolabs.site:3306/parkinghub
@@ -27,11 +27,15 @@ spring:
       hibernate:
         format_sql: true
 
+# 스웨거
 springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  cache:
+    disabled: true
   api-docs:
-    path: /user-service/v3/api-docs
+    groups:
+      enabled: true
   swagger-ui:
-    path: /user-service/swagger-ui.html
-openapi:
-  service:
-    url: http://localhost:8000
+    tags-sorter: alpha
+    operations-sorter: alpha
