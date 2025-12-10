@@ -1,4 +1,4 @@
-package com.valetparker.reservationservice.config;
+package com.valetparker.reparkingservice.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -6,9 +6,10 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
-import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -17,8 +18,8 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
 
         Info info = new Info()
-                .title("Reservation Service API")
-                .description("Reservation Service API")
+                .title("Reparking Service API")
+                .description("Reparking Service API")
                 .version("1.0.0");
 
         String jwtSchemeName = "jwtAuth";
@@ -36,7 +37,7 @@ public class SwaggerConfig {
                 );
 
         Server gatewayServer = new Server()
-                .url("http://localhost:8000/api/v1/valetparker-reservation-service")
+                .url("http://localhost:8000/api/v1/valetparker-reparking-service")
                 .description("Gateway Server");
 
         Server localServer = new Server()
