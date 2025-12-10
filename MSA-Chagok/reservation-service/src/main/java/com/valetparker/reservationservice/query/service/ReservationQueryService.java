@@ -35,7 +35,7 @@ public class ReservationQueryService {
     @Transactional(readOnly = true)
     public ReservationListResponse getReservationsByUserNo(Long userNo) {
         List<Reservation> reservations = reservationQueryRepository
-                .findByUserNoOrderByCreatedAtDesc(userNo);
+                .findAllByUserNoOrderByCreatedAtDesc(userNo);
         List<ReservationDto> reservationDtos = reservations.stream()
                 .map(ReservationDto::from)
                 .toList();

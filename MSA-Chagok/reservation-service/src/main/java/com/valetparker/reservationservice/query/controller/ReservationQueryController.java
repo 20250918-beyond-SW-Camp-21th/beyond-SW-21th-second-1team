@@ -25,7 +25,7 @@ public class ReservationQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @GetMapping("/mypage/{userNo}")
+    @GetMapping("/mypage/reservation/search/{userNo}")
     public ResponseEntity<ApiResponse<ReservationListResponse>> findByUserId(
 //            @AuthenticationPrincipal Long userNo //Security들어오면 사용
             @PathVariable Long userNo

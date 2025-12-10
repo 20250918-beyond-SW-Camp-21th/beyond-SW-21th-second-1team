@@ -10,7 +10,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // 등록,수정,삭제 관련 오류
     REGIST_ERROR("10001", "등록에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-
+    REGIST_ERROR_NO_SEAT("10002", "남은 자리가 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    REGIST_ERROR_TIME_CONFLICT("10003", "겹치는 시간입니다.",HttpStatus.INTERNAL_SERVER_ERROR),
 
     // 조회 관련 오류
     NOT_FOUND("20001", "조회에 실패하였습니다.",  HttpStatus.NOT_FOUND),
