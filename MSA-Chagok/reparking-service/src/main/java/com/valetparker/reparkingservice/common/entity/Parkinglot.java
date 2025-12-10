@@ -83,4 +83,12 @@ public class Parkinglot {
         this.baseFee = request.getBaseFee();
         this.unitFee = request.getUnitFee();
     }
+
+    public void updateUsedSpots(boolean isUsing) {
+        if (isUsing) {
+            this.usedSpots++;
+        } else {
+            this.usedSpots--;
+        }
+    }
 }
