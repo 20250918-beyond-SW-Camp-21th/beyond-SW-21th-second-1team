@@ -18,6 +18,7 @@ spring:
                 - RewritePath=/valetparker-user-service/v3/api-docs(?<segment>.*), /v3/api-docs$\{segment}
 
             # Swagger API Docs Routes End
+            # 유저
             - id: user-service
               uri: lb://VALETPARKER-USER-SERVICE
               predicates:
@@ -28,24 +29,35 @@ spring:
                   args:
                     name: userServiceCB9
                     fallbackUri: forward:/fallback/user
+            # 주차장
             - id: parkinglot-service
-              uri: lb://VALETPARKER-ORDER-SERVICE
+              uri: lb://VALETPARKER-PARKINGLOT-SERVICE
               predicates:
-                - Path=/api/v1/parkinglot-service/**
+                - Path=/api/v1/valetparker-parkinglot-service/**
               filters:
-                - RewritePath=/api/v1/parkinglot-service/(?<segment>.*), /$\{segment}
+                - RewritePath=/api/v1/valetparker-parkinglot-service/(?<segment>.*), /$\{segment}
+            # 리뷰
             - id: valetparker-review-service
               uri: lb://VALETPARKER-REVIEW-SERVICE
               predicates:
                 - Path=/api/v1/valetparker-review-service/**
               filters:
                 - RewritePath=/api/v1/valetparker-review-service/(?<segment>.*), /$\{segment}
+            # 예약
+            - id: valetparker-reservation-service
+              uri: lb://VALETPARKER-RESERVATION-SERVICE
+              predicates:
+                - Path=/api/v1/valetparker-reservation-service/**
+              filters:
+                - RewritePath=/api/v1/valetparker-reservation-service/(?<segment>.*), /$\{segment}
+            # 주차장 ver.2
             - id: valetparker-reparking-service
               uri: lb://VALETPARKER-REPARKING-SERVICE
               predicates:
                 - Path=/api/v1/valetparker-reparking-service/**
               filters:
-                - RewritePath=/api/v1/reparking-service/(?<segment>.*), /$\{segment}
+                - RewritePath=/api/v1/valetparker-reparking-service/(?<segment>.*), /$\{segment}
+            # hub
             - id: hub-service-swagger
               uri: lb://hub-service
               predicates:
@@ -71,9 +83,13 @@ springdoc:
     urls:
       - name: user-service
         url: /valetparker-user-service/v3/api-docs
-#      - name: parkinglot-service
-#        url: /api/v1/parkinglot-service/v3/api-docs
-#      - name: review-service
-#        url: /api/v1/review-service/v3/api-docs
+      - name: parkinglot-service
+        url: /api/v1/valetparker-parkinglot-service/v3/api-docs
+      - name: review-service
+        url: /api/v1/valetparker-review-service/v3/api-docs
+      - name: reservation-service
+        url: /api/v1/valetparker-reservation-service/v3/api-docs
+      - name: reparking-service
+        url: /api/v1/valetparker-reparking-service/v3/api-docs
         # 예약 , 이용, 결제 설정 해주기
 
