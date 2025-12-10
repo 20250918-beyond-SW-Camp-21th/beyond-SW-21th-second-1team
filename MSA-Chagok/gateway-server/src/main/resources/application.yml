@@ -40,6 +40,12 @@ spring:
                 - Path=/api/v1/valetparker-review-service/**
               filters:
                 - RewritePath=/api/v1/review-service/(?<segment>.*), /$\{segment}
+            - id: valetparker-reparking-service
+              uri: lb://VALETPARKER-REPARKING-SERVICE
+              predicates:
+                - Path=/api/v1/valetparker-reparking-service/**
+              filters:
+                - RewritePath=/api/v1/reparking-service/(?<segment>.*), /$\{segment}
             - id: hub-service-swagger
               uri: lb://hub-service
               predicates:
@@ -47,7 +53,6 @@ spring:
               filters:
                 - StripPrefix=1 # /hub-service/v3/api-docs
 
->>>>>>> 5615becc3e8a93505e01dfbede606ca0b8738d14
 eureka:
   client:
     fetch-registry: true
