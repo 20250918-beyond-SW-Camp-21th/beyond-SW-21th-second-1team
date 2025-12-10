@@ -23,7 +23,7 @@ public class ReviewQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @GetMapping("/parkinglots/details/{parkinglotId}/reviews")
+    @GetMapping("/parkinglot/detail/{parkinglotId}/reviews")
     public ResponseEntity<ApiResponse<ReviewListResponse>> getParkingReviews(
             @PathVariable Long parkinglotId,
             ParkinglotReviewSearchRequest request
