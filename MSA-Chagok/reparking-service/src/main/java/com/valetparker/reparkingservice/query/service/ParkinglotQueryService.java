@@ -60,7 +60,7 @@ public class ParkinglotQueryService {
 
         Page<Parkinglot> parkinglotPage =
                 (seoulDistrict == null)
-                        ? parkinglotQueryRepository.findAllByParkinglotId(pageable)
+                        ? parkinglotQueryRepository.findAll(pageable)
                         : parkinglotQueryRepository.findAllBySeoulDistrict(seoulDistrict, pageable);
 
         List<ParkinglotDto> parkinglotDtoList = parkinglotPage.getContent().stream()

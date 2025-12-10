@@ -1,6 +1,6 @@
 package com.valetparker.reparkingservice.common.exception;
 
-import com.valetparker.reviewservice.common.dto.ApiResponse;
+import com.valetparker.reparkingservice.common.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
