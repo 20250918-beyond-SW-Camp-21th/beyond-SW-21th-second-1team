@@ -1,5 +1,6 @@
 package com.valetparker.reparkingservice.common.entity;
 
+import com.valetparker.reparkingservice.command.dto.ParkinglotUpdateRequest;
 import com.valetparker.reparkingservice.common.enums.SeoulDistrict;
 import jakarta.persistence.*;
 import lombok.*;
@@ -72,5 +73,14 @@ public class Parkinglot {
         parkinglot.baseTime = 30;           // 30분.
         parkinglot.unitTime = 10;           // 10분 단위.
         return parkinglot;
+    }
+
+    public void updateParkinglot(ParkinglotUpdateRequest request) {
+        this.name = request.getName();
+        this.address = request.getAddress();
+        this.seoulDistrict = request.getSeoulDistrict();
+        this.totalSpots = request.getTotalSpots();
+        this.baseFee = request.getBaseFee();
+        this.unitFee = request.getUnitFee();
     }
 }
