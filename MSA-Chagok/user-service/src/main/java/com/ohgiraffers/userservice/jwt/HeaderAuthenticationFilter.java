@@ -34,13 +34,30 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
         log.info("email : {}", email);
         log.info("role : {}", role);
 
+//        if (email != null && role != null) {
+//            // 이미 Gateway에서 검증된 정보로 인증 객체 구성
+//            PreAuthenticatedAuthenticationToken authentication =
+//                    new PreAuthenticatedAuthenticationToken(email, null,
+//                            List.of(new SimpleGrantedAuthority(role)));
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//        }
+
         if (email != null) {
-            // 이미 Gateway에서 검증된 정보로 인증 객체 구성
+
+            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            if(role != null) {
+                authorities.add(new SimpleGrantedAuthority(role));
+            }
+
+            // Principal 을 UserDetails 로 구성해야 AuthenticationPrincipal에서 받을 수 있음
+            UserDetails principal = new org.springframework.security.core.userdetails.User(email, "", authorities);
+
             PreAuthenticatedAuthenticationToken authentication =
-                    new PreAuthenticatedAuthenticationToken(email, null,
-                            List.of(new SimpleGrantedAuthority(role)));
+                    new PreAuthenticatedAuthenticationToken(principal, null, authorities);
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         filterChain.doFilter(request, response);
 
     }
