@@ -43,13 +43,20 @@ spring:
                 - Path=/api/v1/valetparker-reservation-service/**
               filters:
                 - RewritePath=/api/v1/valetparker-reservation-service/(?<segment>.*), /$\{segment}
-            # 주차장 ver.2
+            # 주차장
             - id: valetparker-reparking-service
               uri: lb://VALETPARKER-REPARKING-SERVICE
               predicates:
                 - Path=/api/v1/valetparker-reparking-service/**
               filters:
                 - RewritePath=/api/v1/valetparker-reparking-service/(?<segment>.*), /$\{segment}
+            # 결제
+            - id: valetparker-payment-service
+              uri: lb://VALETPARKER-PAYMENT-SERVICE
+              predicates:
+                - Path=/api/v1/valetparker-payment-service/**
+              filters:
+                - RewritePath=/api/v1/valetparker-payment-service/(?<segment>.*), /$\{segment}
             # hub
             - id: hub-service-swagger
               uri: lb://hub-service
@@ -82,5 +89,7 @@ springdoc:
         url: /api/v1/valetparker-reservation-service/v3/api-docs
       - name: reparking-service
         url: /api/v1/valetparker-reparking-service/v3/api-docs
+      - name: payment-service
+        url: /api/v1/valetparker-payment-service/v3/api-docs
         # 예약 , 이용, 결제 설정 해주기
 
