@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class UsedSpotsUpdateRequest {
-    private final boolean isUsing;
+    private final boolean using;
     private final Long parkinglotId;
 }
