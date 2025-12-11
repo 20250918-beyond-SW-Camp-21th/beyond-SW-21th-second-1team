@@ -8,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 public class UsedSpotsUpdateResponse {
-    private final boolean isUsing;
+    private final boolean using;
     private final Long parkinglotId;
 }

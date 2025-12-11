@@ -1,7 +1,8 @@
 package com.valetparker.reservationservice.command.service;
 
 import com.valetparker.reservationservice.command.client.ParkingLotClient;
-import com.valetparker.reservationservice.command.dto.request.ReservationUpdateRequest;
+import com.valetparker.reservationservice.command.dto.request.ReservationEndRequest;
+import com.valetparker.reservationservice.command.dto.request.ReservationStartRequest;
 import com.valetparker.reservationservice.command.dto.response.UsedSpotsUpdateResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,26 +58,30 @@ public class ReservationCommandService {
         return saved.getReservationId();
     }
 
-    public UsedSpotsUpdateResponse startReservation(ReservationUpdateRequest request) {
+    public UsedSpotsUpdateResponse startReservation(ReservationStartRequest request) {
         LocalDateTime currTime = localDateTimeConverter.convert(request.getUpdateTime());
-        Reservation reservation = reservationCommandRepository.findByParkinglotIdAndIsCanceledFalse(request.getParkinglotId());
+        Reservation reservation = reservationCommandRepository.findByReservationIdAndIsCanceledFalse(request.getReservationId());
 
         boolean hasReservationStarted = reservation.isStarted(currTime, reservation.getStartTime(), reservation.getEndTime());
 
         if (!hasReservationStarted) {
             throw new BusinessException(ErrorCode.VALIDATION_ERROR_EARLY_START);
         }
-        return UsedSpotsUpdateResponse.builder()
+        UsedSpotsUpdateResponse response =  UsedSpotsUpdateResponse.builder()
                 .parkinglotId(request.getParkinglotId())
-                .isUsing(true)
+                .using(true)
                 .build();
+        parkingLotClient.updateUsedSpots(response);
+        return response;
     }
 
-    public UsedSpotsUpdateResponse finishReservation(ReservationUpdateRequest request) {
-        return UsedSpotsUpdateResponse.builder()
+    public UsedSpotsUpdateResponse finishReservation(ReservationEndRequest request) {
+        UsedSpotsUpdateResponse response = UsedSpotsUpdateResponse.builder()
                 .parkinglotId(request.getParkinglotId())
-                .isUsing(false)
+                .using(false)
                 .build();
+        parkingLotClient.updateUsedSpots(response);
+        return response;
     }
 
 
