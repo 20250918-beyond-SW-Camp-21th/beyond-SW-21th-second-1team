@@ -26,15 +26,17 @@ public class SecurityConfig {
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     private final RestAccessDeniedHandler restAccessDeniedHandler;
 
+/*
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .sessionManagement(session
                         -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception ->
@@ -45,8 +47,8 @@ public class SecurityConfig {
                         auth
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/kakaopay/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/kakaopay/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/kakaopay/ready/{reservationId}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/kakaopay/success", "/kakaopay/cancel", "/kakaopay/fail").authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -59,7 +61,7 @@ public class SecurityConfig {
     }
 
     // CORS 설정 빈 등록
-    @Bean
+/*    @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
 
@@ -81,6 +83,6 @@ public class SecurityConfig {
         org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
+    }*/
 
 }
