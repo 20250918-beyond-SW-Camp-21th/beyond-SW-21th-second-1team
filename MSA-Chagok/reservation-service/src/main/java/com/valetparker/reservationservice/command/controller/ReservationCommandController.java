@@ -3,16 +3,15 @@ package com.valetparker.reservationservice.command.controller;
 import com.valetparker.reservationservice.command.dto.request.ReservationCreateRequest;
 import com.valetparker.reservationservice.command.dto.request.ReservationEndRequest;
 import com.valetparker.reservationservice.command.dto.request.ReservationStartRequest;
-import com.valetparker.reservationservice.command.dto.response.BaseInfoResponse;
 import com.valetparker.reservationservice.command.dto.response.PaymentResponse;
 import com.valetparker.reservationservice.command.dto.response.UsedSpotsUpdateResponse;
 import com.valetparker.reservationservice.command.dto.response.ReservationCommandResponse;
 import com.valetparker.reservationservice.command.service.ReservationCommandService;
 import com.valetparker.reservationservice.common.dto.ApiResponse;
+import com.valetparker.reservationservice.common.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authorization.method.AuthorizeReturnObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +25,9 @@ public class ReservationCommandController {
     // 예약 생성
     @PostMapping("/reservation/createReservation/{userNo}")
     public ResponseEntity<ApiResponse<ReservationCommandResponse>> createReservation(
-            @RequestBody ReservationCreateRequest request, @PathVariable Long userNo
+            @RequestBody ReservationCreateRequest request, @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Long reservationId = reservationCommandService.createReservation(request, userNo);
+        Long reservationId = reservationCommandService.createReservation(request, userDetails.getUserNo());
         ReservationCommandResponse reservationCommandResponse = ReservationCommandResponse.builder()
                 .reservationId(reservationId)
                 .build();

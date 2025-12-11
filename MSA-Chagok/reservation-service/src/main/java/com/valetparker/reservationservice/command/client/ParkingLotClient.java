@@ -13,7 +13,7 @@ public interface ParkingLotClient {
 
     // ParkinglotId로 받아오기
     @GetMapping("/parkinglot/base")
-    public BaseInfoResponse getParkinglotBaseInfo(
+    public ResponseEntity<ApiResponse<BaseInfoResponse>> getParkinglotBaseInfo(
             @RequestParam Long parkinglotId
     );
 

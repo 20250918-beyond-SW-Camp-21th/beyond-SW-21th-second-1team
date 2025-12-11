@@ -31,14 +31,15 @@ public class ReservationCommandService {
     @Transactional
     public Long createReservation(ReservationCreateRequest request, Long userNo) {
         LocalDateTime startTime = localDateTimeConverter.convert(request.getStartTime());
-        BaseInfoResponse response = parkingLotClient.getParkinglotBaseInfo(request.getParkingLotId());
+        ResponseEntity<ApiResponse<BaseInfoResponse>> response = parkingLotClient
+                .getParkinglotBaseInfo(request.getParkingLotId());
 
-        int baseTimeMinutes = response.getBaseTime();
+        int baseTimeMinutes = response.getBody().getData().getBaseTime();
         LocalDateTime endTime = startTime.plusMinutes(baseTimeMinutes);
 
         if (reservationCommandRepository.existsByParkinglotIdAndIsCanceledFalseAndEndTimeGreaterThanAndStartTimeLessThan(
                 // 겹치는 시간이 있을 경우
-                response.getParkinglotId(),
+                response.getBody().getData().getParkinglotId(),
                 startTime,
                 endTime
         )) {
@@ -63,14 +64,14 @@ public class ReservationCommandService {
     // Payment Response 생성
     public PaymentResponse createPayment(Long reservationId) {
         Reservation reservation = reservationCommandRepository.findByReservationIdAndIsCanceledFalse(reservationId);
-        BaseInfoResponse parkinglot = parkingLotClient
+        ResponseEntity<ApiResponse<BaseInfoResponse>> response = parkingLotClient
                 .getParkinglotBaseInfo(reservation.getParkinglotId());
-        Integer totalAmount = parkinglot.getBaseFee();
+        Integer totalAmount = response.getBody().getData().getBaseFee();
         return PaymentResponse.builder()
                 .reservationId(reservationId)
-                .parkinglotId(parkinglot.getParkinglotId())
+                .parkinglotId(response.getBody().getData().getParkinglotId())
                 .totalAmount(totalAmount)
-                .parkinglotName(parkinglot.getName())
+                .parkinglotName(response.getBody().getData().getName())
                 .build();
     }
 
