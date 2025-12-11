@@ -3,6 +3,7 @@ package com.valetparker.reparkingservice.common.exception;
 import com.valetparker.reparkingservice.common.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +37,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
         log.error("[UNHANDLED] ", e);  // 꼭 e까지 같이
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+        return new ResponseEntity<>(response, errorCode.getHttpStatus());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(AccessDeniedException e) {
+        log.warn("[AccessDenied] {}", e.getMessage());
+        // ErrorCode.ADMIN_ERROR를 사용하여 응답 생성
+        ErrorCode errorCode = ErrorCode.ADMIN_ERROR;
         ApiResponse<Void> response
                 = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
         return new ResponseEntity<>(response, errorCode.getHttpStatus());
