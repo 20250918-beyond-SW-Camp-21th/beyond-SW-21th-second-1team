@@ -27,7 +27,9 @@ public enum SeoulDistrict {
     JUNG("중구"),
     JUNGNANG("중랑구");
 
+
     private final String koreanName;
+
 
     SeoulDistrict(String koreanName) {
         this.koreanName = koreanName;

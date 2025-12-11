@@ -41,7 +41,6 @@ public class ParkinglotQueryService {
                 .build();
     }
 
-
     // 주차장 전체 조회 (이름순/평균별점높은순/평균별점낮은순/남은자리많은순) + (서울시구필터링)
     @Transactional(readOnly = true)
     public ParkinglotListResponse getParkinglots(ParkinglotSearchRequest request) {
