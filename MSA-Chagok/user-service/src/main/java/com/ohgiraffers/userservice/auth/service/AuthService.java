@@ -6,6 +6,8 @@ import com.ohgiraffers.userservice.auth.entity.RefreshToken;
 import com.ohgiraffers.userservice.auth.repository.RefreshTokenRepository;
 import com.ohgiraffers.userservice.command.domain.User;
 import com.ohgiraffers.userservice.command.repository.UserRepository;
+import com.ohgiraffers.userservice.exception.BusinessException;
+import com.ohgiraffers.userservice.exception.ErrorCode;
 import com.ohgiraffers.userservice.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,11 +28,16 @@ public class AuthService {
 
     public TokenResponse login(LoginRequest request) {
 
+        if (request.getEmail() == null || request.getEmail().isEmpty() ||
+            request.getPassword() == null || request.getPassword().isEmpty()) {
+            throw new BusinessException(ErrorCode.REQUIRED_FIELD_MISSING);
+        }
+
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BadCredentialsException("이메일 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_CREDENTIALS));
 
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("이메일 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
+            throw new BusinessException(ErrorCode.INVALID_CREDENTIALS);
         }
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail(), user.getRole().name(), user.getUserNo());
@@ -58,18 +65,18 @@ public class AuthService {
         String email = jwtTokenProvider.getEmailFromJWT(providedRefreshToken);
 
         RefreshToken storedToken = refreshTokenRepository.findById(email)
-                .orElseThrow(() -> new BadCredentialsException("해당 유저로 조회되는 리프레시 토큰 없음"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
 
         if(!storedToken.getToken().equals(providedRefreshToken)) {
-            throw new BadCredentialsException("리프레시 토큰 일치하지 않음");
+            throw new BusinessException(ErrorCode.REFRESH_TOKEN_MISMATCH);
         }
 
         if(storedToken.getExpiryDate().before(new Date())) {
-            throw new BadCredentialsException("리프레시 토큰 유효시간 만료");
+            throw new BusinessException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         }
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new BadCredentialsException("해당 리프레시 토큰을 위한 유저 없음"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail(), user.getRole().name(), user.getUserNo());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
@@ -94,7 +101,19 @@ public class AuthService {
     @Transactional
     public void logout(String refreshToken) {
         jwtTokenProvider.validateToken(refreshToken);
+
         String email = jwtTokenProvider.getEmailFromJWT(refreshToken);
+
+        RefreshToken storedToken = refreshTokenRepository.findById(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+        if(!storedToken.getToken().equals(refreshToken)) {
+            throw new BusinessException(ErrorCode.REFRESH_TOKEN_MISMATCH);
+        }
+
+        if (storedToken.getExpiryDate().before(new Date())) {
+            throw new BusinessException(ErrorCode.REFRESH_TOKEN_EXPIRED);
+        }
+
         refreshTokenRepository.deleteByEmail(email);
     }
 }
