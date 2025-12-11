@@ -52,6 +52,9 @@ public class ReservationCommandController {
             @RequestBody ReservationUpdateRequest request, @AuthenticationPrincipal UserDetails user
     )   {
         UsedSpotsUpdateResponse response = reservationCommandService.finishReservation(request);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(response));
     }
 
 }

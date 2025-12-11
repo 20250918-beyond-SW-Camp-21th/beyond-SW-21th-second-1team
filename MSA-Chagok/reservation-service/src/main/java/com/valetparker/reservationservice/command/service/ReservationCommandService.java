@@ -59,7 +59,7 @@ public class ReservationCommandService {
 
     public UsedSpotsUpdateResponse startReservation(ReservationUpdateRequest request) {
         LocalDateTime currTime = localDateTimeConverter.convert(request.getUpdateTime());
-        Reservation reservation = reservationCommandRepository.findByParkingLotIdAndIsCanceledFalse(request.getReservationId());
+        Reservation reservation = reservationCommandRepository.findByParkinglotIdAndIsCanceledFalse(request.getParkinglotId());
 
         boolean hasReservationStarted = reservation.isStarted(currTime, reservation.getStartTime(), reservation.getEndTime());
 
@@ -67,14 +67,14 @@ public class ReservationCommandService {
             throw new BusinessException(ErrorCode.VALIDATION_ERROR_EARLY_START);
         }
         return UsedSpotsUpdateResponse.builder()
-                .parkinglotId(request.getParkingLotId())
+                .parkinglotId(request.getParkinglotId())
                 .isUsing(true)
                 .build();
     }
 
     public UsedSpotsUpdateResponse finishReservation(ReservationUpdateRequest request) {
         return UsedSpotsUpdateResponse.builder()
-                .parkinglotId(request.getParkingLotId())
+                .parkinglotId(request.getParkinglotId())
                 .isUsing(false)
                 .build();
     }
