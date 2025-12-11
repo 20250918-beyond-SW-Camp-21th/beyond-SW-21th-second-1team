@@ -1,6 +1,6 @@
 #spring.application.name=payment-service
 server:
-  port: 0
+  port: 8099
 
 eureka:
   instance:
@@ -44,6 +44,6 @@ springdoc:
 kakaopay:
   secret-key: DEV83DBF4CA9253457F361D494F1E9F3DE56682C
   cid: TC0ONETIME
-  redirect-url-success: http://localhost:8080/kakaopay/success
-  redirect-url-cancel: http://localhost:8080/kakaopay/cancel
-  redirect-url-fail: http://localhost:8080/kakaopay/fail
+  redirect-url-success: http://localhost:8000/kakaopay/success
+  redirect-url-cancel: http://localhost:8000/kakaopay/cancel
+  redirect-url-fail: http://localhost:8000/kakaopay/fail

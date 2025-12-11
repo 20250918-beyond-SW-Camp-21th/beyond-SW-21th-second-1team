@@ -29,6 +29,8 @@ public class KakaoPayController {
     @PostMapping("/ready")
     public ResponseEntity<KakaoPayReadyResponse> ready(@RequestBody KakaoPayReadyRequest request) {
 
+
+
         KakaoPayReadyResponse response = kakaoPayService.ready(request);
 
         // 데모를 위해 임시 변수에 저장 (동시성 문제 존재함, 테스트 용도로만 사용)

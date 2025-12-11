@@ -1,5 +1,6 @@
 package com.valetparker.paymentservice.service;
 
+import com.valetparker.paymentservice.client.ReservationClient;
 import com.valetparker.paymentservice.config.KakaoPayProperties;
 import com.valetparker.paymentservice.dto.request.KakaoPayReadyRequest;
 import com.valetparker.paymentservice.dto.response.KakaoPayApproveResponse;
@@ -21,6 +22,7 @@ public class KakaoPayService {
 
     private final KakaoPayProperties kakaoPayProperties;
     private final RestTemplate restTemplate;
+    private final ReservationClient reservationClient;
 
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
@@ -45,6 +47,9 @@ public class KakaoPayService {
      * 카카오페이 결제 준비 요청
      */
     public KakaoPayReadyResponse ready(KakaoPayReadyRequest request) {
+
+        KakaoPayReadyRequest requestReservation = getReservationInfo
+
 
         // 요청 헤더
         HttpHeaders headers = getHeaders();
