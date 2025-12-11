@@ -1,5 +1,8 @@
 package com.valetparker.reservationservice.query.service;
 
+import com.valetparker.reservationservice.command.client.ParkingLotClient;
+import com.valetparker.reservationservice.command.dto.response.BaseInfoResponse;
+import com.valetparker.reservationservice.command.dto.response.PaymentResponse;
 import com.valetparker.reservationservice.common.entity.Reservation;
 import com.valetparker.reservationservice.common.exception.BusinessException;
 import com.valetparker.reservationservice.common.exception.ErrorCode;
@@ -18,6 +21,7 @@ import java.util.List;
 public class ReservationQueryService {
 
     private final ReservationQueryRepository reservationQueryRepository;
+    private final ParkingLotClient parkingLotClient;
 
     // 단일객체 조회(reservationId)
     @Transactional(readOnly = true)
@@ -48,5 +52,21 @@ public class ReservationQueryService {
     public Reservation getByReservationId(Long reservationId) {
         return reservationQueryRepository.findByReservationId(reservationId).
                 orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+    }
+
+    // Payment API service
+    public PaymentResponse getInfoforPaymentReservation(Long reservationId) {
+        Reservation reservation = reservationQueryRepository.findReservationBy(reservationId);
+
+        BaseInfoResponse response = parkingLotClient
+                .getParkinglotBaseInfo(reservation.getParkinglotId())
+                .getBody().getData();
+
+        return PaymentResponse.builder()
+                .parkinglotId(reservation.getParkinglotId())
+                .reservationId(reservationId)
+                .parkinglotName(response.getName())
+                .totalAmount(response.getBaseFee())
+                .build();
     }
 }
