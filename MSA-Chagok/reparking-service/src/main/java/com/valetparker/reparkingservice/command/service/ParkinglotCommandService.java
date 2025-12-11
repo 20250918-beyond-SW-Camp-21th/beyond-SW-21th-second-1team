@@ -40,4 +40,6 @@ public class ParkinglotCommandService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
         parkinglot.updateUsedSpots(request.isUsing());
     }
+
+
 }
