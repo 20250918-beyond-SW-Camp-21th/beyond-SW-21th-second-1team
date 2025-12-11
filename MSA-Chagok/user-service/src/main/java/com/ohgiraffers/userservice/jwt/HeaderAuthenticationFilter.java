@@ -30,13 +30,16 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
         // API Gateway가 전달한 헤더 읽기
         String email = request.getHeader("X-User-Email");
         String role = request.getHeader("X-User-Role");
+        String userNo = request.getHeader("X-User-No");
 
         log.info("email : {}", email);
         log.info("role : {}", role);
+        log.info("userNo : {}", userNo);
 
         if (email != null) {
 
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
             if(role != null) {
                 authorities.add(new SimpleGrantedAuthority(role));
             }

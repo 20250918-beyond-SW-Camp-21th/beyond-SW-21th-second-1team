@@ -32,12 +32,13 @@ public class JwtTokenProvider {
     }
 
     // 로그인 access token 생성 (email)
-    public String createAccessToken(String email, String role) {
+    public String createAccessToken(String email, String role, Long userNo) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
         return Jwts.builder()
                 .subject(email)
                 .claim("role", role)
+                .claim("userNo", userNo)
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(secretKey)
