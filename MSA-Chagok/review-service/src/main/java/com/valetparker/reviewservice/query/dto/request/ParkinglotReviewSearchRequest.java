@@ -11,9 +11,14 @@ public class ParkinglotReviewSearchRequest {
     private Integer size = 10;
     private ReviewSortType sort = ReviewSortType.LATEST;
 
+//    public int getOffset() {
+//        return (page - 1) * size;
+//    }
     public int getOffset() {
-        return (page - 1) * size;
+        int validPage = (page == null || page < 1) ? 1 : page;
+        return (validPage - 1) * size;
     }
+
 
     public int getLimit() {
         return size;
