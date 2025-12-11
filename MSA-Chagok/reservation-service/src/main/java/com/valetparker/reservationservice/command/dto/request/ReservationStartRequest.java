@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class ReservationUpdateRequest {
+public class ReservationStartRequest {
     private Long parkinglotId;
     private Long reservationId;
     private String updateTime;

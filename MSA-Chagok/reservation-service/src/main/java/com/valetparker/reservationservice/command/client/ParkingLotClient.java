@@ -17,8 +17,7 @@ public interface ParkingLotClient {
             @RequestParam Long parkinglotId
     );
 
-    // Parkinglot used ++
+    // Parkinglot used Update
     @PutMapping("/parkinglot/using")
     public ResponseEntity<ApiResponse<BaseInfoResponse>> updateUsedSpots(@RequestBody UsedSpotsUpdateResponse request);
-    // Parkinglot used --
 }

@@ -17,7 +17,5 @@ public interface ReservationCommandRepository extends JpaRepository<Reservation,
             LocalDateTime endTime
     );
 
-    Reservation findByParkinglotIdAndIsCanceledFalse(Long parkinglotId);
-
-    Reservation findByParkinglotIdAndIsCanceledFalse(Long parkinglotId, Boolean isCanceled, Sort sort, Limit limit);
+    Reservation findByReservationIdAndIsCanceledFalse(Long reservationId);
 }
