@@ -29,7 +29,7 @@ public class ReviewQueryService {
     @Transactional(readOnly = true)
     public ReviewDetailResponse getReviewByReservation(Long reservationId) {
         Review review = reviewQueryRepository.findByReservationId(reservationId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.REVIEW_NOT_FOUND));
         ReviewDto reviewDto = ReviewDto.from(review);
 
         return ReviewDetailResponse.builder()

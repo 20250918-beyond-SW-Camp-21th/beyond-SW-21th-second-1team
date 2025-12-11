@@ -46,9 +46,10 @@ public class Review {
     @Column(nullable = false)
     private Long reservationId;
 
-    public void updateReview(ReviewUpdateRequest request) {
+    public int updateReview(ReviewUpdateRequest request) {
         this.content = request.getContent();
         this.rating = request.getRating();
+        return 1;
     }
 
     public static Review create(

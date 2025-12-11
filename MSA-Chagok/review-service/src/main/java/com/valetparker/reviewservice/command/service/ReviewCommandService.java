@@ -24,9 +24,21 @@ public class ReviewCommandService {
     @Transactional
     public Long createReview(ReviewCreateRequest request, Long reservationId) {
 
+        Double rating = request.getRating();
+        if (rating == null || rating < 1 || rating > 5) {
+            throw new BusinessException(ErrorCode.INVALID_RATING);
+        }
+
+
         ReviewReservationInfoResponse reservation = reservationClient
                 .getReservation(reservationId)
                 .getData();
+        Long userNo = reservation.getUserNo();
+        Long parkinglotId = reservation.getParkinglotId();
+
+        if (userNo == null || parkinglotId == null || reservationId == null) {
+            throw new BusinessException(ErrorCode.INVALID_REVIEW_REQUEST);
+        }
 
         Review newReview = Review.create(
                 request.getRating(),
@@ -37,19 +49,27 @@ public class ReviewCommandService {
         );
 
         Review saved = jpaReviewCommandRepository.save(newReview);
+        if (saved == null) {
+            throw new BusinessException(ErrorCode.REVIEW_CREATE_FAILED);
+        }
         return saved.getReviewId();
     }
 
     @Transactional
     public void updateReview(ReviewUpdateRequest request, Long reviewId) {
         Review review = jpaReviewCommandRepository.findById(reviewId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.REVIEW_NOT_FOUND));
 
-        review.updateReview(request);
+        if (review.updateReview(request) != 1) {
+            throw new BusinessException(ErrorCode.REVIEW_UPDATE_FAILED);
+        }
     }
 
     @Transactional
     public void deleteReview(Long reviewId) {
         jpaReviewCommandRepository.deleteById(reviewId);
+        if (jpaReviewCommandRepository.findById(reviewId).isPresent()) {
+            throw new BusinessException(ErrorCode.REVIEW_DELETE_FAILED);
+        }
     }
 }
