@@ -45,8 +45,8 @@ public class SecurityConfig {
                         auth
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/kakaopay/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/kakaopay/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/kakaopay/ready/{reservationId}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/kakaopay/success", "/kakaopay/cancel", "/kakaopay/fail").authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
