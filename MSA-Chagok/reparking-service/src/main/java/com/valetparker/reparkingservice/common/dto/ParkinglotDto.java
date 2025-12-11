@@ -19,8 +19,6 @@ public class ParkinglotDto {
     private Integer usedSpots;
     private Integer baseFee;
     private Integer baseTime;
-    private Integer unitFee;
-    private Integer unitTime;
     private Double avgRating;
 
     public static ParkinglotDto from(Parkinglot parkinglot) {
@@ -33,8 +31,6 @@ public class ParkinglotDto {
                 .usedSpots(parkinglot.getUsedSpots())
                 .baseFee(parkinglot.getBaseFee())
                 .baseTime(parkinglot.getBaseTime())
-                .unitFee(parkinglot.getUnitFee())
-                .unitTime(parkinglot.getUnitTime())
                 .avgRating(parkinglot.getAvgRating())
                 .build();
     }
