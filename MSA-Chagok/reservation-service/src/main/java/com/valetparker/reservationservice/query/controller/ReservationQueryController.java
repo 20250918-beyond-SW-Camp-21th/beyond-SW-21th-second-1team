@@ -1,5 +1,6 @@
 package com.valetparker.reservationservice.query.controller;
 
+import com.valetparker.reservationservice.command.dto.response.PaymentResponse;
 import com.valetparker.reservationservice.common.dto.ApiResponse;
 import com.valetparker.reservationservice.common.entity.Reservation;
 import com.valetparker.reservationservice.query.dto.response.ReservationListResponse;
@@ -47,6 +48,15 @@ public class ReservationQueryController {
                 .userNo(reservation.getUserNo())
                 .reservationId(reservation.getReservationId())
                 .build();
+        return ApiResponse.success(response);
+    }
+
+    // payment API: Payment 생성용 reservation정보 전달
+    @GetMapping("/payment/{reservationId}")
+    public ApiResponse<PaymentResponse> getInfoForPaymentReservation(
+            @PathVariable Long reservationId
+    )   {
+        PaymentResponse response = reservationQueryService.getInfoforPaymentReservation(reservationId);
         return ApiResponse.success(response);
     }
 }
