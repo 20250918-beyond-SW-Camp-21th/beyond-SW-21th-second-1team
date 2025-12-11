@@ -56,7 +56,7 @@ public class ReservationQueryController {
     public ApiResponse<PaymentResponse> getInfoForPaymentReservation(
             @PathVariable Long reservationId
     )   {
-        PaymentResponse response = reservationQueryService.getInfoforPaymentReservation(reservationId);
+        PaymentResponse response = reservationQueryService.getInfoForPaymentReservation(reservationId);
         return ApiResponse.success(response);
     }
 }
