@@ -3,6 +3,7 @@ package com.valetparker.reservationservice.command.service;
 import com.valetparker.reservationservice.command.client.ParkingLotClient;
 import com.valetparker.reservationservice.command.dto.request.ReservationEndRequest;
 import com.valetparker.reservationservice.command.dto.request.ReservationStartRequest;
+import com.valetparker.reservationservice.command.dto.response.PaymentResponse;
 import com.valetparker.reservationservice.command.dto.response.UsedSpotsUpdateResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,8 @@ public class ReservationCommandService {
     @Transactional
     public Long createReservation(ReservationCreateRequest request, Long userNo) {
         LocalDateTime startTime = localDateTimeConverter.convert(request.getStartTime());
-        ResponseEntity<ApiResponse<BaseInfoResponse>> response = parkingLotClient.getParkinglotBaseInfo(request.getParkingLotId());
+        ResponseEntity<ApiResponse<BaseInfoResponse>> response = parkingLotClient
+                .getParkinglotBaseInfo(request.getParkingLotId());
 
         int baseTimeMinutes = response.getBody().getData().getBaseTime();
         LocalDateTime endTime = startTime.plusMinutes(baseTimeMinutes);
@@ -58,6 +60,21 @@ public class ReservationCommandService {
         return saved.getReservationId();
     }
 
+
+    // Payment Response 생성
+    public PaymentResponse createPayment(Long reservationId) {
+        Reservation reservation = reservationCommandRepository.findByReservationIdAndIsCanceledFalse(reservationId);
+        ResponseEntity<ApiResponse<BaseInfoResponse>> response = parkingLotClient
+                .getParkinglotBaseInfo(reservation.getParkinglotId());
+        Integer totalAmount = response.getBody().getData().getBaseFee();
+        return PaymentResponse.builder()
+                .reservationId(reservationId)
+                .parkinglotId(response.getBody().getData().getParkinglotId())
+                .totalAmount(totalAmount)
+                .parkinglotName(response.getBody().getData().getName())
+                .build();
+    }
+
     public UsedSpotsUpdateResponse startReservation(ReservationStartRequest request) {
         LocalDateTime currTime = localDateTimeConverter.convert(request.getUpdateTime());
         Reservation reservation = reservationCommandRepository.findByReservationIdAndIsCanceledFalse(request.getReservationId());
@@ -83,6 +100,5 @@ public class ReservationCommandService {
         parkingLotClient.updateUsedSpots(response);
         return response;
     }
-
 
 }
