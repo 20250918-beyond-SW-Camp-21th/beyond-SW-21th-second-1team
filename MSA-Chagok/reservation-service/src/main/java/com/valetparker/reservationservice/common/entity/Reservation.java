@@ -1,6 +1,5 @@
 package com.valetparker.reservationservice.common.entity;
 
-import com.valetparker.reservationservice.common.converter.LocalDateTimeConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -61,9 +60,12 @@ public class Reservation {
         reservation.parkinglotId = parkinglotId;
         return reservation;
     }
-
     // 취소
     public void cancel() {
         isCanceled = true;
+    }
+
+    public boolean isStarted(LocalDateTime currTime, LocalDateTime startTime, LocalDateTime endTime) {
+        return currTime.isAfter(startTime) && currTime.isBefore(endTime);
     }
 }

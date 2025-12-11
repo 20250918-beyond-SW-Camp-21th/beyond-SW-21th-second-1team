@@ -1,6 +1,8 @@
 package com.valetparker.reservationservice.command.repository;
 
 import com.valetparker.reservationservice.common.entity.Reservation;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,8 @@ public interface ReservationCommandRepository extends JpaRepository<Reservation,
             LocalDateTime startTime,
             LocalDateTime endTime
     );
+
+    Reservation findByParkinglotIdAndIsCanceledFalse(Long parkinglotId);
+
+    Reservation findByParkinglotIdAndIsCanceledFalse(Long parkinglotId, Boolean isCanceled, Sort sort, Limit limit);
 }
