@@ -1,8 +1,10 @@
 package com.valetparker.reservationservice.query.controller;
 
 import com.valetparker.reservationservice.common.dto.ApiResponse;
+import com.valetparker.reservationservice.common.entity.Reservation;
 import com.valetparker.reservationservice.query.dto.response.ReservationListResponse;
 import com.valetparker.reservationservice.query.dto.response.ReservationQueryResponse;
+import com.valetparker.reservationservice.query.dto.response.ReviewReservationInfoResponse;
 import com.valetparker.reservationservice.query.service.ReservationQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +34,19 @@ public class ReservationQueryController {
     ) {
         ReservationListResponse response = reservationQueryService.getReservationsByUserNo(userNo);
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    // review API: Review 생성용 reservation정보 전달
+    @GetMapping("/reservation/{reservationId}")
+    public ApiResponse<ReviewReservationInfoResponse> getInfoForReview(
+            @PathVariable("reservationId") Long reservationId
+    ) {
+        Reservation reservation = reservationQueryService.getByReservationId(reservationId);
+        ReviewReservationInfoResponse response = ReviewReservationInfoResponse.builder()
+                .parkinglotId(reservation.getParkinglotId())
+                .userNo(reservation.getUserNo())
+                .reservationId(reservation.getReservationId())
+                .build();
+        return ApiResponse.success(response);
     }
 }

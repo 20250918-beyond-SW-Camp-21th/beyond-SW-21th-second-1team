@@ -44,4 +44,9 @@ public class ReservationQueryService {
                 .build();
 
     }
+
+    public Reservation getByReservationId(Long reservationId) {
+        return reservationQueryRepository.findByReservationId(reservationId).
+                orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+    }
 }

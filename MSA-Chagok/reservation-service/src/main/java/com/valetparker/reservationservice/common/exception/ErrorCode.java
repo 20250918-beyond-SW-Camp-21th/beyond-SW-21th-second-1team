@@ -18,6 +18,7 @@ public enum ErrorCode {
 
     // request 값 입력 오류
     VALIDATION_ERROR("40001", "입력 값 검증 오류입니다.", HttpStatus.BAD_REQUEST),
+    VALIDATION_ERROR_EARLY_START("40002", "예약 시간보다 이릅니다.", HttpStatus.BAD_REQUEST),
 
     LOGIN_ERROR("40002", "아이디 혹은 비밀번호 오류입니다.", HttpStatus.BAD_REQUEST),
 
