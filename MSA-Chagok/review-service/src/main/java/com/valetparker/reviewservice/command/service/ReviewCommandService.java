@@ -8,10 +8,15 @@ import com.valetparker.reviewservice.command.repository.JpaReviewCommandReposito
 import com.valetparker.reviewservice.common.entity.Review;
 import com.valetparker.reviewservice.common.exception.BusinessException;
 import com.valetparker.reviewservice.common.exception.ErrorCode;
+import com.valetparker.reviewservice.common.model.CustomUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +45,10 @@ public class ReviewCommandService {
             throw new BusinessException(ErrorCode.INVALID_REVIEW_REQUEST);
         }
 
+        if (!isValidUser(userNo)) {
+            throw new BusinessException(ErrorCode.REVIEW_ACCESS_DENIED);
+        }
+
         Review newReview = Review.create(
                 request.getRating(),
                 request.getContent(),
@@ -59,7 +68,10 @@ public class ReviewCommandService {
     public void updateReview(ReviewUpdateRequest request, Long reviewId) {
         Review review = jpaReviewCommandRepository.findById(reviewId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.REVIEW_NOT_FOUND));
-
+        Long userNo = review.getWriterId();
+        if (!isValidUser(userNo)) {
+            throw new BusinessException(ErrorCode.REVIEW_ACCESS_DENIED);
+        }
         if (review.updateReview(request) != 1) {
             throw new BusinessException(ErrorCode.REVIEW_UPDATE_FAILED);
         }
@@ -67,9 +79,35 @@ public class ReviewCommandService {
 
     @Transactional
     public void deleteReview(Long reviewId) {
+        Review review = jpaReviewCommandRepository.findById(reviewId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.REVIEW_NOT_FOUND));
+        if (!isValidUser(review.getWriterId())) {
+            throw new BusinessException(ErrorCode.REVIEW_ACCESS_DENIED);
+        }
         jpaReviewCommandRepository.deleteById(reviewId);
         if (jpaReviewCommandRepository.findById(reviewId).isPresent()) {
             throw new BusinessException(ErrorCode.REVIEW_DELETE_FAILED);
         }
     }
+
+//    private boolean isValidUser(Long validUserNo) {
+//        CustomUser user = (CustomUser) SecurityContextHolder
+//                .getContext()
+//                .getAuthentication()
+//                .getPrincipal();
+//        Long accessUserNo = user.getUserNo();
+//        if (accessUserNo != validUserNo) {
+//            return false;
+//        }
+//        return true;
+//    }
+
+    private boolean isValidUser(Long userNo) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUser customUser)) {
+            return false;
+        }
+        return Objects.equals(customUser.getUserNo(), userNo);
+    }
+
 }
