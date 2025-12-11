@@ -47,6 +47,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth ->
                         auth
+                                .requestMatchers("/actuator/**").permitAll()
                                 .requestMatchers( "/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/reservation/createReservation").authenticated()
                                 .requestMatchers(HttpMethod.GET, "mypage/reservations/{reservationId}").authenticated()

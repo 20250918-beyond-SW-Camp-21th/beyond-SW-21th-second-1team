@@ -28,9 +28,11 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
         // API Gateway가 전달한 헤더 읽기
         String email = request.getHeader("X-User-Email");
         String role = request.getHeader("X-User-Role");
+        String userNo = request.getHeader("X-User-No");
 
         log.info("email : {}", email);
         log.info("role : {}", role);
+        log.info("userNo : {}", userNo);
 
 //        if (email != null && role != null) {
 //            // 이미 Gateway에서 검증된 정보로 인증 객체 구성
@@ -41,6 +43,7 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
 //        }
 
         if (email != null) {
+            Long user_no =  Long.valueOf(userNo);
 
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
             if(role != null) {
@@ -48,7 +51,13 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
             }
 
             // Principal 을 UserDetails 로 구성해야 AuthenticationPrincipal에서 받을 수 있음
-            UserDetails principal = new org.springframework.security.core.userdetails.User(email, "", authorities);
+            //UserDetails principal = new org.springframework.security.core.userdetails.User(email, "", authorities);
+            CustomUserDetails principal = new CustomUserDetails(
+                    user_no,
+                    email,
+                    null,
+                    authorities
+            );
 
             PreAuthenticatedAuthenticationToken authentication =
                     new PreAuthenticatedAuthenticationToken(principal, null, authorities);
