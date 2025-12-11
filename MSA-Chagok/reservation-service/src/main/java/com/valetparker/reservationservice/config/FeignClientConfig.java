@@ -17,10 +17,12 @@ public class FeignClientConfig {
                     (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
             if(requestAttributes != null) {
-                String userId = requestAttributes.getRequest().getHeader("X-User-Id");
+                String userId = requestAttributes.getRequest().getHeader("X-User-Email");
                 String role = requestAttributes.getRequest().getHeader("X-User-Role");
-                requestTemplate.header("X-User-Id", userId);
+                String userNo = requestAttributes.getRequest().getHeader("X-User-No");
+                requestTemplate.header("X-User-Email", userId);
                 requestTemplate.header("X-User-Role", role);
+                requestTemplate.header("X-User-No", userNo);
             }
         };
     }
