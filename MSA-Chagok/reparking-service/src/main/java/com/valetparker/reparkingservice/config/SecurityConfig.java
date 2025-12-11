@@ -39,11 +39,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers( "/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/parkinglot/register").hasAuthority("ADMIN")
+                                    .requestMatchers(HttpMethod.POST, "/parkinglot/register").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/parkinglot/using").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/parkinglots/","parkinglot/detail/**", "/parkinglot/base").authenticated()
                                 .anyRequest().authenticated()
                 ).addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
