@@ -1,9 +1,8 @@
-package com.ohgiraffers.userservice.config;
+package com.valetparker.reparkingservice.config;
 
-import com.ohgiraffers.userservice.jwt.HeaderAuthenticationFilter;
-import com.ohgiraffers.userservice.jwt.JwtTokenProvider;
-import com.ohgiraffers.userservice.jwt.RestAccessDeniedHandler;
-import com.ohgiraffers.userservice.jwt.RestAuthenticationEntryPoint;
+import com.valetparker.reparkingservice.jwt.HeaderAuthenticationFilter;
+import com.valetparker.reparkingservice.jwt.RestAccessDeniedHandler;
+import com.valetparker.reparkingservice.jwt.RestAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,11 +24,7 @@ public class SecurityConfig {
 
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     private final RestAccessDeniedHandler restAccessDeniedHandler;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,10 +38,10 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth ->
                         auth
-                        .requestMatchers( "/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/regist", "/auth/login","/auth/refresh").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/auth/logout").authenticated()
-                                .requestMatchers(HttpMethod.POST, "/user/modify").authenticated()
+                                .requestMatchers( "/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/parkinglot/register").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/parkinglot/using").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/parkinglots/","parkinglot/detail/**", "/parkinglot/base").authenticated()
                                 .anyRequest().authenticated()
                 ).addFilterBefore(headerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

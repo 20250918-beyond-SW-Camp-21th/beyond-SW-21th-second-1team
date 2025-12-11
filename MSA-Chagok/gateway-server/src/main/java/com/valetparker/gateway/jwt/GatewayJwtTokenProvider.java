@@ -51,4 +51,13 @@ public class GatewayJwtTokenProvider {
                 .getPayload();
         return claims.get("role", String.class);
     }
+
+    public Long getUserNoFromJWT(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.get("userNo", Long.class);
+    }
 }

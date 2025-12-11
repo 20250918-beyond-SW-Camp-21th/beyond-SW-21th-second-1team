@@ -1,15 +1,13 @@
-package com.ohgiraffers.userservice.jwt;
+package com.valetparker.reparkingservice.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -30,16 +28,13 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
         // API Gateway가 전달한 헤더 읽기
         String email = request.getHeader("X-User-Email");
         String role = request.getHeader("X-User-Role");
-        String userNo = request.getHeader("X-User-No");
 
         log.info("email : {}", email);
         log.info("role : {}", role);
-        log.info("userNo : {}", userNo);
 
         if (email != null) {
 
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
             if(role != null) {
                 authorities.add(new SimpleGrantedAuthority(role));
             }
