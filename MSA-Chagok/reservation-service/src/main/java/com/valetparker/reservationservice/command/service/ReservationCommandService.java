@@ -3,6 +3,7 @@ package com.valetparker.reservationservice.command.service;
 import com.valetparker.reservationservice.command.client.ParkingLotClient;
 import com.valetparker.reservationservice.command.dto.request.ReservationEndRequest;
 import com.valetparker.reservationservice.command.dto.request.ReservationStartRequest;
+import com.valetparker.reservationservice.command.dto.response.PaymentResponse;
 import com.valetparker.reservationservice.command.dto.response.UsedSpotsUpdateResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,14 +31,14 @@ public class ReservationCommandService {
     @Transactional
     public Long createReservation(ReservationCreateRequest request, Long userNo) {
         LocalDateTime startTime = localDateTimeConverter.convert(request.getStartTime());
-        ResponseEntity<ApiResponse<BaseInfoResponse>> response = parkingLotClient.getParkinglotBaseInfo(request.getParkingLotId());
+        BaseInfoResponse response = parkingLotClient.getParkinglotBaseInfo(request.getParkingLotId());
 
-        int baseTimeMinutes = response.getBody().getData().getBaseTime();
+        int baseTimeMinutes = response.getBaseTime();
         LocalDateTime endTime = startTime.plusMinutes(baseTimeMinutes);
 
         if (reservationCommandRepository.existsByParkinglotIdAndIsCanceledFalseAndEndTimeGreaterThanAndStartTimeLessThan(
                 // 겹치는 시간이 있을 경우
-                response.getBody().getData().getParkinglotId(),
+                response.getParkinglotId(),
                 startTime,
                 endTime
         )) {
@@ -56,6 +57,21 @@ public class ReservationCommandService {
         Reservation saved = reservationCommandRepository.save(newReservation);
 
         return saved.getReservationId();
+    }
+
+
+    // Payment Response 생성
+    public PaymentResponse createPayment(Long reservationId) {
+        Reservation reservation = reservationCommandRepository.findByReservationIdAndIsCanceledFalse(reservationId);
+        BaseInfoResponse parkinglot = parkingLotClient
+                .getParkinglotBaseInfo(reservation.getParkinglotId());
+        Integer totalAmount = parkinglot.getBaseFee();
+        return PaymentResponse.builder()
+                .reservationId(reservationId)
+                .parkinglotId(parkinglot.getParkinglotId())
+                .totalAmount(totalAmount)
+                .parkinglotName(parkinglot.getName())
+                .build();
     }
 
     public UsedSpotsUpdateResponse startReservation(ReservationStartRequest request) {
@@ -83,6 +99,5 @@ public class ReservationCommandService {
         parkingLotClient.updateUsedSpots(response);
         return response;
     }
-
 
 }

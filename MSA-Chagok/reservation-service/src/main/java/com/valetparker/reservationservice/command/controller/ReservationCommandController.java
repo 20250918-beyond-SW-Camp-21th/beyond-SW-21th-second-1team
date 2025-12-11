@@ -1,7 +1,10 @@
 package com.valetparker.reservationservice.command.controller;
 
 import com.valetparker.reservationservice.command.dto.request.ReservationCreateRequest;
+import com.valetparker.reservationservice.command.dto.request.ReservationEndRequest;
 import com.valetparker.reservationservice.command.dto.request.ReservationStartRequest;
+import com.valetparker.reservationservice.command.dto.response.BaseInfoResponse;
+import com.valetparker.reservationservice.command.dto.response.PaymentResponse;
 import com.valetparker.reservationservice.command.dto.response.UsedSpotsUpdateResponse;
 import com.valetparker.reservationservice.command.dto.response.ReservationCommandResponse;
 import com.valetparker.reservationservice.command.service.ReservationCommandService;
@@ -9,6 +12,7 @@ import com.valetparker.reservationservice.common.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.method.AuthorizeReturnObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +38,15 @@ public class ReservationCommandController {
     }
 
     // 결제 호출
+    @PostMapping("/payment/{reservationId}")
+    public ResponseEntity<ApiResponse<PaymentResponse>> createPayment(
+            @PathVariable Long reservationId
+    )   {
+        PaymentResponse response = reservationCommandService.createPayment(reservationId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(response));
+    }
 
     // 예약 이용 시작
     @PutMapping("/reservation/start")
@@ -49,7 +62,7 @@ public class ReservationCommandController {
     // 예약 이용 종료
     @PutMapping("/reservation/quit")
     public ResponseEntity<ApiResponse<UsedSpotsUpdateResponse>> quitReservation(
-            @RequestBody ReservationStartRequest request, @AuthenticationPrincipal UserDetails user
+            @RequestBody ReservationEndRequest request, @AuthenticationPrincipal UserDetails user
     )   {
         UsedSpotsUpdateResponse response = reservationCommandService.finishReservation(request);
         return ResponseEntity
