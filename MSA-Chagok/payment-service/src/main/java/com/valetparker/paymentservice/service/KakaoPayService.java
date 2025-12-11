@@ -1,6 +1,9 @@
 package com.valetparker.paymentservice.service;
 
+import com.valetparker.paymentservice.PaymentServiceApplication;
 import com.valetparker.paymentservice.client.ReservationClient;
+import com.valetparker.paymentservice.common.dto.ApiResponse;
+import com.valetparker.paymentservice.common.dto.request.PaymentInfoRequest;
 import com.valetparker.paymentservice.config.KakaoPayProperties;
 import com.valetparker.paymentservice.dto.request.KakaoPayReadyRequest;
 import com.valetparker.paymentservice.dto.response.KakaoPayApproveResponse;
@@ -46,23 +49,29 @@ public class KakaoPayService {
     /**
      * 카카오페이 결제 준비 요청
      */
-    public KakaoPayReadyResponse ready(KakaoPayReadyRequest request) {
+    public KakaoPayReadyResponse ready(Long reservationId) {
+        ApiResponse<PaymentInfoRequest> info = reservationClient.getPaymentInfo(reservationId);
 
-        KakaoPayReadyRequest requestReservation = getReservationInfo
+        PaymentInfoRequest paymentInfo = info.getData();
 
-
+        String partnerOrderId = String.format("ORDER_%03d", reservationId);
+        String partnerUserId = "USER_" + reservationId;
+        String itemName = "주차장 사용권";
+        Integer quantity = 1;
+        Integer totalAmount = paymentInfo.getTotalAmount();
+        Integer taxFreeAmount = 0;
         // 요청 헤더
         HttpHeaders headers = getHeaders();
 
         // 요청 바디
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("cid", kakaoPayProperties.getCid());
-        parameters.put("partner_order_id", request.getPartnerOrderId());
-        parameters.put("partner_user_id", request.getPartnerUserId());
-        parameters.put("item_name", request.getItemName());
-        parameters.put("quantity", request.getQuantity());
-        parameters.put("total_amount", request.getTotalAmount());
-        parameters.put("tax_free_amount", request.getTaxFreeAmount());
+        parameters.put("partner_order_id", partnerOrderId);
+        parameters.put("partner_user_id", partnerUserId);
+        parameters.put("item_name", itemName);
+        parameters.put("quantity", quantity);
+        parameters.put("total_amount", totalAmount);
+        parameters.put("tax_free_amount", taxFreeAmount);
 
         // 디버깅: URL 확인
         log.info("Redirect URL Success: {}", kakaoPayProperties.getRedirectUrlSuccess());

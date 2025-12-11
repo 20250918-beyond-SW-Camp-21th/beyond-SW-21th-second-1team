@@ -26,20 +26,22 @@ public class KakaoPayController {
     /**
      * 결제 준비 (Ready)
      */
-    @PostMapping("/ready")
-    public ResponseEntity<KakaoPayReadyResponse> ready(@RequestBody KakaoPayReadyRequest request) {
+    @PostMapping("/ready/{reservationId}")
+    public ResponseEntity<KakaoPayReadyResponse> ready(
+//            @RequestBody KakaoPayReadyRequest request,
+            @PathVariable Long reservationId) {
 
 
 
-        KakaoPayReadyResponse response = kakaoPayService.ready(request);
+        KakaoPayReadyResponse response = kakaoPayService.ready(reservationId);
 
         // 데모를 위해 임시 변수에 저장 (동시성 문제 존재함, 테스트 용도로만 사용)
-        if (response != null) {
-            this.tempTid = response.getTid();
-            this.tempPartnerOrderId = request.getPartnerOrderId();
-            this.tempPartnerUserId = request.getPartnerUserId();
-            log.info("결제 준비 완료. TID: {}", response.getTid());
-        }
+//        if (response != null) {
+//            this.tempTid = response.getTid();
+//            this.tempPartnerOrderId = request.getPartnerOrderId();
+//            this.tempPartnerUserId = request.getPartnerUserId();
+//            log.info("결제 준비 완료. TID: {}", response.getTid());
+//        }
 
         return ResponseEntity.ok(response);
     }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +27,10 @@ public class ReservationQueryService {
     // 단일객체 조회(reservationId)
     @Transactional(readOnly = true)
     public ReservationQueryResponse getReservationDetailBy(Long reservationId) {
+
         Reservation reservation = reservationQueryRepository
-                .findByReservationId(reservationId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+                .findByReservationId(reservationId);
+//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
         ReservationDto response = ReservationDto.from(reservation);
         return ReservationQueryResponse.builder()
                 .reservationDto(response)
@@ -50,13 +52,14 @@ public class ReservationQueryService {
     }
 
     public Reservation getByReservationId(Long reservationId) {
-        return reservationQueryRepository.findByReservationId(reservationId).
-                orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+        return reservationQueryRepository.findByReservationId(reservationId);
+//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
     }
 
     // Payment API service
-    public PaymentResponse getInfoforPaymentReservation(Long reservationId) {
-        Reservation reservation = reservationQueryRepository.findReservationBy(reservationId);
+    public PaymentResponse getInfoForPaymentReservation(Long reservationId) {
+        Reservation reservation = reservationQueryRepository.findByReservationId(reservationId);
+//        Reservation entityReservation = reservation.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
 
         BaseInfoResponse response = parkingLotClient
                 .getParkinglotBaseInfo(reservation.getParkinglotId())
