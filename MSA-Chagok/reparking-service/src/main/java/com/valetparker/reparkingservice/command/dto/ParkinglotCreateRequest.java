@@ -13,6 +13,5 @@ public class ParkinglotCreateRequest {
     private final SeoulDistrict seoulDistrict;
     private final Integer totalSpots;
     private final Integer baseFee;
-    private final Integer unitFee;
 
 }
