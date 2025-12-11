@@ -2,6 +2,7 @@ package com.valetparker.reviewservice.command.service;
 
 import com.valetparker.reviewservice.command.client.ReservationClient;
 import com.valetparker.reviewservice.command.dto.request.ReviewCreateRequest;
+import com.valetparker.reviewservice.command.dto.request.ReviewUpdateRequest;
 import com.valetparker.reviewservice.command.dto.response.ReviewReservationInfoResponse;
 import com.valetparker.reviewservice.command.repository.JpaReviewCommandRepository;
 import com.valetparker.reviewservice.common.dto.ApiResponse;
@@ -23,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -204,5 +206,270 @@ class ReviewCommandServiceTests {
         // then
         assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.REVIEW_CREATE_FAILED);
     }
+
+
+    // ================== updateReview ==================
+
+    private ReviewUpdateRequest buildUpdateRequest(Double rating, String content) {
+        return ReviewUpdateRequest.builder()
+                .rating(rating)
+                .content(content)
+                .build();
+    }
+
+    @Test
+    @DisplayName("Ok : 리뷰 정상 수정")
+    void updateReview_Ok() {
+        // given
+        Long reviewId = 1L;
+        Long userNo = 10L;
+        Long parkinglotId = 100L;
+        Long reservationId = 999L;
+
+        ReviewUpdateRequest request = buildUpdateRequest(5.0, "수정된 내용");
+
+        Review existing = Review.create(
+                3.0,
+                "원래 내용",
+                userNo,
+                parkinglotId,
+                reservationId
+        );
+        ReflectionTestUtils.setField(existing, "reviewId", reviewId);
+
+        when(repository.findById(reviewId))
+                .thenReturn(Optional.of(existing));
+
+        CustomUser customUser = CustomUser.builder()
+                .userNo(userNo)
+                .email("test@example.com")
+                .password("")
+                .authorities(List.of(new SimpleGrantedAuthority("ROLE_USER")))
+                .build();
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                customUser, null, customUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        // when
+        commandService.updateReview(request, reviewId);
+
+        // then
+        verify(repository).findById(reviewId);
+    }
+
+    @Test
+    @DisplayName("NotOk : 리뷰 수정 - 권한 없음")
+    void updateReview_AccessDenied() {
+        // given
+        Long reviewId = 1L;
+        Long ownerUserNo = 10L;
+        Long currentUserNo = 99L;
+        Long parkinglotId = 100L;
+        Long reservationId = 999L;
+
+        ReviewUpdateRequest request = buildUpdateRequest(5.0, "수정된 내용");
+
+        Review existing = Review.create(
+                3.0,
+                "원래 내용",
+                ownerUserNo,
+                parkinglotId,
+                reservationId
+        );
+        ReflectionTestUtils.setField(existing, "reviewId", reviewId);
+
+        when(repository.findById(reviewId))
+                .thenReturn(Optional.of(existing));
+
+        CustomUser customUser = CustomUser.builder()
+                .userNo(currentUserNo)
+                .email("other@example.com")
+                .password("")
+                .authorities(List.of(new SimpleGrantedAuthority("ROLE_USER")))
+                .build();
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                customUser, null, customUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        // when
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> commandService.updateReview(request, reviewId));
+
+        // then
+        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.REVIEW_ACCESS_DENIED);
+        verify(repository).findById(reviewId);
+    }
+
+    @Test
+    @DisplayName("NotOk : 리뷰 수정 - 범위 밖의 별점")
+    void updateReview_InvalidRating() {
+        // given
+        Long reviewId = 1L;
+        Long userNo = 10L;
+        Long parkinglotId = 100L;
+        Long reservationId = 999L;
+
+        // 잘못된 rating
+        ReviewUpdateRequest request = buildUpdateRequest(0.0, "내용");
+
+        // 리뷰는 존재한다고 가정
+        Review existing = Review.create(
+                3.0,
+                "원래 내용",
+                userNo,
+                parkinglotId,
+                reservationId
+        );
+        ReflectionTestUtils.setField(existing, "reviewId", reviewId);
+
+        when(repository.findById(reviewId))
+                .thenReturn(Optional.of(existing));
+
+        // ✅ 권한 검증 통과하도록 현재 로그인 유저를 review의 userNo와 동일하게 세팅
+        CustomUser customUser = CustomUser.builder()
+                .userNo(userNo)
+                .email("test@example.com")
+                .password("")
+                .authorities(List.of(new SimpleGrantedAuthority("ROLE_USER")))
+                .build();
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                customUser, null, customUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        // when
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> commandService.updateReview(request, reviewId));
+
+        // then
+        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_RATING);
+        verify(repository).findById(reviewId);
+    }
+
+
+
+    @Test
+    @DisplayName("NotOk : 리뷰 수정 - 대상 리뷰 없음")
+    void updateReview_NotFound() {
+        // given
+        Long reviewId = 1L;
+        ReviewUpdateRequest request = buildUpdateRequest(4.0, "내용");
+
+        when(repository.findById(reviewId))
+                .thenReturn(Optional.empty());
+
+        // when
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> commandService.updateReview(request, reviewId));
+
+        // then
+        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.REVIEW_NOT_FOUND);
+        verify(repository).findById(reviewId);
+    }
+
+    // ================== deleteReview ==================
+
+    @Test
+    @DisplayName("NotOk : 리뷰 삭제 - 삭제 실패")
+    void deleteReview_DeleteFailed() {
+        // given
+        Long reviewId = 1L;
+        Long userNo = 10L;
+        Long parkinglotId = 100L;
+        Long reservationId = 999L;
+
+        Review existing = Review.create(
+                4.0,
+                "삭제할 리뷰",
+                userNo,
+                parkinglotId,
+                reservationId
+        );
+        ReflectionTestUtils.setField(existing, "reviewId", reviewId);
+
+        when(repository.findById(reviewId))
+                .thenReturn(Optional.of(existing));
+
+        CustomUser customUser = CustomUser.builder()
+                .userNo(userNo)
+                .email("test@example.com")
+                .password("")
+                .authorities(List.of(new SimpleGrantedAuthority("ROLE_USER")))
+                .build();
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                customUser, null, customUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        // when
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> commandService.deleteReview(reviewId));
+
+        // then
+        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.REVIEW_DELETE_FAILED);
+        // ✅ 실제 구현에서 findById를 2번 호출하므로 2회 검증
+        verify(repository, times(2)).findById(reviewId);
+        // 실패 분기라 delete()는 호출 안 되거나, 호출 전에 예외 발생했을 가능성 있음
+    }
+
+    @Test
+    @DisplayName("NotOk : 리뷰 삭제 - 권한 없음")
+    void deleteReview_AccessDenied() {
+        // given
+        Long reviewId = 1L;
+        Long ownerUserNo = 10L;
+        Long currentUserNo = 99L;
+        Long parkinglotId = 100L;
+        Long reservationId = 999L;
+
+        Review existing = Review.create(
+                4.0,
+                "삭제할 리뷰",
+                ownerUserNo,
+                parkinglotId,
+                reservationId
+        );
+        ReflectionTestUtils.setField(existing, "reviewId", reviewId);
+
+        when(repository.findById(reviewId))
+                .thenReturn(Optional.of(existing));
+
+        CustomUser customUser = CustomUser.builder()
+                .userNo(currentUserNo)
+                .email("other@example.com")
+                .password("")
+                .authorities(List.of(new SimpleGrantedAuthority("ROLE_USER")))
+                .build();
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                customUser, null, customUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        // when
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> commandService.deleteReview(reviewId));
+
+        // then
+        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.REVIEW_ACCESS_DENIED);
+        verify(repository).findById(reviewId);
+        verify(repository, never()).delete(any());
+    }
+
+    @Test
+    @DisplayName("NotOk : 리뷰 삭제 - 대상 리뷰 없음")
+    void deleteReview_NotFound() {
+        // given
+        Long reviewId = 1L;
+
+        when(repository.findById(reviewId))
+                .thenReturn(Optional.empty());
+
+        // when
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> commandService.deleteReview(reviewId));
+
+        // then
+        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.REVIEW_NOT_FOUND);
+        verify(repository).findById(reviewId);
+        verify(repository, never()).delete(any());
+    }
+
 
 }

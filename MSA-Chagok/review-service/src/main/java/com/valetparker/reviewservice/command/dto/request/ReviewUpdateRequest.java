@@ -3,10 +3,12 @@ package com.valetparker.reviewservice.command.dto.request;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
+@Builder
 @RequiredArgsConstructor
 public class ReviewUpdateRequest {
     @NotNull(message = "평점은 필수 값입니다.")

@@ -72,6 +72,10 @@ public class ReviewCommandService {
         if (!isValidUser(userNo)) {
             throw new BusinessException(ErrorCode.REVIEW_ACCESS_DENIED);
         }
+        Double rating = request.getRating();
+        if (rating == null || rating < 1 || rating > 5) {
+            throw new BusinessException(ErrorCode.INVALID_RATING);
+        }
         if (review.updateReview(request) != 1) {
             throw new BusinessException(ErrorCode.REVIEW_UPDATE_FAILED);
         }
