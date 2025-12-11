@@ -84,8 +84,8 @@ public class Parkinglot {
         this.unitFee = request.getUnitFee();
     }
 
-    public void updateUsedSpots(boolean isUsing) {
-        if (isUsing) {
+    public void updateUsedSpots(boolean using) {
+        if (using) {
             this.usedSpots++;
         } else {
             this.usedSpots--;
