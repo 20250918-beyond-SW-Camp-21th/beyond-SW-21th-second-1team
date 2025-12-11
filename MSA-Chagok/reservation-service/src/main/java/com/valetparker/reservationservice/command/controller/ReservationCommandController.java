@@ -8,8 +8,11 @@ import com.valetparker.reservationservice.command.dto.response.UsedSpotsUpdateRe
 import com.valetparker.reservationservice.command.dto.response.ReservationCommandResponse;
 import com.valetparker.reservationservice.command.service.ReservationCommandService;
 import com.valetparker.reservationservice.common.dto.ApiResponse;
+import com.valetparker.reservationservice.common.exception.BusinessException;
+import com.valetparker.reservationservice.common.exception.ErrorCode;
 import com.valetparker.reservationservice.common.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,7 +44,7 @@ public class ReservationCommandController {
     public ResponseEntity<ApiResponse<PaymentResponse>> createPayment(
             @PathVariable Long reservationId
     )   {
-        PaymentResponse response = reservationCommandService.createPayment(reservationId);
+        PaymentResponse response = reservationCommandService.reservationPayment(reservationId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(response));
