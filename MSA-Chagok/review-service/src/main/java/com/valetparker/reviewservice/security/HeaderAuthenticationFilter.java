@@ -1,10 +1,12 @@
 package com.valetparker.reviewservice.security;
 
+import com.valetparker.reviewservice.common.model.CustomUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,24 +30,43 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
         // API Gateway가 전달한 헤더 읽기
         String email = request.getHeader("X-User-Email");
         String role = request.getHeader("X-User-Role");
+        String userNoStr = request.getHeader("X-User-No");
 
         log.info("email : {}", email);
         log.info("role : {}", role);
+        log.info("userNo : {}", userNoStr);
 
-        if (email != null) {
+//        if (email != null) {
+//
+//            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//            if(role != null) {
+//                authorities.add(new SimpleGrantedAuthority(role));
+//            }
+//
+//            // Principal 을 UserDetails 로 구성해야 AuthenticationPrincipal에서 받을 수 있음
+//            UserDetails principal = new org.springframework.security.core.userdetails.User(email, "", authorities);
+//
+//            PreAuthenticatedAuthenticationToken authentication =
+//                    new PreAuthenticatedAuthenticationToken(principal, null, authorities);
+//
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//        }
 
-            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            if(role != null) {
-                authorities.add(new SimpleGrantedAuthority(role));
-            }
 
-            // Principal 을 UserDetails 로 구성해야 AuthenticationPrincipal에서 받을 수 있음
-            UserDetails principal = new org.springframework.security.core.userdetails.User(email, "", authorities);
+        if (email != null && userNoStr != null && role != null) {
+            Long userNo = Long.valueOf(userNoStr);
 
-            PreAuthenticatedAuthenticationToken authentication =
-                    new PreAuthenticatedAuthenticationToken(principal, null, authorities);
+            CustomUser customUser = CustomUser.builder()
+                    .email(email)
+                    .userNo(userNo)
+                    .password("")  // 필요 없음
+                    .authorities(List.of(new SimpleGrantedAuthority(role)))
+                    .build();
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(customUser, null, customUser.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
         filterChain.doFilter(request, response);

@@ -1,12 +1,14 @@
 package com.valetparker.reviewservice.command.dto.request;
 
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @RequiredArgsConstructor
 public class ReviewCreateRequest {
     @NotNull(message = "평점은 필수 값입니다.")
