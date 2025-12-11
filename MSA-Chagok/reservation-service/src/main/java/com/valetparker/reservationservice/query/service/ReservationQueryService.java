@@ -3,6 +3,7 @@ package com.valetparker.reservationservice.query.service;
 import com.valetparker.reservationservice.command.client.ParkingLotClient;
 import com.valetparker.reservationservice.command.dto.response.BaseInfoResponse;
 import com.valetparker.reservationservice.command.dto.response.PaymentResponse;
+import com.valetparker.reservationservice.common.dto.ApiResponse;
 import com.valetparker.reservationservice.common.entity.Reservation;
 import com.valetparker.reservationservice.common.exception.BusinessException;
 import com.valetparker.reservationservice.common.exception.ErrorCode;
@@ -11,6 +12,7 @@ import com.valetparker.reservationservice.query.dto.response.ReservationListResp
 import com.valetparker.reservationservice.query.dto.response.ReservationQueryResponse;
 import com.valetparker.reservationservice.query.repository.ReservationQueryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,15 +63,38 @@ public class ReservationQueryService {
         Reservation reservation = reservationQueryRepository.findByReservationId(reservationId);
 //        Reservation entityReservation = reservation.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
 
-        BaseInfoResponse response = parkingLotClient
-                .getParkinglotBaseInfo(reservation.getParkinglotId())
-                .getBody().getData();
+        ResponseEntity<ApiResponse<BaseInfoResponse>> responseEntity =
+                parkingLotClient.getParkinglotBaseInfo(reservation.getParkinglotId());
+
+        ApiResponse<BaseInfoResponse> body = responseEntity.getBody();
+
+        // 1단계: body 자체 검증
+        if (body == null) {
+            throw new BusinessException(ErrorCode.REGIST_ERROR_NO_PARKINGLOT);
+        }
+
+        // 2단계: success 여부 검증
+        if (!body.isSuccess()) {
+            // 필요하면 errorCode 보고 분기
+            throw new BusinessException(ErrorCode.REGIST_ERROR_NO_PARKINGLOT);
+        }
+
+        // 3단계: data 존재 여부 검증
+        BaseInfoResponse info = body.getData();
+        if (info == null) {
+            throw new BusinessException(ErrorCode.REGIST_ERROR_NO_PARKINGLOT);
+        }
+
+        // 4단계: 이제 안심하고 사용
+        Integer amount = info.getBaseFee();
+        String name = info.getName();
+
 
         return PaymentResponse.builder()
                 .parkinglotId(reservation.getParkinglotId())
                 .reservationId(reservationId)
-                .parkinglotName(response.getName())
-                .totalAmount(response.getBaseFee())
+                .parkinglotName(name)
+                .totalAmount(amount)
                 .build();
     }
 }

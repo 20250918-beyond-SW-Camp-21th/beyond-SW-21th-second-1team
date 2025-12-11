@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ReservationClient {
 
     @GetMapping("/payment/{reservationId}")
-    public ApiResponse<PaymentInfoRequest> getPaymentInfo(@PathVariable("reservationId") Long reservationId);
+    ApiResponse<PaymentInfoRequest> getPaymentInfo(@PathVariable("reservationId") Long reservationId);
 }
