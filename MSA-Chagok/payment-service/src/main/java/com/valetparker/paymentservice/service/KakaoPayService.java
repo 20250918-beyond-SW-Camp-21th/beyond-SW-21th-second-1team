@@ -60,6 +60,11 @@ public class KakaoPayService {
         Integer quantity = 1;
         Integer totalAmount = paymentInfo.getTotalAmount();
         Integer taxFreeAmount = 0;
+
+
+        log.info("[KAKAO READY] reservationId={}, partnerOrderId={}, partnerUserId={}",
+                reservationId, partnerOrderId, partnerUserId);
+
         // 요청 헤더
         HttpHeaders headers = getHeaders();
 
@@ -96,6 +101,9 @@ public class KakaoPayService {
      * 카카오페이 결제 승인 요청
      */
     public KakaoPayApproveResponse approve(String pgToken, String tid, String partnerOrderId, String partnerUserId) {
+
+        log.info("[KAKAO APPROVE] tid={}, partnerOrderId={}, partnerUserId={}, pgToken={}",
+                tid, partnerOrderId, partnerUserId, pgToken);
 
         // 요청 헤더
         HttpHeaders headers = getHeaders();
