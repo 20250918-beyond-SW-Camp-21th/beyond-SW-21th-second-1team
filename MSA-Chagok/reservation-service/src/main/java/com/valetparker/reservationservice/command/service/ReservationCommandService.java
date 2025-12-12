@@ -71,7 +71,7 @@ public class ReservationCommandService {
 
         Reservation saved = reservationCommandRepository.save(newReservation);
 
-        if (saved.getReservationId() != null) {
+        if (saved.getReservationId() == null) {
             throw new BusinessException(ErrorCode.REGIST_ERROR);
         }
 
