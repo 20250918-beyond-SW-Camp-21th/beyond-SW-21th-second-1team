@@ -53,7 +53,8 @@ public class Parkinglot {
             String address,
             SeoulDistrict seoulDistrict,
             Integer totalSpots,
-            Integer baseFee) {
+            Integer baseFee,
+            Integer baseTime) {
 
         Parkinglot parkinglot = new Parkinglot();
         parkinglot.name = name;
@@ -72,6 +73,7 @@ public class Parkinglot {
         this.seoulDistrict = request.getSeoulDistrict();
         this.totalSpots = request.getTotalSpots();
         this.baseFee = request.getBaseFee();
+        this.baseTime = request.getBaseTime();
     }
 
     public void updateUsedSpots(boolean using) {
