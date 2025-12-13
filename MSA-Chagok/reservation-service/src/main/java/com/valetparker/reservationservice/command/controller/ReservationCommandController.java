@@ -26,7 +26,7 @@ public class ReservationCommandController {
     private final ReservationCommandService reservationCommandService;
 
     // 예약 생성
-    @PostMapping("/reservation/createReservation/{userNo}")
+    @PostMapping("/reservation/createReservation")
     public ResponseEntity<ApiResponse<ReservationCommandResponse>> createReservation(
             @RequestBody ReservationCreateRequest request, @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
