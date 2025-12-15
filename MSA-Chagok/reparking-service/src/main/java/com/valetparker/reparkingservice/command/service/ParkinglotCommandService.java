@@ -25,7 +25,7 @@ public class ParkinglotCommandService {
                 request.getSeoulDistrict(),
                 request.getTotalSpots(),
                 request.getBaseFee(),
-                request.getUnitFee()
+                request.getBaseTime()
         );
         Parkinglot saved = repository.save(newParkinglot);
         return saved.getParkinglotId();

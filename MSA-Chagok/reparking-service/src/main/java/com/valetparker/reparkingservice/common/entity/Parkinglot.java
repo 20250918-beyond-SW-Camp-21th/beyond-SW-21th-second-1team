@@ -44,12 +44,6 @@ public class Parkinglot {
     @Column(nullable = false)
     private Integer baseTime;
 
-    @Column(nullable = false)
-    private Integer unitFee;
-
-    @Column(nullable = false)
-    private Integer unitTime;
-
     @Column
     private Double avgRating;
 
@@ -60,18 +54,16 @@ public class Parkinglot {
             SeoulDistrict seoulDistrict,
             Integer totalSpots,
             Integer baseFee,
-            Integer unitFee) {
+            Integer baseTime) {
 
         Parkinglot parkinglot = new Parkinglot();
         parkinglot.name = name;
         parkinglot.seoulDistrict = seoulDistrict;
         parkinglot.address = address != null ? address : "주소 미입력";
         parkinglot.baseFee = baseFee;
-        parkinglot.unitFee = unitFee;
         parkinglot.totalSpots = totalSpots;
         parkinglot.usedSpots = 0;           // 초기화값.
         parkinglot.baseTime = 30;           // 30분.
-        parkinglot.unitTime = 10;           // 10분 단위.
         return parkinglot;
     }
 
@@ -81,7 +73,7 @@ public class Parkinglot {
         this.seoulDistrict = request.getSeoulDistrict();
         this.totalSpots = request.getTotalSpots();
         this.baseFee = request.getBaseFee();
-        this.unitFee = request.getUnitFee();
+        this.baseTime = request.getBaseTime();
     }
 
     public void updateUsedSpots(boolean using) {

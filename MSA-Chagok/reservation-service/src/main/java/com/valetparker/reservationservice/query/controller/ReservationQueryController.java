@@ -1,7 +1,9 @@
 package com.valetparker.reservationservice.query.controller;
 
+import com.valetparker.reservationservice.command.dto.response.PaymentResponse;
 import com.valetparker.reservationservice.common.dto.ApiResponse;
 import com.valetparker.reservationservice.common.entity.Reservation;
+import com.valetparker.reservationservice.common.security.CustomUserDetails;
 import com.valetparker.reservationservice.query.dto.response.ReservationListResponse;
 import com.valetparker.reservationservice.query.dto.response.ReservationQueryResponse;
 import com.valetparker.reservationservice.query.dto.response.ReviewReservationInfoResponse;
@@ -9,6 +11,7 @@ import com.valetparker.reservationservice.query.service.ReservationQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +30,11 @@ public class ReservationQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @GetMapping("/mypage/reservation/search/{userNo}")
+    @GetMapping("/mypage/reservation/search/")
     public ResponseEntity<ApiResponse<ReservationListResponse>> findByUserId(
-//            @AuthenticationPrincipal Long userNo //Security들어오면 사용
-            @PathVariable Long userNo
+            @AuthenticationPrincipal CustomUserDetails userDetail
     ) {
-        ReservationListResponse response = reservationQueryService.getReservationsByUserNo(userNo);
+        ReservationListResponse response = reservationQueryService.getReservationsByUserNo(userDetail.getUserNo());
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
@@ -47,6 +49,15 @@ public class ReservationQueryController {
                 .userNo(reservation.getUserNo())
                 .reservationId(reservation.getReservationId())
                 .build();
+        return ApiResponse.success(response);
+    }
+
+    // payment API: Payment 생성용 reservation정보 전달
+    @GetMapping("/payment/{reservationId}")
+    public ApiResponse<PaymentResponse> getInfoForPaymentReservation(
+            @PathVariable Long reservationId
+    )   {
+        PaymentResponse response = reservationQueryService.getInfoForPaymentReservation(reservationId);
         return ApiResponse.success(response);
     }
 }

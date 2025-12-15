@@ -1,10 +1,11 @@
 package com.valetparker.reservationservice.command.dto.request;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ReservationStartRequest {
     private Long parkinglotId;
     private Long reservationId;
