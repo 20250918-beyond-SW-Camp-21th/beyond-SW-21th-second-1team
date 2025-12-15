@@ -87,5 +87,91 @@
 
 ---
 
-## MSA 구조도
+## 기술 스택 (Tech Stack)
+
+### Backend
+
+| 구분 | 기술 |
+|------|------|
+| Language | Java 17 |
+| Framework | Spring Boot 3.x |
+| Build Tool | Gradle |
+| Architecture | MSA (Command / Query 분리) |
+| Web | Spring Web (REST API) |
+| Security | Spring Security (JWT 기반 인증, Header Authentication) |
+| Data Access | Spring Data JPA |
+| Database | MariaDB / MySQL |
+| ORM | Hibernate |
+| API Documentation | Swagger (Springdoc OpenAPI) |
+| Inter-service Communication | OpenFeign |
+| Testing | JUnit 5, Mockito, MockMvc |
+| Validation | Spring Validation |
+| Logging | SLF4J + Logback |
+| Version Control | Git / GitHub |
+
+
+---
+
+## 산출물
+
+### MSA 구조도
+<details>
+ <summary>MSA 구조도</summary>
 > <img width="800" height="" alt="image" src="./images/MSA.png" />
+</details>
+
+---
+
+### ERD
+<details>
+ <summary>ERD</summary>
+> <img width="800" height="" alt="image" src="./images/erd.png" />
+</details>
+
+---
+
+### WBS
+<details>
+> <img width="800" height="" alt="images" src="./images/docs/chagok-wbs.jpg" />
+</details>
+
+---
+
+### 요구사항명세서
+<details>
+> <img width="800" height="" alt="image" src="./images/docs/chagok_requirements.jpg" />
+</details>
+
+---
+
+### DDD 설계문서
+<details>
+ <summary>DDD 문서</summary>
+ <img width="800" height="" alt="image" src="./images/DDD/Valet Parkar.jpg" />
+ 
+ <img width="800" height="" alt="image" src="./images/DDD/Valet Parkar (2).jpg" />
+ 
+ <img width="800" height="" alt="image" src="./images/DDD/Valet Parkar (3).jpg" />
+ 
+ <img width="800" height="" alt="image" src="./images/DDD/Valet Parkar (4).jpg" />
+ 
+ <img width="800" height="" alt="image" src="./images/DDD/Valet Parkar (final).jpg" />
+</details>
+
+---
+
+### 테이블정의서
+<details>
+> <img width="800" height="" alt="image" src="./images/docs/chagok-tableDefs.jpg" />
+</details>
+
+## 소감문
+## 👥 팀원 소감
+
+| 이름 | 담당 역할 | 프로젝트 소감 |
+|------|-----------|---------------|
+| 이건우 | 결제 |  |
+| 이상준 | 주차장 |  |
+| 이하경 | 리뷰 |  |
+| 이형욱 | 예약 | 이번 프로젝트는 기능 구현보다 개발의 기본기를 다지는 데 초점을 둔 경험이었습니다. 기획 단계에서는 API 구현을 비교적 단순하게 생각했지만, 실제 개발 과정에서 API 동작 구조에 대한 이해 부족으로 많은 어려움을 겪었고, 팀원들과의 소통을 통해 하나씩 배워가며 구현할 수 있었습니다. 예약과 이용 현황 업데이트 기능을 맡았으나, 설계 단계의 논리적 미흡함과 시간 제약으로 일부 기능을 제외하게 되었고, 이를 통해 기획 단계에서의 철저한 논리 정리와 현실적인 범위 설정, 그리고 스스로의 역량을 객관적으로 파악하는 메타인지의 중요성을 깊이 깨닫는 계기가 되었습니다. |
+| 정하경 | 회원관리 |  |
