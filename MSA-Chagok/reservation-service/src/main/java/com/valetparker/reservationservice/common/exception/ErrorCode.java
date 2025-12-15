@@ -14,6 +14,7 @@ public enum ErrorCode {
     REGIST_ERROR_NO_PARKINGLOT("10004", "없는 주차장을 선택하셨습니다.",HttpStatus.INTERNAL_SERVER_ERROR),
     // 조회 관련 오류
     NOT_FOUND("20001", "조회에 실패하였습니다.",  HttpStatus.NOT_FOUND),
+    RESERVATION_NOT_FOUND("20002", "예약 정보를 조회할 수 업습니다.", HttpStatus.NOT_FOUND),
 
     // request 값 입력 오류
     VALIDATION_ERROR("40001", "입력 값 검증 오류입니다.", HttpStatus.BAD_REQUEST),

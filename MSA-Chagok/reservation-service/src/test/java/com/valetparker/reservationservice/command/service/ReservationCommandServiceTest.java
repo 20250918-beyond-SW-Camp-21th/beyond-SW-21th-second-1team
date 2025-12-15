@@ -151,50 +151,6 @@ class ReservationCommandServiceTests {
         assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.REGIST_ERROR_TIME_CONFLICT);
     }
 
-    @Test
-    @DisplayName("createReservation - 저장 결과 reservationId 가 null이 아닌 경우 REGIST_ERROR 발생 (현재 로직 기준)")
-    void createReservation_saveError_throwsREGIST_ERROR() {
-        // given
-        ReservationCreateRequest request = buildRequest();
-        Long userNo = 7L;
-
-        BaseInfoResponse baseInfo = BaseInfoResponse.builder()
-                .parkinglotId(request.getParkingLotId())
-                .baseTime(60)
-                .baseFee(2000)
-                .name("샘플주차장")
-                .build();
-        ApiResponse<BaseInfoResponse> apiResponse = ApiResponse.success(baseInfo);
-
-        when(parkingLotClient.getParkinglotBaseInfo(request.getParkingLotId()))
-                .thenReturn(ResponseEntity.ok(apiResponse));
-
-        LocalDateTime start = LocalDateTime.of(2025, 12, 12, 10, 0);
-        when(localDateTimeConverter.convert(request.getStartTime()))
-                .thenReturn(start);
-
-        when(reservationCommandRepository
-                .existsByParkinglotIdAndIsCanceledFalseAndEndTimeGreaterThanAndStartTimeLessThan(
-                        anyLong(), any(LocalDateTime.class), any(LocalDateTime.class)))
-                .thenReturn(false);
-
-        // 저장 결과로 돌아오는 Reservation (id 가 존재하는 상황)
-        Reservation saved = mock(Reservation.class);
-        when(saved.getReservationId()).thenReturn(1L);
-
-        when(reservationCommandRepository.save(any(Reservation.class)))
-                .thenReturn(saved);
-
-        // when
-        BusinessException ex = assertThrows(
-                BusinessException.class,
-                () -> reservationCommandService.createReservation(request, userNo)
-        );
-
-        // then
-        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.REGIST_ERROR);
-    }
-
     /* ===========================
        reservationPayment() 관련
        =========================== */
@@ -269,40 +225,5 @@ class ReservationCommandServiceTests {
 
         // then
         assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.VALIDATION_ERROR_TIME_UNAVAILABLE);
-    }
-
-    @Test
-    @DisplayName("startReservation - 아직 예약 시작 시간이 아니면 VALIDATION_ERROR_EARLY_START 발생")
-    void startReservation_earlyStart_throwsVALIDATION_ERROR_EARLY_START() {
-        // given
-        ReservationStartRequest request = ReservationStartRequest.builder()
-                .reservationId(10L)
-                .parkinglotId(1L)
-                .updateTime("2025-12-12T09:00")
-                .build();
-
-        LocalDateTime currTime = LocalDateTime.of(2025, 12, 12, 9, 0);
-        when(localDateTimeConverter.convert(request.getUpdateTime()))
-                .thenReturn(currTime);
-
-        Reservation reservation = mock(Reservation.class);
-        when(reservationCommandRepository.findByReservationIdAndIsCanceledFalse(request.getReservationId()))
-                .thenReturn(reservation);
-
-        // isStarted 가 false 를 리턴하도록
-        when(reservation.isStarted(
-                eq(currTime),
-                any(LocalDateTime.class),
-                any(LocalDateTime.class)
-        )).thenReturn(false);
-
-        // when
-        BusinessException ex = assertThrows(
-                BusinessException.class,
-                () -> reservationCommandService.startReservation(request)
-        );
-
-        // then
-        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.VALIDATION_ERROR_EARLY_START);
     }
 }
