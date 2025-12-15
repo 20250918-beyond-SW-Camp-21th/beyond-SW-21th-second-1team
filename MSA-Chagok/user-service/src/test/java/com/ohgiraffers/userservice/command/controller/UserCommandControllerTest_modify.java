@@ -6,6 +6,7 @@ import com.ohgiraffers.userservice.command.service.UserCommandService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserCommandController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @WithMockUser(username = "hi@email.com", roles = "USER")
 class UserCommandControllerTest_modify {
 
@@ -43,7 +45,7 @@ class UserCommandControllerTest_modify {
 
         String json = """
                 {
-                  "password": "newPass1234",
+                  "password": "hio",
                   "carNumber": "11가1111"
                 }
                 """;
@@ -53,6 +55,9 @@ class UserCommandControllerTest_modify {
         mockMvc.perform(
                         post("/user/modify")
                                 .with(csrf())
+                                .header("X-USER-EMAIL", email)   // ⭐ 필수 추가
+                                .header("X-USER-ROLE", "USER")   // ⭐ 필수 추가
+                                .header("X-USER-NO", "1")        // 필요하면
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json)
                 )
