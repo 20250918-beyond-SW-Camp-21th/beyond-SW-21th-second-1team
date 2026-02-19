@@ -1,0 +1,41 @@
+#spring.application.name=review-service
+server:
+  port: 0
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: valetparker-review-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://dev.macacolabs.site:3306/parkinghub
+    username: valetparker
+    password: valetparker
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# 스웨거
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  cache:
+    disabled: true
+  api-docs:
+    groups:
+      enabled: true
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
